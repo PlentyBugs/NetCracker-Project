@@ -1,0 +1,14 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="parts/markup :: head"></head>
+    <body>
+        <div th:replace="parts/markup :: header"></div>
+
+        <div id="main" class="container mt-5">
+            <div layout:fragment="content">
+
+            </div>
+        </div>
+        <div th:replace="parts/markup :: footer"></div>
+    </body>
+    <th:block th:replace="parts/markup :: scripts"></th:block>
+</html>
