@@ -1,0 +1,17 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <div class="container mt-3" layout:fragment="pager (url, page, filter)" th:with="totalPages = ${page.totalPages}, pageNumber = ${page.number}">
+        <th:block layout:fragment="pagerContent">
+
+        </th:block>
+        <nav aria-label="...">
+            <ul class="pagination col justify-content-center">
+                <li th:if="${pageNumber > 0}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
+                    <a class="page-link" th:href="${url} + '?page=' + ${pageNumber - 1} + '&filter=' + ${filter}"><span class="sr-only"><-</span></a>
+                </li>
+                <li th:if="${pageNumber < totalPages}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
+                    <a class="page-link" th:href="${url} + '?page=' + ${pageNumber + 1} + '&filter=' + ${filter}"><span class="sr-only">-></span></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
