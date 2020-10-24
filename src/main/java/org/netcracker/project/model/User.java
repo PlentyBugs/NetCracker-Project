@@ -35,22 +35,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @ElementCollection(targetClass = Role.class, fetch=FetchType.EAGER)
-    //to add @CollectionTable
+    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
     @Override
     public boolean isAccountNonExpired() {
         return true;
