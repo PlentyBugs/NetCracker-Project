@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <!-- Могут быть ошибки с *{name} поэтому нужны рабочие репозитории, чтобы протестировать -->
+    <div class="form-group row" layout:fragment="row (name, user, field, placeholder, rowtype)">
+        <label for="loginEmail" class="col-sm-2 col-form-label"><span th:text="${#strings.capitalize(name)}"></span>:</label>
+        <div class="col-sm-6">
+            <input th:value="${user != null} ? *{name}: ''" th:type="${rowtype}" class="form-control"  name="email" id="loginEmail" th:placeholder="${placeholder}"  th:classappend="${user != null and #fields.hasErrors(name)} ? 'is-invalid': ''"/>
+            <span class="invalid-feedback" th:if="${user != null and #fields.hasErrors(name)}" th:errors="*{name}"></span>
+        </div>
+    </div>
+    <th:block layout:fragment="row-full (name, user, field, placeholder, rowtype)">
+        <div layout:replace="~{fragments/form-row :: row (name = ${name}, user = ${user}, field = ${field}, placeholder = ${placeholder}, rowtype = ${rowtype})}"></div>
+    </th:block>
+    <th:block layout:fragment="row-short (name, user, field)">
+        <div layout:replace="~{fragments/form-row :: row (name = ${name}, user = ${user}, field = ${field}, placeholder = ${#strings.capitalizeWords(name)}, rowtype = 'text')}"></div>
+    </th:block>
+</html>

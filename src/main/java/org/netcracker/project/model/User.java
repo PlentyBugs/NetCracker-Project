@@ -1,7 +1,6 @@
 package org.netcracker.project.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.netcracker.project.model.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +24,7 @@ public class User implements UserDetails {
     @NotBlank(message = "Second name can't be empty!")
     private String secName;
     @Email(message = "E-mail's format is not correct!")
+    @NotBlank
     private String email;
     @NotBlank(message = "Password can't be empty!")
     @Size(min=8)
@@ -32,6 +32,10 @@ public class User implements UserDetails {
     @NotBlank(message = "Username can't be empty!")
 
     private String username;   //username=login
+
+    private boolean active;
+    private String activationCode;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,7 +44,6 @@ public class User implements UserDetails {
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -64,6 +67,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }
