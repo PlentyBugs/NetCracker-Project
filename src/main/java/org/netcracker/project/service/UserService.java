@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Mir. Please, visit next link: http://%s/registration/activate/%s"
+                            "Welcome to NetHacker! Please, visit next link to activate your account: http://%s/registration/activate/%s"
                     , user.getUsername(), hostname, user.getActivationCode()
             );
             mailService.send(user.getEmail(), "Activation Code", message);
