@@ -1,6 +1,7 @@
 package org.netcracker.project.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.netcracker.project.model.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,6 +19,10 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     @NotBlank(message = "Name can't be empty!")
     private String name;
     @NotBlank(message = "Surname can't be empty!")
@@ -33,17 +39,26 @@ public class User implements UserDetails {
 
     private String username;   //username=login
 
+    @Column(columnDefinition = "varchar(255) default 'default.png'")
+    private String avatarFilename;
+
     private boolean active;
     private String activationCode;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     @ElementCollection(targetClass = Role.class, fetch=FetchType.EAGER)
-    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    // todo: Надо как-то попробовать сделать ленивую подгрузку статистики и команд, но это проблема завтрашнего дня
+
+    @ManyToMany
+    @JoinTable(
+            name = "usr_team",
+            joinColumns = { @JoinColumn(name = "usr_id") },
+            inverseJoinColumns = { @JoinColumn(name = "team_id") }
+    )
+    private Set<Team> teams = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
