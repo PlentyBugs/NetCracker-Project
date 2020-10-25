@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,8 +33,8 @@ public class User implements UserDetails {
     @Email(message = "E-mail's format is not correct!")
     @NotBlank
     private String email;
-    @NotBlank(message = "Password can't be empty!")
-    @Size(min=8)
+    @NotNull
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
     @NotBlank(message = "Username can't be empty!")
 
