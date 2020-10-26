@@ -1,4 +1,4 @@
-package org.netcracker.project.models;
+package org.netcracker.project.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

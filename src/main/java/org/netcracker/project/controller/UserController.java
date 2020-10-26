@@ -1,6 +1,6 @@
-package org.netcracker.project.controllers;
+package org.netcracker.project.controller;
 
-import org.netcracker.project.models.User;
+import org.netcracker.project.model.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
