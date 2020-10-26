@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-4"><img th:src="@{/img/} + ${user.avatarFilename}"></div>
             <div class="col-sm-8">
-                <h3 th:text="${user.name} + ' ' + ${user.surname} + ' ' + ${user.secName}"></h3>
+                <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName}"></h3>
             </div>
         </div>
         <div class="row">
