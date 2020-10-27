@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,6 +20,10 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     @NotBlank(message = "Name can't be empty!")
     private String name;
     @NotBlank(message = "Surname can't be empty!")
@@ -25,32 +31,41 @@ public class User implements UserDetails {
     @NotBlank(message = "Second name can't be empty!")
     private String secName;
     @Email(message = "E-mail's format is not correct!")
+    @NotBlank
     private String email;
-    @NotBlank(message = "Password can't be empty!")
-    @Size(min=8)
+    @NotNull
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
     @NotBlank(message = "Username can't be empty!")
 
     private String username;   //username=login
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+
+    @Column(columnDefinition = "varchar(255) default 'default.png'")
+    private String avatarFilename;
+
+    private boolean active;
+    private String activationCode;
+
     @ElementCollection(targetClass = Role.class, fetch=FetchType.EAGER)
-    //to add @CollectionTable
+    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    // todo: Надо как-то попробовать сделать ленивую подгрузку статистики и команд, но это проблема завтрашнего дня
+
+    @ManyToMany
+    @JoinTable(
+            name = "usr_team",
+            joinColumns = { @JoinColumn(name = "usr_id") },
+            inverseJoinColumns = { @JoinColumn(name = "team_id") }
+    )
+    private Set<Team> teams = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -68,6 +83,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }

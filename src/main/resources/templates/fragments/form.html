@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <div th:fragment="log_form (type)">
         <div th:if="${param.logout}">
             You have been logged out.
@@ -6,13 +6,10 @@
         <h3 th:text="${#strings.capitalize(type)}"></h3>
         <div class="alert alert-success" role="alert" th:if="${message != null}" th:text="${message}"></div>
         <form action="#" th:action="@{/} + ${type}" method="post" th:object="${user}">
-            <div class="form-group row" th:if="${type == 'registration'}">
-                <label for="loginEmail" class="col-sm-2 col-form-label">Email:</label>
-                <div class="col-sm-6">
-                    <input th:value="${user != null} ? *{email}: ''" type="email" class="form-control"  name="email" id="loginEmail" placeholder="some@some.com"  th:classappend="${user != null and #fields.hasErrors('email')} ? 'is-invalid': ''"/>
-                    <span class="invalid-feedback" th:if="${user != null and #fields.hasErrors('email')}" th:errors="*{email}"></span>
-                </div>
-            </div>
+            <th:block th:if="${type == 'registration'}" layout:insert="~{fragments/form-row :: row-full (name = 'email', user = ${user}, field = 'email', placeholder = 'example@exam.com', rowtype = 'email', error = ${user != null} ? *{email} : '')}"></th:block>
+            <th:block th:if="${type == 'registration'}" layout:insert="~{fragments/form-row :: row-short (name = 'name', user = ${user}, field = 'name', error = ${user != null} ? *{name} : '')}"></th:block>
+            <th:block th:if="${type == 'registration'}" layout:insert="~{fragments/form-row :: row-short (name = 'surname', user = ${user}, field = 'surname', error = ${user != null} ? *{surname} : '')}"></th:block>
+            <th:block th:if="${type == 'registration'}" layout:insert="~{fragments/form-row :: row-short (name = 'second name', user = ${user}, field = 'secName', error = ${user != null} ? *{secName} : '')}"></th:block>
             <div class="form-group row">
                 <label for="loginUsername" class="col-sm-2 col-form-label">Username:</label>
                 <div class="col-sm-6">
