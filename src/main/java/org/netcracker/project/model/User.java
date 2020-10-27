@@ -1,36 +1,88 @@
 package org.netcracker.project.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.netcracker.project.model.enums.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Objects;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Entity
+@Table(name="usr")
+@Data
 @NoArgsConstructor
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-public class User {
-    Integer id;
-    String name;
-    String surname;
-    String lastname;
-    String email;
-    String login;
-    String password;
+    @NotBlank(message = "Name can't be empty!")
+    private String name;
+    @NotBlank(message = "Surname can't be empty!")
+    private String surname;
+    @NotBlank(message = "Second name can't be empty!")
+    private String secName;
+    @Email(message = "E-mail's format is not correct!")
+    @NotBlank
+    private String email;
+    @NotNull
+    @Size(min = 8, message = "Password must be at least 8 characters")
+    private String password;
+    @NotBlank(message = "Username can't be empty!")
+
+    private String username;   //username=login
+
+    @Column(columnDefinition = "varchar(255) default 'default.png'")
+    private String avatarFilename;
+
+    private boolean active;
+    private String activationCode;
+
+    @ElementCollection(targetClass = Role.class, fetch=FetchType.EAGER)
+    @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+
+    // todo: Надо как-то попробовать сделать ленивую подгрузку статистики и команд, но это проблема завтрашнего дня
+
+    @ManyToMany
+    @JoinTable(
+            name = "usr_team",
+            joinColumns = { @JoinColumn(name = "usr_id") },
+            inverseJoinColumns = { @JoinColumn(name = "team_id") }
+    )
+    private Set<Team> teams = new HashSet<>();
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
     }
 }

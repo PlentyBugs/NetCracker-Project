@@ -1,6 +1,5 @@
 package org.netcracker.project.controller;
 
-import org.hibernate.annotations.SQLUpdate;
 import org.netcracker.project.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +14,11 @@ public class UserController extends ExceptionHandlerController {
 
     static List<User> users = new ArrayList<>();
 
-    static User user1 = new User(1, "Jessica", "Andreevna",
-            "Moskvina", "dekamussi@yandex.ru", "Jess", "hash");
+    static User user1 = new User();
 
     static {
         users.add(user1);
-        users.add(new User(2, "Juss", "Andr", "Moss",
-                "email", "Juss", "hash"));
+        users.add(new User());
     }
 
 
@@ -36,11 +33,6 @@ public class UserController extends ExceptionHandlerController {
         }
         return null;
     }
-
-   /* @GetMapping("/users")
-    public List<User> getUsers(){
-        return Collections.singletonList(user1);
-    } */
 
     @PutMapping("/user")
     public User updateUser(@RequestBody User userForUpdate){
