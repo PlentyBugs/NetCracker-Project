@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:fragment="navbar">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">NH</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Когда определимся с дизайном: сделать кнопки и выдать права доступа к секциям -->
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+
+                <a th:href="@{/login}" class="btn btn-outline-warning float-right" sec:authorize="!isAuthenticated()">Log In</a>
+                <a th:href="@{/registration}" class="btn btn-outline-warning float-right" sec:authorize="!isAuthenticated()">Sign Up</a>
+                <th:block th:insert="~{fragments/logout :: logout}"></th:block>
+            </div>
+        </nav>
+    </th:block>
+</html>

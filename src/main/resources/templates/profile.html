@@ -1,0 +1,36 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+    <!--Блок для написания кода-->
+    <!-- Для странички нужно:
+        пользователь, с его личной информацией,
+        табличка команд, чтобы можно было показывать команды в которых есть пользователь,
+        соревнования, чтобы можно было показать статистику, а также
+        ... мб еще что
+    -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4"><img th:src="@{/img/} + ${user.avatarFilename}"></div>
+            <div class="col-sm-8">
+                <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName}"></h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <ul class="list-group">
+                    <th:block th:each="team : ${user.teams}">
+                        <li class="list-group-item"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
+                    </th:block>
+                </ul>
+            </div>
+            <div class="col-sm">
+                <div class="col-sm">
+                    <ul class="list-group">
+                        <th:block th:each="comp : ${user.competitions}">
+                            <li class="list-group-item"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---->
+</div></html>
