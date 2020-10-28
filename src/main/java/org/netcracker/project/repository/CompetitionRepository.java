@@ -9,5 +9,5 @@ import java.time.LocalDateTime;
 public interface CompetitionRepository extends JpaRepository<Competition,Long> {
     Competition findByCompName(String compName);
     // @Query(...)
-    Competition queryByStart(LocalDateTime start);
+    Competition queryByStartDate(LocalDateTime startDate);
 }

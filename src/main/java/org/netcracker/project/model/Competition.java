@@ -20,7 +20,7 @@ public class Competition {
     @NotBlank(message = "Competition's name can't be empty!")
     private String compName;
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
-    private LocalDateTime start;
+    private LocalDateTime startDate;
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
-    private LocalDateTime end;
+    private LocalDateTime endDate;
 }
