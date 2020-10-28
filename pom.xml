@@ -14,6 +14,8 @@
 	<name>Netcracker-Project</name>
 	<description>Netcracker project</description>
 
+	<packaging>war</packaging>
+
 	<properties>
 		<java.version>11</java.version>
 	</properties>
