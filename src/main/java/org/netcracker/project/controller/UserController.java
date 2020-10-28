@@ -1,6 +1,8 @@
 package org.netcracker.project.controller;
 
 import org.netcracker.project.model.User;
+import org.netcracker.project.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,17 +23,16 @@ public class UserController extends ExceptionHandlerController {
         users.add(new User());
     }
 
+    @Autowired
+    UserRepository userRepository;
+
 
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     public User getUser(@RequestParam Integer id){
-        for (User user : users){
-            if (user.equals(users.get(id))){
-                return user;
-            }
-        }
-        return null;
+        System.out.println(userRepository.findByUsername("july"));
+        return userRepository.findByUsername("july");
     }
 
     @PutMapping("/user")
