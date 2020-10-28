@@ -1,6 +1,7 @@
 package org.netcracker.project.controller;
 
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class RegistrationController {
@@ -29,6 +31,7 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String addUser(
             @RequestParam("password2") String password2,
+            @RequestParam(value = "role", required = false) Set<Role> roles,
             @Valid User user,
             BindingResult bindingResult,
             Model model
@@ -53,7 +56,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        if (!userService.create(user)) {
+        if (roles != null ? !userService.create(user, roles) : !userService.create(user)) {
             model.addAttribute("usernameError", "User exists");
             model.addAttribute("user", user);
             return "registration";

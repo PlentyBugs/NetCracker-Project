@@ -9,7 +9,18 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Когда определимся с дизайном: сделать кнопки и выдать права доступа к секциям -->
                 <ul class="navbar-nav mr-auto">
-
+                    <li class="nav-item" sec:authorize="hasAuthority('PARTICIPANT')">
+                        <a class="nav-link" th:href="@{/somepage}">Some page for participant</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ORGANIZER')">
+                        <a class="nav-link" th:href="@{/add-competition}">Add competition</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('USER')">
+                        <a class="nav-link" th:href="@{/competition-list}">Competitions</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{/admin}">Admin panel</a>
+                    </li>
                 </ul>
 
                 <a th:href="@{/login}" class="btn btn-outline-warning float-right" sec:authorize="!isAuthenticated()">Log In</a>

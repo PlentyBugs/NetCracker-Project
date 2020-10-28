@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -38,13 +39,22 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public boolean create(User user, Set<Role> roles) {
+        user.setRoles(roles);
+        return create(user);
+    }
+
     public boolean create(User user) {
         User userFromDB = repository.findByUsername(user.getUsername());
 
         if (userFromDB != null) return false;
 
         user.setActive(false);
-        user.setRoles(Collections.singleton(Role.USER));
+        if (user.getRoles() == null) {
+            user.setRoles(Collections.singleton(Role.USER));
+        } else {
+            user.getRoles().add(Role.USER);
+        }
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
