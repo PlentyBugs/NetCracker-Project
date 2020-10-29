@@ -11,7 +11,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
@@ -25,6 +30,9 @@ public class UserService implements UserDetailsService {
 
     @Value("${hostname}")
     private String hostname;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder, MailService mailService) {
         this.repository = repository;
@@ -96,5 +104,20 @@ public class UserService implements UserDetailsService {
         log.info(user.getUsername() + " activated account!");
 
         return true;
+    }
+
+    private void saveAvatar(@Valid User user, @RequestParam("avatar") MultipartFile file) throws IOException {
+        if (file != null && file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (uploadDir.exists()) uploadDir.mkdir();
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+
+            user.setAvatarFilename(resultFilename);
+        }
     }
 }

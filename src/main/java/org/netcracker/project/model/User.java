@@ -2,6 +2,7 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.netcracker.project.model.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,8 +41,8 @@ public class User implements UserDetails {
 
     private String username;   //username=login
 
-    @Column(columnDefinition = "varchar(255) default 'default.png'")
-    private String avatarFilename;
+    @Column(name="avatarFilename", nullable = false)
+    private String avatarFilename = "default.png";
 
     private boolean active;
     private String activationCode;
