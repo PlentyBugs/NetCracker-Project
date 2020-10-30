@@ -2,6 +2,7 @@ package org.netcracker.project.controller;
 
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.CompetitionService;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.data.domain.Page;
@@ -12,10 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
@@ -34,7 +32,7 @@ public class CompetitionController {
     }
 
     @GetMapping
-    public String getCompetitions(
+    public String getAllCompetitions(
             Model model,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(defaultValue = "", required = false) String filter
@@ -62,5 +60,26 @@ public class CompetitionController {
         }
 
         return "redirect:/competition";
+    }
+
+    @GetMapping("/{id}")
+    public String getCompetition(
+            @PathVariable("id") Competition competition,
+            Model model
+    ) {
+        model.addAttribute(competition);
+        return "competition";
+    }
+
+    @GetMapping("/{id}/signup")
+    public String signup(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Competition competition,
+            Model model
+    ) {
+        if (user.getRoles().contains(Role.PARTICIPANT)) {
+            // todo: сделать запись команды на соревнование
+        }
+        return "redirect:/competition/{id}";
     }
 }

@@ -1,5 +1,15 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
-    
+    <div class="container">
+        <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title">
+        <div class="card-body">
+            <h1 class="card-title" th:text="${competition.compName}"></h1>
+            <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}"></h6>
+            <p class="card-text" th:text="${competition.description}"></p>
+            <p class="card-text">Start: <span th:text="${competition.startDate}"></span></p>
+            <p class="card-text">End: <span th:text="${competition.endDate}"></span></p>
+        </div>
+        <a type="button" class="btn btn-warning btn-lg btn-block" th:href="@{/competition/} + ${competition.id} + '/signup'">Sign up for a Competition</a>
+    </div>
     <!---->
 </div></html>

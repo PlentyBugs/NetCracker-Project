@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -26,4 +28,12 @@ public class Competition {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
     private User organizer;
+
+    @ManyToMany
+    @JoinTable(
+            name = "statistics",
+            joinColumns = { @JoinColumn(name = "comp_id") },
+            inverseJoinColumns = { @JoinColumn(name = "team_id") }
+    )
+    private Set<Competition> teams = new HashSet<>();
 }

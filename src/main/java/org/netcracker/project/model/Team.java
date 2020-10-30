@@ -26,4 +26,12 @@ public class Team {
             inverseJoinColumns = { @JoinColumn(name = "usr_id") }
     )
     private Set<Team> teammates = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "statistics",
+            joinColumns = { @JoinColumn(name = "team_id") },
+            inverseJoinColumns = { @JoinColumn(name = "comp_id") }
+    )
+    private Set<Competition> statistics = new HashSet<>();
 }
