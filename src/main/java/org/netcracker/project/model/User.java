@@ -41,7 +41,7 @@ public class User implements UserDetails {
 
     private String username;   //username=login
 
-    @Column(name="avatarFilename", nullable = false)
+    @Column(name="avatar_filename", nullable = false)
     private String avatarFilename = "default.png";
 
     private boolean active;
