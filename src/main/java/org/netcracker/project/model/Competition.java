@@ -1,17 +1,21 @@
 package org.netcracker.project.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Data
-public class Competition {
+public class Competition implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -29,11 +33,34 @@ public class Competition {
     @JoinColumn(name = "usr_id")
     private User organizer;
 
-    @ManyToMany
+    // Надо решить проблему с ленивой подгрузкой
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "statistics",
             joinColumns = { @JoinColumn(name = "comp_id") },
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
-    private Set<Competition> teams = new HashSet<>();
+    private Set<Team> teams = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Competition that = (Competition) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Competition{" +
+                "id=" + id +
+                ", compName='" + compName + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

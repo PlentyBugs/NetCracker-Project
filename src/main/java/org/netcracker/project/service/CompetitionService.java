@@ -57,6 +57,11 @@ public class CompetitionService {
         return true;
     }
 
+    public boolean update(Competition competition) {
+        repository.save(competition);
+        return true;
+    }
+
     private void saveTitle(@Valid Competition competition, @RequestParam("avatar") MultipartFile file) throws IOException {
         String resultFilename = ImageUtils.saveFile(file);
         if (!"".equals(resultFilename)) {

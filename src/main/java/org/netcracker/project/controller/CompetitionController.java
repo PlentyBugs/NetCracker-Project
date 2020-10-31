@@ -1,6 +1,7 @@
 package org.netcracker.project.controller;
 
 import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.CompetitionService;
@@ -64,21 +65,41 @@ public class CompetitionController {
 
     @GetMapping("/{id}")
     public String getCompetition(
-            @PathVariable("id") Competition competition,
-            Model model
-    ) {
-        model.addAttribute(competition);
-        return "competition";
-    }
-
-    @GetMapping("/{id}/signup")
-    public String signup(
             @AuthenticationPrincipal User user,
             @PathVariable("id") Competition competition,
             Model model
     ) {
+        model.addAttribute(competition);
+        model.addAttribute("participate", user.getTeams().stream().map(e -> competition.getTeams().contains(e)).reduce(false, (x,y) -> x || y));
+        return "competition";
+    }
+
+    @PostMapping("/{id}/signup")
+    public String signup(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value = "team", required = false) Team team,
+            @PathVariable("id") Competition competition
+    ) {
+        if (user.getRoles().contains(Role.PARTICIPANT) && user.getTeams().contains(team)) {
+            competition.getTeams().add(team);
+            service.update(competition);
+        }
+        return "redirect:/competition/{id}";
+    }
+
+    @PostMapping("/{id}/logout")
+    public String logout(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Competition competition
+    ) {
         if (user.getRoles().contains(Role.PARTICIPANT)) {
-            // todo: сделать запись команды на соревнование
+            for (Team team : user.getTeams()) {
+                if (competition.getTeams().contains(team)) {
+                    competition.getTeams().remove(team);
+                    service.update(competition);
+                    break;
+                }
+            }
         }
         return "redirect:/competition/{id}";
     }

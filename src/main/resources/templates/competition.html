@@ -9,7 +9,34 @@
             <p class="card-text">Start: <span th:text="${competition.startDate}"></span></p>
             <p class="card-text">End: <span th:text="${competition.endDate}"></span></p>
         </div>
-        <a type="button" class="btn btn-warning btn-lg btn-block" th:href="@{/competition/} + ${competition.id} + '/signup'">Sign up for a Competition</a>
+        <th:block th:if="${!participate}">
+            <button type="button" class="btn btn-warning btn-lg btn-block" onclick="$('.dropdown').toggle()">Sign up for a Competition</button>
+            <div class="btn-group dropdown container-fluid" style="display: none">
+                <form class="px-4 py-3 container-fluid" method="post" th:action="@{/competition/} + ${competition.id} + '/signup'">
+                    <div class="form-group">
+                        <label for="team">The team in which you will participate:</label>
+                        <select id="team" name="team">
+                            <th:block th:each="team : ${#authentication.principal.teams}">
+                                <option th:value="${team.id}" th:text="${team.teamName}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <!-- Оставлю сюда "Для галочки" галочку, ведь это так важно, вдруг никто не заметит -->
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                        <label class="form-check-label" for="dropdownCheck">
+                            I agree to sell my soul to the devil for the right to participate in this competition
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg btn-block mt-2">Sign up for a competition</button>
+                </form>
+            </div>
+        </th:block>
+        <th:block th:unless="${!participate}">
+            <form method="post" th:action="@{/competition/} + ${competition.id} + '/logout'">
+                <button type="submit" class="btn btn-danger btn-lg btn-block">Refuse to participate in the competition</button>
+            </form>
+        </th:block>
     </div>
     <!---->
 </div></html>

@@ -2,7 +2,6 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.netcracker.project.model.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,7 +53,8 @@ public class User implements UserDetails {
 
     // todo: Надо как-то попробовать сделать ленивую подгрузку статистики и команд, но это проблема завтрашнего дня
 
-    @ManyToMany
+    // Надо решить проблему с ленивой подгрузкой
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usr_team",
             joinColumns = { @JoinColumn(name = "usr_id") },
