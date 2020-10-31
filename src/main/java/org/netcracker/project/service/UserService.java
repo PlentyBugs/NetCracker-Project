@@ -27,14 +27,16 @@ public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final ImageUtils imageUtils;
 
     @Value("${hostname}")
     private String hostname;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, MailService mailService) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, MailService mailService, ImageUtils imageUtils) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
+        this.imageUtils = imageUtils;
     }
 
     @Override
@@ -104,7 +106,7 @@ public class UserService implements UserDetailsService {
     }
 
     private void saveAvatar(@Valid User user, @RequestParam("avatar") MultipartFile file) throws IOException {
-        String resultFilename = ImageUtils.saveFile(file);
+        String resultFilename = imageUtils.saveFile(file);
         if (!"".equals(resultFilename)) {
             user.setAvatarFilename(resultFilename);
         }

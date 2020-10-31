@@ -20,6 +20,8 @@ import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Controller
@@ -48,17 +50,27 @@ public class CompetitionController {
     @PostMapping
     public String addCompetition(
             @AuthenticationPrincipal User user,
+            @RequestParam("title") MultipartFile title,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate,
             @Valid Competition competition,
             BindingResult bindingResult,
-            Model model,
-            @RequestParam("title") MultipartFile title
+            Model model
     ) throws IOException {
-        if (bindingResult.hasErrors()) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime startDateFormatted = LocalDateTime.parse(startDate.replaceFirst("T", " "), formatter);
+        LocalDateTime endDateFormatted = LocalDateTime.parse(endDate.replaceFirst("T", " "), formatter);
+        competition.setEndDate(endDateFormatted);
+        competition.setStartDate(startDateFormatted);
+        if (bindingResult.hasFieldErrors("compName") || bindingResult.hasFieldErrors("description")) {
             Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
-        } else {
-            service.save(competition, title, user);
+            model.addAttribute(competition);
+            // todo: Исправить
+            return "redirect:/add-competition";
         }
+        service.save(competition, title, user);
 
         return "redirect:/competition";
     }

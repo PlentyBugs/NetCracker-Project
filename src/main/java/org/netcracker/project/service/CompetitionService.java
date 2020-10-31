@@ -22,12 +22,14 @@ public class CompetitionService {
     private final CompetitionRepository repository;
     private final String DATE_PATTERN_SAFE;
     private final DateTimeFormatter formatter;
+    private final ImageUtils imageUtils;
 
-    public CompetitionService(CompetitionRepository repository) {
+    public CompetitionService(CompetitionRepository repository, ImageUtils imageUtils) {
         this.repository = repository;
         String DATE_PATTERN = "dd.MM.yyyy HH:mm";
         DATE_PATTERN_SAFE = Pattern.quote(DATE_PATTERN);
         formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        this.imageUtils = imageUtils;
     }
 
     public Page<Competition> getPage(Pageable pageable) {
@@ -63,7 +65,7 @@ public class CompetitionService {
     }
 
     private void saveTitle(@Valid Competition competition, @RequestParam("avatar") MultipartFile file) throws IOException {
-        String resultFilename = ImageUtils.saveFile(file);
+        String resultFilename = imageUtils.saveFile(file);
         if (!"".equals(resultFilename)) {
             competition.setTitleFilename(resultFilename);
         }
