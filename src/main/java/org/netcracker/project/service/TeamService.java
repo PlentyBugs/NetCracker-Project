@@ -7,8 +7,11 @@ import org.netcracker.project.util.ImageUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.Multipart;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Service
@@ -24,15 +27,23 @@ public class TeamService {
     public Page<Team> getPage(Pageable pageable){return repository.findAll(pageable);}
     public Page<Team> getPage(Pageable pageable, String filter){    //need to write body
         return getPage(pageable);
-    }
+    }  //to write filter
 
-    public boolean save(Team team, Multipart logo, User user) throws IOException {  //need to write body
-
+    public boolean save(Team team, MultipartFile logo, User user) throws IOException {
+        //...mb creator
+        saveLogo(team,logo);
+        repository.save(team);
         return true;
     }
 
-    public boolean update(Team team){   //body
+    public boolean update(Team team){
+        repository.save(team);
         return true;
     }
-    private
+    private void saveLogo(@Valid Team team, @RequestParam("avatar") MultipartFile file)throws IOException{
+        String resultFilename=imageUtils.saveFile(file);
+        if(!"".equals(resultFilename)){
+            team.setLogoFilename(resultFilename);
+        }
+    }
 }
