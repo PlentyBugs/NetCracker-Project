@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
     <div class="container">
         <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title">
@@ -9,7 +9,7 @@
             <p class="card-text">Start: <span th:text="${competition.startDate}"></span></p>
             <p class="card-text">End: <span th:text="${competition.endDate}"></span></p>
         </div>
-        <th:block th:if="${!participate}">
+        <th:block sec:authorize="hasAuthority('PARTICIPANT')" th:if="${!participate}">
             <button type="button" class="btn btn-warning btn-lg btn-block" onclick="$('.dropdown').toggle()">Sign up for a Competition</button>
             <div class="btn-group dropdown container-fluid" style="display: none">
                 <form class="px-4 py-3 container-fluid" method="post" th:action="@{/competition/} + ${competition.id} + '/signup'">

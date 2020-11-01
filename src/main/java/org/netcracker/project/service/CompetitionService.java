@@ -4,6 +4,7 @@ import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.CompetitionRepository;
 import org.netcracker.project.util.ImageUtils;
+import org.netcracker.project.util.callback.DateCallback;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,14 @@ public class CompetitionService {
     private final String DATE_PATTERN_SAFE;
     private final DateTimeFormatter formatter;
     private final ImageUtils imageUtils;
+    private final DateTimeFormatter formDateFormatter;
 
     public CompetitionService(CompetitionRepository repository, ImageUtils imageUtils) {
         this.repository = repository;
         String DATE_PATTERN = "dd.MM.yyyy HH:mm";
         DATE_PATTERN_SAFE = Pattern.quote(DATE_PATTERN);
         formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        formDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
         this.imageUtils = imageUtils;
     }
 
@@ -69,5 +72,13 @@ public class CompetitionService {
         if (!"".equals(resultFilename)) {
             competition.setTitleFilename(resultFilename);
         }
+    }
+
+    public DateCallback parseDateFromForm(String formDate) {
+        if ((formDate = formDate.replaceFirst("T", " ")).matches(formDateFormatter.toString())) {
+            LocalDateTime parsed = LocalDateTime.parse(formDate, formDateFormatter);
+            return new DateCallback(parsed, true);
+        }
+        return new DateCallback(null, false);
     }
 }
