@@ -1,7 +1,6 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
     <h3>Register new hackathon</h3>
-    <h3 th:if="${startDateError != null || competition != null}">Register new hackathon</h3>
     <form enctype="multipart/form-data" th:action="@{/competition}" method="post" th:object="${competition}">
         <div class="form-group row">
             <label for="compName" class="col-sm-2 col-form-label">Hackathon name:</label>

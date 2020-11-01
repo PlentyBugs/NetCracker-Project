@@ -1,0 +1,21 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+    <!--Блок для написания кода-->
+    <h3>Add new Team</h3>
+    <form enctype="multipart/form-data" th:action="@{/team}" method="post" th:object="${team}">
+        <div class="form-group row">
+            <label for="teamName" class="col-sm-2 col-form-label">Team name:</label>
+            <div class="col-sm-10">
+                <input th:value="${team != null} ? *{teamName}: ''" type="text" class="form-control"  name="teamName" id="teamName" placeholder="Team name" th:classappend="${team != null and #fields.hasErrors('teamName')} ? 'is-invalid': ''"/>
+                <span class="invalid-feedback" th:if="${team != null and #fields.hasErrors('teamName')}" th:errors="*{teamName}"></span>
+            </div>
+        </div>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" name="logo" accept="image/png, image/jpeg">
+            <label class="custom-file-label" for="customFile">Choose logo</label>
+        </div>
+        <div class="form-group row mt-3">
+            <button type="submit" class="btn btn-dark btn-lg btn-block">Add new Team</button>
+        </div>
+    </form>
+    <!---->
+</div></html>
