@@ -3,6 +3,7 @@ package org.netcracker.project.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.netcracker.project.model.enums.Role;
+import org.netcracker.project.model.enums.TeamRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -40,8 +41,8 @@ public class User implements UserDetails {
 
     private String username;   //username=login
 
-    @Column(columnDefinition = "varchar(255) default 'default.png'")
-    private String avatarFilename;
+    @Column(name="avatar_filename", nullable = false)
+    private String avatarFilename = "default.png";
 
     private boolean active;
     private String activationCode;
@@ -51,9 +52,15 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @ElementCollection(targetClass = TeamRole.class, fetch=FetchType.EAGER)
+    @CollectionTable(name = "usr_team_role", joinColumns = @JoinColumn(name = "usr_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<TeamRole> teamRoles;
+
     // todo: Надо как-то попробовать сделать ленивую подгрузку статистики и команд, но это проблема завтрашнего дня
 
-    @ManyToMany
+    // Надо решить проблему с ленивой подгрузкой
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usr_team",
             joinColumns = { @JoinColumn(name = "usr_id") },

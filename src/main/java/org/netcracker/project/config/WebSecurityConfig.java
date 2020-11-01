@@ -1,5 +1,6 @@
 package org.netcracker.project.config;
 
+import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,6 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/", "/registration", "/css/**", "/js/**", "/registration/activate/*", "/webjars/**").permitAll()
+                    .antMatchers("/add-competition")
+                        .hasAuthority(Role.ORGANIZER.getAuthority())
+                    .antMatchers("/somepage")
+                        .hasAuthority(Role.PARTICIPANT.getAuthority())
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

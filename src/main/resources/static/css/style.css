@@ -16,3 +16,13 @@ body {
 #footer {
     flex-shrink: 0;
 }
+
+.flex_checkbox {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.navbar-avatar {
+    width: 40px;
+    height: 40px;
+}

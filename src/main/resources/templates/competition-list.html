@@ -1,5 +1,25 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
-    
+    <div layout:replace="fragments/pager :: pager (url = ${url}, page = ${page}, filter = ${filter})">
+        <div layout:fragment="pagerContent">
+            <div class="py-4" id="competition-list">
+                <th:block th:if="${not #lists.isEmpty(page.content)}">
+                    <th:block th:each="competition: ${page}" >
+                        <div class="container">
+                            <div class="card mb-3">
+                                <a th:href="@{/competition/} + ${competition.id}"><img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title"></a>
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${competition.compName}"></h5>
+                                    <p class="card-text" th:text="${competition.description}"></p>
+                                    <a th:href="@{/competition/} + ${competition.id}">Go to competition</a>
+                                    <p class="card-text"><small class="text-muted" th:text="${competition.startDate}"></small> : <small class="text-muted" th:text="${competition.endDate}"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </th:block>
+            </div>
+        </div>
+    </div>
     <!---->
 </div></html>
