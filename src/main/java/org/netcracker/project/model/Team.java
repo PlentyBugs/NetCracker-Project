@@ -47,6 +47,9 @@ public class Team implements Serializable {
     @Enumerated(EnumType.STRING)
     private Set<TeamRole> professions;
 
+    @Column(name="logo_filename", nullable = false)
+    private String logoFilename = "teamLogo.png";
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
