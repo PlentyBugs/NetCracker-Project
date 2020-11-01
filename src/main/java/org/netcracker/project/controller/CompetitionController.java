@@ -6,6 +6,7 @@ import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.CompetitionService;
 import org.netcracker.project.util.ValidationUtils;
+import org.netcracker.project.util.callback.DateCallback;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,8 +21,6 @@ import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Controller
@@ -47,6 +46,7 @@ public class CompetitionController {
         return "competition-list";
     }
 
+    // todo: Решить проблему по которой не получается при редиректе передать Model
     @PostMapping
     public String addCompetition(
             @AuthenticationPrincipal User user,
@@ -57,19 +57,25 @@ public class CompetitionController {
             BindingResult bindingResult,
             Model model
     ) throws IOException {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime startDateFormatted = LocalDateTime.parse(startDate.replaceFirst("T", " "), formatter);
-        LocalDateTime endDateFormatted = LocalDateTime.parse(endDate.replaceFirst("T", " "), formatter);
-        competition.setEndDate(endDateFormatted);
-        competition.setStartDate(startDateFormatted);
-        if (bindingResult.hasFieldErrors("compName") || bindingResult.hasFieldErrors("description")) {
+        DateCallback startDateCallback = service.parseDateFromForm(startDate);
+        DateCallback endDateCallback = service.parseDateFromForm(endDate);
+        if (
+                bindingResult.hasFieldErrors("compName") ||
+                bindingResult.hasFieldErrors("description") ||
+                startDateCallback.isFailure() ||
+                endDateCallback.isFailure()
+        ) {
             Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
+            errors.remove("startDate");
+            errors.remove("endDate");
             model.mergeAttributes(errors);
             model.addAttribute(competition);
-            // todo: Исправить
-            return "redirect:/add-competition";
+            if (startDateCallback.isFailure()) model.addAttribute("startDateError", "Wrong Format or Empty");
+            if (endDateCallback.isFailure()) model.addAttribute("endDateError", "Wrong Format or Empty");
+            return "forward:/competition/add-competition";
         }
+        competition.setEndDate(startDateCallback.getLocalDateTime());
+        competition.setStartDate(endDateCallback.getLocalDateTime());
         service.save(competition, title, user);
 
         return "redirect:/competition";

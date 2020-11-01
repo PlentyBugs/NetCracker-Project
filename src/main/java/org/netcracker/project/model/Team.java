@@ -2,6 +2,7 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.enums.TeamRole;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -38,6 +39,16 @@ public class Team implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "comp_id") }
     )
     private Set<Competition> statistics = new HashSet<>();
+
+    // Сюда роли добавляются при изменении (добавлении, обновлении) команды через post/put запросы, т.е. это никак не связано с usr_team_role таблицей
+    // Так как пользователь, возможно не хочет вступать в команду со всеми его ролями
+    @ElementCollection(targetClass = TeamRole.class, fetch=FetchType.EAGER)
+    @CollectionTable(name = "team_profession", joinColumns = @JoinColumn(name = "team_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<TeamRole> professions;
+
+    @Column(name="logo_filename", nullable = false)
+    private String logoFilename = "teamLogo.png";
 
     @Override
     public boolean equals(Object o) {
