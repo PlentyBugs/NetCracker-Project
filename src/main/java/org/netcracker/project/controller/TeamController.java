@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
 import javax.mail.Multipart;
@@ -43,7 +44,7 @@ public class TeamController {
 
     @PostMapping
     public String addTeam(@AuthenticationPrincipal User user,
-                          @RequestParam ("logo") Multipart logo,
+                          @RequestParam ("logo") MultipartFile logo,
                           Model model,
                           @Valid Team team,
                           BindingResult bindingResult
