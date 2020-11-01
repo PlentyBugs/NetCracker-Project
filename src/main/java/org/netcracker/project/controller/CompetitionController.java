@@ -46,7 +46,6 @@ public class CompetitionController {
         return "competition-list";
     }
 
-    // todo: Решить проблему по которой не получается при редиректе передать Model
     @PostMapping
     public String addCompetition(
             @AuthenticationPrincipal User user,
@@ -57,22 +56,25 @@ public class CompetitionController {
             BindingResult bindingResult,
             Model model
     ) throws IOException {
+        // todo: Решить проблему по которой не получается при редиректе передать Model
         DateCallback startDateCallback = service.parseDateFromForm(startDate);
         DateCallback endDateCallback = service.parseDateFromForm(endDate);
+        Map<String, String> errors = null;
+        if (bindingResult.hasErrors()) {
+            errors = ValidationUtils.getErrors(bindingResult);
+            errors.remove("startDateError");
+            errors.remove("endDateError");
+            model.mergeAttributes(errors);
+        }
         if (
-                bindingResult.hasFieldErrors("compName") ||
-                bindingResult.hasFieldErrors("description") ||
+                (errors != null && !errors.isEmpty()) ||
                 startDateCallback.isFailure() ||
                 endDateCallback.isFailure()
         ) {
-            Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
-            errors.remove("startDate");
-            errors.remove("endDate");
-            model.mergeAttributes(errors);
             model.addAttribute(competition);
             if (startDateCallback.isFailure()) model.addAttribute("startDateError", "Wrong Format or Empty");
             if (endDateCallback.isFailure()) model.addAttribute("endDateError", "Wrong Format or Empty");
-            return "forward:/competition/add-competition";
+            return "redirect:/add-competition";
         }
         competition.setEndDate(startDateCallback.getLocalDateTime());
         competition.setStartDate(endDateCallback.getLocalDateTime());

@@ -75,7 +75,8 @@ public class CompetitionService {
     }
 
     public DateCallback parseDateFromForm(String formDate) {
-        if ((formDate = formDate.replaceFirst("T", " ")).matches(formDateFormatter.toString())) {
+        System.out.println(formDate);
+        if ((formDate = formDate.replaceFirst("T", " ")).matches("2[0-9][2-9][0-9]-(1[0-2]|0[0-9])-([0-2][0-9]|3[0-1])\\s(2[0-4]|[01][0-9]):([0-5][0-9]|60)")) {
             LocalDateTime parsed = LocalDateTime.parse(formDate, formDateFormatter);
             return new DateCallback(parsed, true);
         }
