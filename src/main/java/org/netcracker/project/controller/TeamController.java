@@ -4,6 +4,7 @@ import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.TeamService;
+import org.netcracker.project.util.SecurityUtils;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
-import javax.mail.Multipart;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
@@ -26,9 +26,11 @@ import java.util.Map;
 @RequestMapping("/team")
 public class TeamController {
     private final TeamService service;
+    private final SecurityUtils securityUtils;
 
-    public TeamController(TeamService service) {
+    public TeamController(TeamService service, SecurityUtils securityUtils) {
         this.service = service;
+        this.securityUtils = securityUtils;
     }
     @GetMapping
     public String getAllTeams(Model model,
@@ -73,20 +75,24 @@ public class TeamController {
     ){
         if(user.getRoles().contains(Role.PARTICIPANT)){
             team.getTeammates().add(user);
+            user.getTeams().add(team);
             service.update(team);
+            securityUtils.updateContext(user);
         }
         return "redirect:/team/{id}";
     }
 
     @PostMapping("/{id}/quit")
     public String quit(@AuthenticationPrincipal User user,
-                       @PathVariable Team team
+                       @PathVariable("id") Team team
     ){
         if(user.getRoles().contains(Role.PARTICIPANT)){
                 for(User u:team.getTeammates()){
                     if(team.getTeammates().contains(u)){
                         team.getTeammates().remove(u);
+                        u.getTeams().remove(team);
                         service.update(team);
+                        securityUtils.updateContext(u);
                         break;
                     }
                 }

@@ -76,6 +76,11 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public boolean update(User user) {
+        repository.save(user);
+        return true;
+    }
+
     private void sendMessage(User user) {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
