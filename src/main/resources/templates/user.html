@@ -7,14 +7,25 @@
         ... мб еще что
     -->
     <div class="container">
-        <div class="row">
-            <div class="col-sm-4"><img th:src="@{/img/} + ${user.avatarFilename}"></div>
-            <div class="col-sm-8">
-                <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName}"></h3>
+        <div class="row mb-3">
+            <div class="col-sm-2"><img th:src="@{/img/} + ${user.avatarFilename}" style="max-width: 100px; height: auto; max-height: 200px;"></div>
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'"></h3>
+                    </div>
+                    <div class="col-sm-8">
+                        Командные роли:
+                        <th:block th:each="role : ${user.teamRoles}">
+                            <i class="list-group-item" th:text="${#strings.capitalize(role.name())}"></i>
+                        </th:block>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm">
+                <h5 class="text-center">Команды</h5>
                 <ul class="list-group">
                     <th:block th:each="team : ${user.teams}">
                         <li class="list-group-item"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
@@ -22,10 +33,13 @@
                 </ul>
             </div>
             <div class="col-sm">
+                <h5 class="text-center">Соревнования</h5>
                 <div class="col-sm">
                     <ul class="list-group">
-                        <th:block th:each="comp : ${user.competitions}">
-                            <li class="list-group-item"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
+                        <th:block th:each="team : ${user.teams}">
+                            <th:block th:each="comp : ${team.statistics}">
+                                <li class="list-group-item"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
+                            </th:block>
                         </th:block>
                     </ul>
                 </div>
