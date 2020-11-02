@@ -1,65 +1,33 @@
 package org.netcracker.project.controller;
 
 import org.netcracker.project.model.User;
-import org.netcracker.project.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.netcracker.project.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
+@Controller
+@RequestMapping("/user")
+public class UserController {
 
+    private final UserService userService;
 
-@ControllerAdvice
-@RestController
-public class UserController extends ExceptionHandlerController {
-    @Autowired
-    UserRepository userRepository;
-
-    @GetMapping("/user")
-    @ResponseStatus(HttpStatus.CREATED)
-    public User getUser(@RequestParam Long id){
-        if (userRepository.findById(id).isPresent()){
-            return userRepository.findById(id).get();
-        }
-        else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @PutMapping("/user")
-    public User updateUser(@RequestBody User userForUpdate){
-        Optional<User> optionalUser = userRepository.findById(userForUpdate.getId());
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
-            user.setActivationCode(userForUpdate.getActivationCode());
-            user.setActive(true);
-            user.setAvatarFilename(userForUpdate.getAvatarFilename());
-            user.setEmail(userForUpdate.getEmail());
-            user.setName(userForUpdate.getName());
-            user.setPassword(userForUpdate.getPassword());
-            user.setRoles(userForUpdate.getRoles());
-            user.setSecName(userForUpdate.getSecName());
-            user.setSurname(userForUpdate.getSurname());
-            user.setTeams(userForUpdate.getTeams());
-            user.setUsername(userForUpdate.getUsername());
-            user = userRepository.save(user);
-            return user;
-        }
-        else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-
+    @GetMapping
+    public String getUser(@RequestParam Long id){
+        return userService.getUser(id);
     }
 
-    @DeleteMapping("/user")
-    public void deleteUser(@RequestParam Long id){
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            deleteUser(optionalUser.get().getId());
-        }
-        else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping
+    public String updateUser(@AuthenticationPrincipal User userForUpdate){
+        return userService.updateUser(userForUpdate);
+    }
+
+    @DeleteMapping
+    public String deleteUser(@RequestParam Long id){
+        return userService.deleteUser(id);
     }
 }

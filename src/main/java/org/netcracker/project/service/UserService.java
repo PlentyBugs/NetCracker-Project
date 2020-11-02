@@ -6,6 +6,7 @@ import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.repository.UserRepository;
 import org.netcracker.project.util.ImageUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -116,4 +118,49 @@ public class UserService implements UserDetailsService {
             user.setAvatarFilename(resultFilename);
         }
     }
+
+    public String getUser(@RequestParam Long id){
+        if (repository.findById(id).isPresent()){
+            return "profile"+"?id="+id;
+        }
+        else{
+            return "404";
+        }
+    }
+
+    public String updateUser(@AuthenticationPrincipal User userForUpdate){
+        Optional<User> optionalUser = repository.findById(userForUpdate.getId());
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setActivationCode(userForUpdate.getActivationCode());
+            user.setActive(true);
+            user.setAvatarFilename(userForUpdate.getAvatarFilename());
+            user.setEmail(userForUpdate.getEmail());
+            user.setName(userForUpdate.getName());
+            user.setPassword(userForUpdate.getPassword());
+            user.setRoles(userForUpdate.getRoles());
+            user.setSecName(userForUpdate.getSecName());
+            user.setSurname(userForUpdate.getSurname());
+            user.setTeams(userForUpdate.getTeams());
+            user.setUsername(userForUpdate.getUsername());
+            user = repository.save(user);
+            return "profile"+"?id="+user.getId();
+        }
+        else{
+            return "404";
+        }
+    }
+
+    public String deleteUser(@RequestParam Long id){
+        Optional<User> optionalUser = repository.findById(id);
+        if (optionalUser.isPresent()){
+            deleteUser(optionalUser.get().getId());
+            return "login";
+        }
+        else{
+            return "404";
+        }
+    }
+
+
 }
