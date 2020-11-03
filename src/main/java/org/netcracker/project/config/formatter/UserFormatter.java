@@ -1,5 +1,6 @@
 package org.netcracker.project.config.formatter;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.UserRepository;
 import org.springframework.format.Formatter;
@@ -11,13 +12,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class UserFormatter implements Formatter<User> {
 
     private final UserRepository repository;
-
-    public UserFormatter(UserRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public User parse(String s, Locale locale) throws ResponseStatusException {

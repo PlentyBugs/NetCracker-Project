@@ -1,5 +1,6 @@
 package org.netcracker.project.service;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.TeamRepository;
@@ -10,21 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import javax.validation.Valid;
 import java.io.IOException;
 
 @Service
+@RequiredArgsConstructor
 public class TeamService {
     private final TeamRepository repository;
     private final ImageUtils imageUtils;
 
-    public TeamService(TeamRepository repository,ImageUtils imageUtils)
-    {
-        this.repository=repository;
-        this.imageUtils=imageUtils;
-    }
     public Page<Team> getPage(Pageable pageable){return repository.findAll(pageable);}
+
     public Page<Team> getPage(Pageable pageable, String filter){    //need to write body
         return getPage(pageable);
     }  //to write filter

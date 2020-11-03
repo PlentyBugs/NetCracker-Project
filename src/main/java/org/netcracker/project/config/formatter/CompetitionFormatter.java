@@ -1,5 +1,6 @@
 package org.netcracker.project.config.formatter;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.repository.CompetitionRepository;
 import org.springframework.format.Formatter;
@@ -11,13 +12,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class CompetitionFormatter implements Formatter<Competition> {
 
     private final CompetitionRepository repository;
-
-    public CompetitionFormatter(CompetitionRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Competition parse(String s, Locale locale) throws ResponseStatusException {

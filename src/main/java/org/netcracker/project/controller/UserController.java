@@ -1,5 +1,6 @@
 package org.netcracker.project.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.ValidationUtils;
@@ -16,13 +17,10 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/{id}")
     public String getUser(

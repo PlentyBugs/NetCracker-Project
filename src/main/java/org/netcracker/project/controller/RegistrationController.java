@@ -1,5 +1,6 @@
 package org.netcracker.project.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.UserService;
@@ -15,13 +16,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Controller
+@RequiredArgsConstructor
 public class RegistrationController {
 
     private final UserService userService;
-
-    public RegistrationController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/registration")
     public String registration() {

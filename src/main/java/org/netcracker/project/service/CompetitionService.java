@@ -1,8 +1,10 @@
 package org.netcracker.project.service;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.CompetitionRepository;
+import org.netcracker.project.util.DateUtil;
 import org.netcracker.project.util.ImageUtils;
 import org.netcracker.project.util.callback.DateCallback;
 import org.springframework.data.domain.Page;
@@ -14,44 +16,33 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor
 public class CompetitionService {
 
     private final CompetitionRepository repository;
-    private final String DATE_PATTERN_SAFE;
-    private final DateTimeFormatter formatter;
     private final ImageUtils imageUtils;
-    private final DateTimeFormatter formDateFormatter;
-
-    public CompetitionService(CompetitionRepository repository, ImageUtils imageUtils) {
-        this.repository = repository;
-        String DATE_PATTERN = "dd.MM.yyyy HH:mm";
-        DATE_PATTERN_SAFE = Pattern.quote(DATE_PATTERN);
-        formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
-        formDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
-        this.imageUtils = imageUtils;
-    }
+    private final DateUtil dateUtil;
 
     public Page<Competition> getPage(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
     public Page<Competition> getPage(Pageable pageable, String filter) {
-        if (filter.matches("after" + DATE_PATTERN_SAFE)) {
+        String safe = dateUtil.getDATE_PATTERN_SAFE();
+        if (filter.matches("after" + safe)) {
             return compileFilter(pageable, filter, "after");
-        } else if (filter.matches("before" + DATE_PATTERN_SAFE)) {
+        } else if (filter.matches("before" + safe)) {
             return compileFilter(pageable, filter, "before");
-        } else if (filter.matches("equals" + DATE_PATTERN_SAFE)) {
+        } else if (filter.matches("equals" + safe)) {
             return compileFilter(pageable, filter, "equals");
         }
         return getPage(pageable);
     }
 
     private Page<Competition> compileFilter(Pageable pageable, String filter, String command) {
-        LocalDateTime localDateTime = LocalDateTime.parse(filter.replaceFirst(command, ""), formatter);
+        LocalDateTime localDateTime = LocalDateTime.parse(filter.replaceFirst(command, ""), dateUtil.getFormatter());
         return repository.findAllByStartDateBefore(pageable, localDateTime);
     }
 
@@ -75,9 +66,8 @@ public class CompetitionService {
     }
 
     public DateCallback parseDateFromForm(String formDate) {
-        System.out.println(formDate);
         if ((formDate = formDate.replaceFirst("T", " ")).matches("2[0-9][2-9][0-9]-(1[0-2]|0[0-9])-([0-2][0-9]|3[0-1])\\s(2[0-4]|[01][0-9]):([0-5][0-9]|60)")) {
-            LocalDateTime parsed = LocalDateTime.parse(formDate, formDateFormatter);
+            LocalDateTime parsed = LocalDateTime.parse(formDate, dateUtil.getFormDateFormatter());
             return new DateCallback(parsed, true);
         }
         return new DateCallback(null, false);

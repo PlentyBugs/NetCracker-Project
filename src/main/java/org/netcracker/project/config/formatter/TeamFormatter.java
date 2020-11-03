@@ -1,5 +1,6 @@
 package org.netcracker.project.config.formatter;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.repository.TeamRepository;
 import org.springframework.format.Formatter;
@@ -11,13 +12,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class TeamFormatter implements Formatter<Team> {
 
     private final TeamRepository repository;
-
-    public TeamFormatter(TeamRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Team parse(String s, Locale locale) throws ResponseStatusException {

@@ -1,5 +1,6 @@
 package org.netcracker.project.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
@@ -24,14 +25,11 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/team")
+@RequiredArgsConstructor
 public class TeamController {
     private final TeamService service;
     private final SecurityUtils securityUtils;
 
-    public TeamController(TeamService service, SecurityUtils securityUtils) {
-        this.service = service;
-        this.securityUtils = securityUtils;
-    }
     @GetMapping
     public String getAllTeams(Model model,
                               @RequestParam(defaultValue="",required=false) String filter,

@@ -1,5 +1,6 @@
 package org.netcracker.project.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -31,13 +33,6 @@ public class UserService implements UserDetailsService {
 
     @Value("${hostname}")
     private String hostname;
-
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, MailService mailService, ImageUtils imageUtils) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-        this.mailService = mailService;
-        this.imageUtils = imageUtils;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

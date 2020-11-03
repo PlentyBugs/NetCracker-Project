@@ -1,5 +1,6 @@
 package org.netcracker.project.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
@@ -26,13 +27,10 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/competition")
+@RequiredArgsConstructor
 public class CompetitionController {
 
     private final CompetitionService service;
-
-    public CompetitionController(CompetitionService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public String getAllCompetitions(
