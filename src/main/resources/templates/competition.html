@@ -45,7 +45,7 @@
                 <th:block th:each="team : ${competition.teams}">
                     <div class="list-group-item" th:id="'team-id-' + ${team.id}">
                         Название команды: <i th:text="${#strings.capitalize(team.teamName)}"></i>
-                        <div class="float-right">
+                        <div class="float-right" style="margin-top: -7px;">
                             <button type="button" class="btn btn-primary">Write</button>
                             <button type="button" class="btn btn-danger" th:onclick="'removeTeam(' + ${team.id} + ');'">Remove</button>
                         </div>
