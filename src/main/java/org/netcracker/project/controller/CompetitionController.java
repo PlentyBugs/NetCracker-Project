@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,6 +93,21 @@ public class CompetitionController {
         model.addAttribute(competition);
         model.addAttribute("participate", user.getTeams().stream().map(e -> competition.getTeams().contains(e)).reduce(false, (x,y) -> x || y));
         return "competition";
+    }
+
+    @Async
+    @DeleteMapping(value = "/{id}/team/{teamID}", produces = "application/json")
+    public @ResponseBody void removeTeam(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Competition competition,
+            @PathVariable("teamID") Team team
+    ) {
+        if (user.getId() != null && user.getId().equals(competition.getOrganizer().getId())) {
+            competition.getTeams().remove(team);
+            // Пока статистика не так проработана и, по сути дела, надо было бы это записывать вроде "был удален организатором"
+            team.getStatistics().remove(competition);
+            service.update(competition);
+        }
     }
 
     @PostMapping("/{id}/signup")
