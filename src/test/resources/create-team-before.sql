@@ -1,5 +1,6 @@
-delete from team_profession;
+delete from statistics;
 delete from usr_team;
+delete from team_profession;
 delete from team;
 
 insert into team(id, logo_filename, team_name) VALUES
@@ -16,3 +17,7 @@ insert into team_profession(team_id, professions) VALUES
 (1, 'GAME_DESIGNER'), (1, 'MUSICIAN'), (1, 'TESTER'), (1, 'PROGRAMMER'), (1, 'BACKEND'),
 (2, 'PROGRAMMER'),
 (3, 'GAME_DESIGNER'), (3, 'MUSICIAN'), (3, 'TESTER'), (3, 'PROGRAMMER'), (3, 'BACKEND'), (3, 'DESIGNER'), (3, 'BIOTECHNOLOGIST');
+insert into statistics(team_id, comp_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2);

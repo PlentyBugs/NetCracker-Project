@@ -4,9 +4,9 @@ delete from usr;
 
 insert into usr(id, activation_code, active, avatar_filename, email, name, password, sec_name, surname, username) values
 (1, null, true, 'default.png', 'wminecraft616@gmail.com', 'Гога', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'mock'),
-(1, null, true, 'default.png', 'wminecraft616@gmail.com', 'Гоша', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'gog'),
-(1, null, true, 'default.png', 'wminecraft616@gmail.com', 'Жора', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'mockito'),
-(1, null, true, 'default.png', 'wminecraft616@gmail.com', 'Егор', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'steam');
+(2, null, true, 'default.png', 'wminecraft616@gmail.com', 'Гоша', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'gog'),
+(3, null, true, 'default.png', 'wminecraft616@gmail.com', 'Жора', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'mockito'),
+(4, null, true, 'default.png', 'wminecraft616@gmail.com', 'Егор', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Жуков', 'Константинович', 'steam');
 insert into usr_role(usr_id, roles) values
 (1, 'USER'),
 (2, 'USER'), (2, 'PARTICIPANT'),
