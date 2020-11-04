@@ -29,13 +29,13 @@
                                 I agree to sell my soul to the devil for the right to participate in this competition
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-success btn-lg btn-block mt-2">Sign up for a competition</button>
+                        <button type="submit" class="btn btn-success btn-lg btn-block mt-2" id="join-button">Sign up for a competition</button>
                     </form>
                 </div>
             </th:block>
             <th:block th:unless="${!participate}">
                 <form method="post" th:action="@{/competition/} + ${competition.id} + '/quit'">
-                    <button type="submit" class="btn btn-danger btn-lg btn-block">Refuse to participate in the competition</button>
+                    <button type="submit" class="btn btn-danger btn-lg btn-block" id="quit-button">Refuse to participate in the competition</button>
                 </form>
             </th:block>
         </th:block>

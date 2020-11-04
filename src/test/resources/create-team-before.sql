@@ -18,6 +18,10 @@ insert into team_profession(team_id, professions) VALUES
 (2, 'PROGRAMMER'),
 (3, 'GAME_DESIGNER'), (3, 'MUSICIAN'), (3, 'TESTER'), (3, 'PROGRAMMER'), (3, 'BACKEND'), (3, 'DESIGNER'), (3, 'BIOTECHNOLOGIST');
 insert into statistics(team_id, comp_id) VALUES
-(1, 1),
 (1, 2),
-(2, 2);
+(1, 4),
+(2, 1),
+(2, 3),
+(2, 4);
+
+alter sequence hibernate_sequence restart with 10;

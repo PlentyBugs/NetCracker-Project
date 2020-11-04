@@ -17,3 +17,5 @@ insert into usr_team_role(usr_id, team_roles) values
 (2, 'DESIGNER'), (2, 'BIOTECHNOLOGIST'),
 (3, 'INTERIOR_DESIGNER'), (3, 'PROGRAMMER'),
 (4, 'GAME_DESIGNER'), (4, 'MUSICIAN'), (4, 'TESTER'), (4, 'PROGRAMMER'), (4, 'BACKEND');
+
+alter sequence hibernate_sequence restart with 10;

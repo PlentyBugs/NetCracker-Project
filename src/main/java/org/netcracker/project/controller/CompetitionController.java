@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
@@ -55,6 +57,7 @@ public class CompetitionController {
             BindingResult bindingResult,
             Model model
     ) throws IOException {
+        if (!user.getRoles().contains(Role.ORGANIZER)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         // todo: Решить проблему по которой не получается при редиректе передать Model
         DateCallback startDateCallback = service.parseDateFromForm(startDate);
         DateCallback endDateCallback = service.parseDateFromForm(endDate);
@@ -75,8 +78,8 @@ public class CompetitionController {
             if (endDateCallback.isFailure()) model.addAttribute("endDateError", "Wrong Format or Empty");
             return "redirect:/add-competition";
         }
-        competition.setEndDate(startDateCallback.getLocalDateTime());
-        competition.setStartDate(endDateCallback.getLocalDateTime());
+        competition.setEndDate(endDateCallback.getLocalDateTime());
+        competition.setStartDate(startDateCallback.getLocalDateTime());
         service.save(competition, title, user);
 
         return "redirect:/competition";
