@@ -108,8 +108,8 @@ public class CompetitionController {
         }
     }
 
-    @PostMapping("/{id}/signup")
-    public String signup(
+    @PostMapping("/{id}/join")
+    public String join(
             @AuthenticationPrincipal User user,
             @RequestParam(value = "team", required = false) Team team,
             @PathVariable("id") Competition competition
@@ -121,8 +121,8 @@ public class CompetitionController {
         return "redirect:/competition/{id}";
     }
 
-    @PostMapping("/{id}/logout")
-    public String logout(
+    @PostMapping("/{id}/quit")
+    public String quit(
             @AuthenticationPrincipal User user,
             @PathVariable("id") Competition competition
     ) {

@@ -13,7 +13,7 @@
             <th:block th:if="${!participate}">
                 <button type="button" class="btn btn-warning btn-lg btn-block" onclick="$('.dropdown').toggle()">Sign up for a Competition</button>
                 <div class="btn-group dropdown container-fluid" style="display: none">
-                    <form class="px-4 py-3 container-fluid" method="post" th:action="@{/competition/} + ${competition.id} + '/signup'">
+                    <form class="px-4 py-3 container-fluid" method="post" th:action="@{/competition/} + ${competition.id} + '/join'">
                         <div class="form-group">
                             <label for="team">The team in which you will participate:</label>
                             <select id="team" name="team">
@@ -34,7 +34,7 @@
                 </div>
             </th:block>
             <th:block th:unless="${!participate}">
-                <form method="post" th:action="@{/competition/} + ${competition.id} + '/logout'">
+                <form method="post" th:action="@{/competition/} + ${competition.id} + '/quit'">
                     <button type="submit" class="btn btn-danger btn-lg btn-block">Refuse to participate in the competition</button>
                 </form>
             </th:block>
