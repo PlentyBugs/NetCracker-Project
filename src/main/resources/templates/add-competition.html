@@ -5,7 +5,7 @@
         <div class="form-group row">
             <label for="compName" class="col-sm-2 col-form-label">Hackathon name:</label>
             <div class="col-sm-10">
-                <input th:value="${competition != null} ? *{compName}: ''" type="text" class="form-control"  name="compName" id="compName" placeholder="Hackathon name" th:classappend="${competition != null and #fields.hasErrors('compName')} ? 'is-invalid': ''"/>
+                <input th:value="${competition != null} ? *{compName}: ''" type="text" class="form-control"  name="compName" id="compName" placeholder="Hackathon name" th:classappend="${competition != null and #fields.hasErrors('compName')} ? 'is-invalid': ''"//>
                 <span class="invalid-feedback" th:if="${competition != null and #fields.hasErrors('compName')}" th:errors="*{compName}"></span>
             </div>
         </div>
@@ -17,19 +17,19 @@
         <div class="form-group row">
             <label for="startDate" class="col-2 col-form-label">Start Date and Time</label>
             <div class="col-sm-10">
-                <input name="startDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="startDate" th:classappend="${startDateError != null} ? 'is-invalid': ''">
+                <input name="startDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="startDate" th:classappend="${startDateError != null} ? 'is-invalid': ''"/>
                 <span class="invalid-feedback" th:if="${startDateError != null}" th:text="${startDateError}"></span>
             </div>
         </div>
         <div class="form-group row">
             <label for="endDate" class="col-2 col-form-label">End Date and Time</label>
             <div class="col-sm-10">
-                <input name="endDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="endDate" th:classappend="${endDateError != null} ? 'is-invalid': ''">
+                <input name="endDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="endDate" th:classappend="${endDateError != null} ? 'is-invalid': ''"/>
                 <span class="invalid-feedback" th:if="${endDateError != null}" th:text="${endDateError}"></span>
             </div>
         </div>
         <div class="custom-file">
-            <input type="file" class="custom-file-input" id="customFile" name="title" accept="image/png, image/jpeg">
+            <input type="file" class="custom-file-input" id="customFile" name="title" accept="image/png, image/jpeg"/>
             <label class="custom-file-label" for="customFile">Choose title image</label>
         </div>
         <div class="form-group row mt-3">

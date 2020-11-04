@@ -1,13 +1,13 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
     <div class="container">
-        <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title">
+        <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title"/>
         <div class="card-body">
             <h1 class="card-title" th:text="${competition.compName}"></h1>
             <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}"></h6>
             <p class="card-text" th:text="${competition.description}"></p>
-            <p class="card-text">Start: <span th:text="${competition.startDate}"></span></p>
-            <p class="card-text">End: <span th:text="${competition.endDate}"></span></p>
+            <p class="card-text">Start: <span th:text="${#strings.replace(competition.startDate, 'T', ' ')}"></span></p>
+            <p class="card-text">End: <span th:text="${#strings.replace(competition.endDate, 'T', ' ')}"></span></p>
         </div>
         <th:block sec:authorize="hasAuthority('PARTICIPANT')" th:if="${competition.organizer.id != #authentication.principal.id}">
             <th:block th:if="${!participate}">
@@ -24,7 +24,7 @@
                         </div>
                         <!-- Оставлю сюда "Для галочки" галочку, ведь это так важно, вдруг никто не заметит -->
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                            <input type="checkbox" class="form-check-input" id="dropdownCheck"/>
                             <label class="form-check-label" for="dropdownCheck">
                                 I agree to sell my soul to the devil for the right to participate in this competition
                             </label>
