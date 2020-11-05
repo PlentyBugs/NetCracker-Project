@@ -10,7 +10,7 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${team.teamName}"></h5>
                             </div>
-                            <a th:href="@{/team/} + ${team.id}"><img th:src="@{/img/} + ${team.logoFilename}" class="card-img-bottom" alt="logo"/></a>
+                            <a th:href="@{/team/} + ${team.id}"><img th:src="@{/img/} + ${team.logoFilename}" class="card-img-bottom" alt="logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/compTitle.png} + '`;'"/></a>
                         </div>
                     </th:block>
                 </th:block>
