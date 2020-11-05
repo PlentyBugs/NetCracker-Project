@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -30,20 +29,15 @@ public class CompetitionService {
     }
 
     public Page<Competition> getPage(Pageable pageable, String filter) {
-        String safe = dateUtil.getDATE_PATTERN_SAFE();
-        if (filter.matches("after" + safe)) {
-            return compileFilter(pageable, filter, "after");
-        } else if (filter.matches("before" + safe)) {
-            return compileFilter(pageable, filter, "before");
-        } else if (filter.matches("equals" + safe)) {
-            return compileFilter(pageable, filter, "equals");
+        String pattern = dateUtil.getDATE_PATTERN();
+        if (filter.matches("after" + pattern)) {
+            return repository.findAllByStartDateAfter(pageable, dateUtil.compileFilter(filter, "after"));
+        } else if (filter.matches("before" + pattern)) {
+            return repository.findAllByStartDateBefore(pageable, dateUtil.compileFilter(filter, "before"));
+        } else if (filter.matches("equals" + pattern)) {
+            return repository.findAllByStartDateEquals(pageable, dateUtil.compileFilter(filter, "equals"));
         }
         return getPage(pageable);
-    }
-
-    private Page<Competition> compileFilter(Pageable pageable, String filter, String command) {
-        LocalDateTime localDateTime = LocalDateTime.parse(filter.replaceFirst(command, ""), dateUtil.getFormatter());
-        return repository.findAllByStartDateBefore(pageable, localDateTime);
     }
 
     public boolean save(Competition competition, MultipartFile title, User user) throws IOException {
@@ -66,10 +60,6 @@ public class CompetitionService {
     }
 
     public DateCallback parseDateFromForm(String formDate) {
-        if ((formDate = formDate.replaceFirst("T", " ")).matches("2[0-9][2-9][0-9]-(1[0-2]|0[0-9])-([0-2][0-9]|3[0-1])\\s(2[0-4]|[01][0-9]):([0-5][0-9]|60)")) {
-            LocalDateTime parsed = LocalDateTime.parse(formDate, dateUtil.getFormDateFormatter());
-            return new DateCallback(parsed, true);
-        }
-        return new DateCallback(null, false);
+        return dateUtil.parseDateFromForm(formDate);
     }
 }
