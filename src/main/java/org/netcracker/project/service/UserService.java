@@ -6,10 +6,12 @@ import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.repository.UserRepository;
 import org.netcracker.project.util.ImageUtils;
+import org.netcracker.project.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,8 +28,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtils securityUtils;
+    private final UserRepository repository;
     private final MailService mailService;
     private final ImageUtils imageUtils;
 
@@ -112,13 +115,18 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean updateUser(User user){
-        repository.save(user);
+    public boolean updateUser(User authUser, User user, String password2) {
+        String encodedNewPassword = passwordEncoder.encode(user.getPassword());
+        if (!BCrypt.checkpw(password2, authUser.getPassword()) && user.getPassword().equals(password2)) {
+            user.setPassword(encodedNewPassword);
+        }
+        securityUtils.updateContext(repository.save(user));
         return true;
     }
 
-    public boolean deleteUser(User user){
-        repository.delete(user);
+    public boolean deleteUser(User user) {
+        user.setActive(false);
+        repository.save(user);
         return true;
     }
 }

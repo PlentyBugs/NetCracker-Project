@@ -6,6 +6,7 @@ import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,26 +35,35 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(
             @AuthenticationPrincipal User authUser,
+            @RequestParam("password2") String password2,
             @Valid User user,
             BindingResult bindingResult,
             Model model
     ){
         if (!user.getId().equals(authUser.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        if (bindingResult.hasErrors()) {
+        boolean passwordsEqual = password2.equals(user.getPassword());
+        if (bindingResult.hasErrors() || !passwordsEqual) {
             Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
-            return "user";
+            if (!passwordsEqual) model.addAttribute("passwordDiffError", "Passwords are different");
+            return "redirect:/user/{id}";
         }
-        userService.updateUser(user);
-        return "redirect:/user";
+        userService.updateUser(authUser, user, password2);
+        return "redirect:/user/{id}";
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(
             @AuthenticationPrincipal User authUser,
-            @PathVariable("id") User user
+            @PathVariable("id") User user,
+            @RequestParam("password2") String password2,
+            Model model
     ){
         if (!user.getId().equals(authUser.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        if (BCrypt.checkpw(password2, user.getPassword())) {
+            model.addAttribute("passwordDiffError", "Passwords are different");
+            return "redirect:/user/{id}";
+        }
         userService.deleteUser(user);
         return "redirect:/login";
     }

@@ -8,13 +8,13 @@
     -->
     <div class="container">
         <div class="row mb-3">
-            <div class="col-sm-2"><img th:src="@{/img/} + ${user.avatarFilename}" style="max-width: 100px; height: auto; max-height: 200px;"/></div>
+            <div class="col-sm-2"><img th:src="@{/img/} + ${user.avatarFilename}" id="user-avatar" style="max-width: 100px; height: auto; max-height: 200px;"/></div>
             <div class="col-sm-10">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'"></h3>
+                        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'" id="user-full-name"></h3>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-8" id="user-team-roles">
                         Командные роли:
                         <th:block th:each="role : ${user.teamRoles}">
                             <i class="list-group-item" th:text="${#strings.capitalize(role.name())}"></i>
@@ -28,7 +28,7 @@
                 <h5 class="text-center">Команды</h5>
                 <ul class="list-group">
                     <th:block th:each="team : ${user.teams}">
-                        <li class="list-group-item"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
+                        <li class="list-group-item team"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
                     </th:block>
                 </ul>
             </div>
@@ -38,7 +38,7 @@
                     <ul class="list-group">
                         <th:block th:each="team : ${user.teams}">
                             <th:block th:each="comp : ${team.statistics}">
-                                <li class="list-group-item"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
+                                <li class="list-group-item competition"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
                             </th:block>
                         </th:block>
                     </ul>
