@@ -1,7 +1,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
     <div class="container">
-        <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title"/>
+        <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title" th:onerror="'this.onerror=null; this.src=`' + @{/img/compTitle.png} + '`;'"/>
         <div class="card-body">
             <h1 class="card-title" th:text="${competition.compName}"></h1>
             <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}"></h6>
