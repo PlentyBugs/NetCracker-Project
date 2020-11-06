@@ -41,8 +41,8 @@ public class TeamControllerTest {
     public void getAllTeamsTest() throws Exception {
         mockMvc.perform(get("/team"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='team-list']").string(containsString("Команды:")))
-                .andExpect(xpath("//button[@id='btn btn-warning btn-lg btn-block']").exists());
+                .andExpect(xpath("//div[@class='card-body']").nodeCount(3))
+                .andExpect(xpath("//a[@class='btn btn-warning btn-lg btn-block']").exists());
     }
     @Test
     public void addTeamTest() throws Exception {
@@ -59,7 +59,7 @@ public class TeamControllerTest {
 
         assertEquals(teamRepository.findAll().size(),4);
         Team team=teamRepository.findById(10L).orElse(new Team());
-        assertEquals(team.getLogoFilename(),"teamLogo");
+        assertEquals(team.getLogoFilename(),"teamLogo.png");
         assertEquals(team.getTeamName(),"Team A");
     }
 
@@ -79,18 +79,18 @@ public class TeamControllerTest {
                 .andExpect(authenticated())
                 .andExpect(xpath("//img[@id='team-logo']").exists())
                 .andExpect(xpath("//div[@id='main']/div/div[1]/h1").string(containsString("Train B")))
-                .andExpect(xpath("//button[@id='btn btn-success btn-lg btn-block']").exists());
+                .andExpect(xpath("//button[@class='btn btn-success btn-lg btn-block']").exists());
         mockMvc.perform(post("/team/2/join").with(csrf()))
                 .andExpect(authenticated())
                 .andExpect(redirectedUrl("/team/2"));
     }
     @Test
     public void quitTeamTest() throws Exception{
-        mockMvc.perform(get("/team/2"))
-                .andExpect(xpath("//button[@id='btn btn-warning btn-lg btn-block']").exists());
-        mockMvc.perform(post("/team/2/quit").with(csrf()))
+        mockMvc.perform(get("/team/3"))
+                .andExpect(xpath("//button[@class='btn btn-warning btn-lg btn-block']").exists());
+        mockMvc.perform(post("/team/3/quit").with(csrf()))
                 .andExpect(authenticated())
-                .andExpect(redirectedUrl("/team/2"));
+                .andExpect(redirectedUrl("/team/3"));
     }
 }
 
