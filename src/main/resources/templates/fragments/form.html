@@ -15,7 +15,7 @@
                     <form action="#" th:action="@{/} + ${type}" method="post" th:object="${user}">
                         <div class="form-group row" th:if="${type == 'registration'}">
                             <div class="col-sm-12">
-                                <input th:value="${user != null} ? *{email}: ''" type="email" class="form-control" name="email" id="loginEmail" placeholder="example@exam.com" th:classappend="${user != null and #fields.hasErrors('email')} ? 'is-invalid': ''"/>
+                                <input th:value="${user != null} ? *{email}: ''" type="email" class="form-control" name="email" id="loginEmail" placeholder="Email example@exam.com" th:classappend="${user != null and #fields.hasErrors('email')} ? 'is-invalid': ''"/>
                                 <span class="invalid-feedback" th:if="${user != null and #fields.hasErrors('email')}" th:errors="*{email}"></span>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
 
                     <div class="col-md-12">
                         <div class="login-or">
-                            <hr class="hr-or">
+                            <hr class="hr-or"/>
                             <span class="span-or">or</span>
                         </div>
                     </div>

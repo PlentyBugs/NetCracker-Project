@@ -51,11 +51,11 @@ public class UserControllerTest {
                 .andExpect(xpath("//img[@id='user-avatar']").exists())
                 .andExpect(xpath("//h3[@id='user-full-name']").string(containsString("Жуков Егор Константинович (steam)")))
                 .andExpect(xpath("//div[@id='user-team-roles']").string(containsString("Командные роли:")))
-                .andExpect(xpath("//li[@class='list-group-item team'][1]/a").string(containsString("Team A")))
-                .andExpect(xpath("//li[@class='list-group-item team'][2]/a").string(containsString("FunCo")))
-                .andExpect(xpath("//li[@class='list-group-item competition']").nodeCount(2))
-                .andExpect(xpath("//li[@class='list-group-item competition'][1]/a").string(containsString("Hackathon 2")))
-                .andExpect(xpath("//li[@class='list-group-item competition'][2]/a").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")));
+                .andExpect(xpath("//li[@class='list-group-item team bg-dark'][1]/a").string(containsString("Team A")))
+                .andExpect(xpath("//li[@class='list-group-item team bg-dark'][2]/a").string(containsString("FunCo")))
+                .andExpect(xpath("//li[@class='list-group-item competition bg-dark']").nodeCount(2))
+                .andExpect(xpath("//li[@class='list-group-item competition bg-dark'][1]/a").string(containsString("Hackathon 2")))
+                .andExpect(xpath("//li[@class='list-group-item competition bg-dark'][2]/a").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")));
     }
 
     @Test
