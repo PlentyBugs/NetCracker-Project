@@ -1,14 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <th:block th:fragment="navbar">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">NH</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="d-flex w-50 order-0">
+                <a class="navbar-brand" href="/">NH</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse justify-content-center order-2 w-100" id="navbarSupportedContent">
                 <!-- Когда определимся с дизайном: сделать кнопки и выдать права доступа к секциям -->
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto mx-auto text-center">
                     <li class="nav-item" sec:authorize="hasAuthority('ORGANIZER')">
                         <a class="nav-link" th:href="@{/add-competition}">Add competition</a>
                     </li>
@@ -22,7 +24,8 @@
                         <a class="nav-link" th:href="@{/admin}">Admin panel</a>
                     </li>
                 </ul>
-
+            </div>
+            <div class="d-inline-block w-50 text-right order-1 order-md-last">
                 <a th:href="@{/login}" class="btn btn-outline-warning float-right" sec:authorize="!isAuthenticated()">Log In</a>
                 <a th:href="@{/registration}" class="btn btn-outline-warning float-right" sec:authorize="!isAuthenticated()">Sign Up</a>
                 <th:block th:insert="~{fragments/logout :: logout}"></th:block>

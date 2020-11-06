@@ -6,7 +6,7 @@
             <div class="card-columns" id="team-list">
                 <th:block th:if="${not #lists.isEmpty(page.content)}">
                     <th:block th:each="team: ${page}" >
-                        <div class="card">
+                        <div class="card bg-dark text-center">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${team.teamName}"></h5>
                             </div>

@@ -39,15 +39,7 @@ public class RegistrationControllerTest {
     @Test
     public void registrationPageTest() throws Exception {
         mockMvc.perform(get("/registration"))
-                .andExpect(xpath("//div[@class='form-group row']").nodeCount(9))
-                .andExpect(xpath("//div[@class='form-group row'][1]").string(containsString("Email")))
-                .andExpect(xpath("//div[@class='form-group row'][2]").string(containsString("Name")))
-                .andExpect(xpath("//div[@class='form-group row'][3]").string(containsString("Surname")))
-                .andExpect(xpath("//div[@class='form-group row'][4]").string(containsString("Second name")))
-                .andExpect(xpath("//div[@class='form-group row'][5]").string(containsString("Username")))
-                .andExpect(xpath("//div[@class='form-group row'][6]").string(containsString("Password")))
-                .andExpect(xpath("//div[@class='form-group row'][7]").string(containsString("Repeat password")))
-                .andExpect(xpath("//div[@class='form-group row'][8]").string(containsString("You register as")))
+                .andExpect(xpath("//div[@class='form-group row']").nodeCount(7))
                 .andExpect(xpath("//div[@class='form-check form-check-inline'][1]").string(containsString("Participant")))
                 .andExpect(xpath("//div[@class='form-check form-check-inline'][2]").string(containsString("Organizer")));
     }
