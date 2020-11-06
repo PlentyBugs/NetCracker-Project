@@ -26,19 +26,19 @@
         <div class="row">
             <div class="col-sm">
                 <h5 class="text-center">Команды</h5>
-                <ul class="list-group">
+                <ul class="list-group text-center">
                     <th:block th:each="team : ${user.teams}">
-                        <li class="list-group-item team"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
+                        <li class="list-group-item team bg-dark"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
                     </th:block>
                 </ul>
             </div>
             <div class="col-sm">
                 <h5 class="text-center">Соревнования</h5>
                 <div class="col-sm">
-                    <ul class="list-group">
+                    <ul class="list-group text-center">
                         <th:block th:each="team : ${user.teams}">
                             <th:block th:each="comp : ${team.statistics}">
-                                <li class="list-group-item competition"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
+                                <li class="list-group-item competition bg-dark"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>
                             </th:block>
                         </th:block>
                     </ul>

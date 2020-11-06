@@ -7,10 +7,15 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
+    background-image: url('../img/background.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-attachment: fixed;
 }
 
 #main {
     flex: 1 0 auto;
+    color: #ffc107;
 }
 
 #footer {
@@ -25,4 +30,65 @@ body {
 .navbar-avatar {
     width: 40px;
     height: 40px;
+}
+
+.form-title {
+
+}
+
+.login-or {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.span-or {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: -2px;
+    margin-left: -25px;
+    background-color: #343a40;
+    width: 50px;
+    text-align: center;
+    color: #ffc107;
+}
+
+.hr-or {
+    height: 1px;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: 1px solid #ffc107 !important;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=datetime-local], textarea, .file-label,
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=datetime-local]:focus, textarea:focus,
+input[type=text]:active, input[type=password]:active, input[type=email]:active, input[type=datetime-local]:active, textarea:active {
+    color: #ffc107 !important;
+    background-color: #767676 !important;
+    border: 0 !important;
+}
+
+.file-label:after {
+    color: #ffc107 !important;
+    background-color: #4e4e4e !important;
+    height: calc(1.5em + .9rem) !important;
+}
+
+::-webkit-input-placeholder { /* Edge */
+    color: #ffc107 !important;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #ffc107 !important;
+}
+
+::placeholder {
+    color: #ffc107 !important;
+}
+
+.button-form {
+    border-color: #4b4b4b !important;
 }

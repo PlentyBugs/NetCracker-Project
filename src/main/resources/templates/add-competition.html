@@ -1,40 +1,48 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
-    <h3>Register new hackathon</h3>
-    <form enctype="multipart/form-data" th:action="@{/competition}" method="post" th:object="${competition}">
-        <div class="form-group row">
-            <label for="compName" class="col-sm-2 col-form-label">Hackathon name:</label>
-            <div class="col-sm-10">
-                <input th:value="${competition != null} ? *{compName}: ''" type="text" class="form-control"  name="compName" id="compName" placeholder="Hackathon name" th:classappend="${competition != null and #fields.hasErrors('compName')} ? 'is-invalid': ''"//>
-                <span class="invalid-feedback" th:if="${competition != null and #fields.hasErrors('compName')}" th:errors="*{compName}"></span>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mx-auto rounded pt-2 pb-3">
+                <div class="mb-3 form-title">
+                    <div class="col-md-12 text-center">
+                        <h3>Register new hackathon</h3>
+                    </div>
+                </div>
+                <form enctype="multipart/form-data" th:action="@{/competition}" method="post" th:object="${competition}">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input th:value="${competition != null} ? *{compName}: ''" type="text" class="form-control" name="compName" id="compName" placeholder="Hackathon name" th:classappend="${competition != null and #fields.hasErrors('compName')} ? 'is-invalid': ''"//>
+                            <span class="invalid-feedback" th:if="${competition != null and #fields.hasErrors('compName')}" th:errors="*{compName}"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <textarea th:value="${competition != null} ? *{description}: ''" class="form-control" name="description" id="description" placeholder="Description" rows="4" th:classappend="${competition != null and #fields.hasErrors('description')} ? 'is-invalid': ''"></textarea>
+                            <span class="invalid-feedback" th:if="${competition != null and #fields.hasErrors('description')}" th:errors="*{description}"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input name="startDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="startDate" th:classappend="${startDateError != null} ? 'is-invalid': ''"/>
+                            <span class="invalid-feedback" th:if="${startDateError != null}" th:text="${startDateError}"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input name="endDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="endDate" th:classappend="${endDateError != null} ? 'is-invalid': ''"/>
+                            <span class="invalid-feedback" th:if="${endDateError != null}" th:text="${endDateError}"></span>
+                        </div>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="title" accept="image/png, image/jpeg"/>
+                        <label class="custom-file-label file-label" for="customFile">Choose title image</label>
+                    </div>
+                    <div class="form-group row mt-3">
+                        <button type="submit" class="btn btn-dark btn-lg btn-block button-form">Register</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="description" class="col-sm-2 col-form-label">Description:</label>
-            <textarea th:value="${competition != null} ? *{description}: ''" class="form-control" name="description" id="description" rows="4" th:classappend="${competition != null and #fields.hasErrors('description')} ? 'is-invalid': ''"></textarea>
-            <span class="invalid-feedback" th:if="${competition != null and #fields.hasErrors('description')}" th:errors="*{description}"></span>
-        </div>
-        <div class="form-group row">
-            <label for="startDate" class="col-2 col-form-label">Start Date and Time</label>
-            <div class="col-sm-10">
-                <input name="startDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="startDate" th:classappend="${startDateError != null} ? 'is-invalid': ''"/>
-                <span class="invalid-feedback" th:if="${startDateError != null}" th:text="${startDateError}"></span>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="endDate" class="col-2 col-form-label">End Date and Time</label>
-            <div class="col-sm-10">
-                <input name="endDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="endDate" th:classappend="${endDateError != null} ? 'is-invalid': ''"/>
-                <span class="invalid-feedback" th:if="${endDateError != null}" th:text="${endDateError}"></span>
-            </div>
-        </div>
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" id="customFile" name="title" accept="image/png, image/jpeg"/>
-            <label class="custom-file-label" for="customFile">Choose title image</label>
-        </div>
-        <div class="form-group row mt-3">
-            <button type="submit" class="btn btn-dark btn-lg btn-block">Register</button>
-        </div>
-    </form>
+    </div>
     <!---->
 </div></html>
