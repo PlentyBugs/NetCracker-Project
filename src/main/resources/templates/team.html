@@ -2,7 +2,7 @@
     <!--Блок для написания кода-->
     <div class="container mb-3 text-center">
         <h1 th:text="${team.teamName}"></h1>
-        <img th:src="@{/img/} + ${team.logoFilename}" alt="logo" style="max-height: 200px; width: auto" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
+        <img th:src="@{/img/} + ${team.logoFilename}" alt="logo" style="max-height: 200px; width: auto" id="team-logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
     </div>
     <form th:if="${#authentication.principal.getTeams().contains(team)}" method="post" th:action="@{/team/} + ${team.id} + '/quit'">
         <button type="submit" class="btn btn-warning btn-lg btn-block">Quit</button>
