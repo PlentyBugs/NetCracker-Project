@@ -14,7 +14,7 @@
     <div class="card-columns">
         <th:block th:each="user: ${team.teammates}" >
             <a th:href="@{/user/} + ${user.id}" class="card-link">
-                <div class="card text-white bg-info mb-3 text-center" style="max-width: 18rem;">
+                <div class="card text-white bg-dark mb-3 text-center" style="max-width: 18rem;">
                     <div class="card-header" th:text="${user.surname} + ' ' + ${user.name}">Full name</div>
                     <div class="card-body">
                         <img th:src="@{/img/} + ${user.avatarFilename}" style="width: 100px; height: auto;" class="card-img-top" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
