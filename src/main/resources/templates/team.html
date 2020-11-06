@@ -10,7 +10,7 @@
     <form th:unless="${#authentication.principal.getTeams().contains(team)}" method="post" th:action="@{/team/} + ${team.id} + '/join'">
         <button type="submit" class="btn btn-success btn-lg btn-block">Join</button>
     </form>
-gi
+
     <div class="card-columns">
         <th:block th:each="user: ${team.teammates}" >
             <a th:href="@{/user/} + ${user.id}" class="card-link">
