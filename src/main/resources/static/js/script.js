@@ -1,3 +1,13 @@
+$(() => {
+    $('#loading-bg').hide();
+    $('#loading-image').hide();
+
+    $(window).on('beforeunload', function() {
+        $('#loading-bg').show();
+        $('#loading-image').show();
+    });
+});
+
 function removeTeam(id) {
     $('#team-id-' + id).remove();
     let token = $('#_csrf').attr('content');
