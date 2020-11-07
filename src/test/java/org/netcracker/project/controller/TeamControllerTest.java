@@ -41,8 +41,7 @@ public class TeamControllerTest {
     public void getAllTeamsTest() throws Exception {
         mockMvc.perform(get("/team"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@class='card-body']").nodeCount(3))
-                .andExpect(xpath("//a[@class='btn btn-warning btn-lg btn-block']").exists());
+                .andExpect(xpath("//div[@class='card-body']").nodeCount(3));
     }
     @Test
     public void addTeamTest() throws Exception {

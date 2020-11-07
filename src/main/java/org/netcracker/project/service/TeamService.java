@@ -39,8 +39,6 @@ public class TeamService {
                     user
             );
         }
-
-        System.out.println(filter);
         return repository.findAllWithFilter(
                 pageable,
                 filter.isMinMembersOn() ? filter.getMinMembers() : filter.isRemoveEmpty() ? 1 : -1,
