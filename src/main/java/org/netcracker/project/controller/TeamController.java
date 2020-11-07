@@ -1,6 +1,7 @@
 package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.filter.TeamFilter;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
@@ -31,14 +32,23 @@ public class TeamController {
     private final SecurityUtils securityUtils;
 
     @GetMapping
-    public String getAllTeams(Model model,
-                              @RequestParam(defaultValue="",required=false) String filter,
-                              @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable)
-    {
-        Page<Team> teams = service.getPage(pageable,filter);
+    public String getAllTeams(
+            @AuthenticationPrincipal User user,
+            Model model,
+            @RequestParam(required = false) boolean alreadyInTheGroup,
+            @RequestParam(required = false) boolean removeEmpty,
+            @RequestParam(required = false) boolean minMembersOn,
+            @RequestParam(required = false) boolean maxMembersOn,
+            @RequestParam(required = false) Integer minMembers,
+            @RequestParam(required = false) Integer maxMembers,
+            @RequestParam(defaultValue = "", required = false) String searchName,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ){
+        TeamFilter teamFilter = new TeamFilter(alreadyInTheGroup, removeEmpty, minMembersOn, maxMembersOn, minMembers, maxMembers, UriUtils.decode(searchName, "UTF-8"));
+        Page<Team> teams = service.getPage(pageable, teamFilter, user);
         model.addAttribute("page",teams);
         model.addAttribute("add","/team");
-        model.addAttribute("filter", UriUtils.encodePath(filter, "UTF-8"));
+        model.addAttribute("filter", teamFilter);
         return "team-list";
     }
 

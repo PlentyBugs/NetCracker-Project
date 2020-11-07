@@ -3,9 +3,9 @@
     <div class="container">
         <a type="button" class="btn btn-warning btn-lg col-sm-6" th:href="@{/add-team}">Add new Team</a>
         <div class="input-group xd-inline-flex float-right col-sm-6 pr-0">
-            <input type="search" class="form-control search-form" placeholder="Search" aria-label="Search"/>
+            <input type="search" class="form-control search-form" placeholder="Search" aria-label="Search" id="searchName"/>
             <div class="input-group-prepend">
-                <a th:href="@{/team}" class="input-group-text  group-prepend"><i class="fa fa-search search-form"></i></a>
+                <button type="submit" onclick="search();" id="submitButton" class="input-group-text group-prepend"><i class="fa fa-search search-form"></i></button>
                 <button type="button" class="btn btn-outline-secondary group-prepend dropdown-toggle dropdown-toggle-split input-group-text" onclick="$('.dropdown').toggle()"></button>
             </div>
         </div>
@@ -61,6 +61,9 @@
                         </div>
                     </th:block>
                 </th:block>
+                <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+                <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+                <meta id="_csrf_parameter" name="_csrf_header" th:content="${_csrf.parameterName}"/>
             </div>
         </div>
     </div>

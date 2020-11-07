@@ -1,6 +1,7 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.filter.TeamFilter;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.TeamRepository;
@@ -22,9 +23,31 @@ public class TeamService {
 
     public Page<Team> getPage(Pageable pageable){return repository.findAll(pageable);}
 
-    public Page<Team> getPage(Pageable pageable, String filter){    //need to write body
-        return getPage(pageable);
-    }  //to write filter
+    public Page<Team> getPage(Pageable pageable, TeamFilter filter, User user) {
+        if (filter.isRemoveEmpty()) {
+            if (filter.getMinMembers() <= 0)
+                filter.setMinMembers(1);
+            if (filter.getMaxMembers() <= 0)
+                filter.setMaxMembers(1);
+        }
+        if (filter.isNotInTheGroup()) {
+            return repository.findAllWithFilterAndWithoutMe(
+                    pageable,
+                    filter.isMinMembersOn() ? filter.getMinMembers() : filter.isRemoveEmpty() ? 1 : -1,
+                    filter.isMaxMembersOn() ? filter.getMaxMembers() : Integer.MAX_VALUE,
+                    "%" + filter.getSearchName() + "%",
+                    user
+            );
+        }
+
+        System.out.println(filter);
+        return repository.findAllWithFilter(
+                pageable,
+                filter.isMinMembersOn() ? filter.getMinMembers() : filter.isRemoveEmpty() ? 1 : -1,
+                filter.isMaxMembersOn() ? filter.getMaxMembers() : Integer.MAX_VALUE,
+                "%" + filter.getSearchName() + "%"
+        );
+    }
 
     public boolean save(Team team, MultipartFile logo, User user) throws IOException {
         //...mb creator
@@ -37,7 +60,8 @@ public class TeamService {
         repository.save(team);
         return true;
     }
-    private void saveLogo(@Valid Team team, @RequestParam("avatar") MultipartFile file)throws IOException{
+
+    private void saveLogo(@Valid Team team, @RequestParam("avatar") MultipartFile file) throws IOException{
         String resultFilename=imageUtils.saveFile(file);
         if(!"".equals(resultFilename)){
             team.setLogoFilename(resultFilename);
