@@ -1,6 +1,53 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
-    <a type="button" class="btn btn-warning btn-lg btn-block" th:href="@{/add-team}">Add new Team</a>
+    <div class="container">
+        <a type="button" class="btn btn-warning btn-lg col-sm-6" th:href="@{/add-team}">Add new Team</a>
+        <div class="input-group xd-inline-flex float-right col-sm-6 pr-0">
+            <input type="search" class="form-control search-form" placeholder="Search" aria-label="Search"/>
+            <div class="input-group-prepend">
+                <a th:href="@{/team}" class="input-group-text  group-prepend"><i class="fa fa-search search-form"></i></a>
+                <button type="button" class="btn btn-outline-secondary group-prepend dropdown-toggle dropdown-toggle-split input-group-text" onclick="$('.dropdown').toggle()"></button>
+            </div>
+        </div>
+        <div class="col-sm-12 dropdown mt-3" style="display: none">
+            <div class="input-group d-inline-flex col-sm-12 mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="minMembersOn" type="checkbox" id="minMembersOn">
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        Min members:
+                    </div>
+                </div>
+                <input class="form-control" name="minMembers" type="number" min="0" max="10000" value="0" id="minMembers"/>
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="maxMembersOn" type="checkbox" id="maxMembersOn">
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        Max members:
+                    </div>
+                </div>
+                <input class="form-control" name="maxMembers" type="number" min="0" max="10000" value="10000" id="maxMembers"/>
+            </div>
+
+            <div class="col-sm-7">
+                <div class="form-check form-check-inline">
+                    <input name="alreadyInTheGroup" type="checkbox" class="form-check-input" id="alreadyInTheGroup"/>
+                    <label class="form-check-label" for="alreadyInTheGroup">
+                        Remove groups in which I am already a member
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input name="removeEmpty" type="checkbox" class="form-check-input" id="removeEmpty"/>
+                    <label class="form-check-label" for="removeEmpty">
+                        Remove Empty
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
     <div layout:replace="fragments/pager :: pager (url = ${url}, page = ${page}, filter = ${filter})">
         <div layout:fragment="pagerContent">
             <div class="card-columns" id="team-list">
@@ -17,5 +64,6 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/js/team.js}"></script>
     <!---->
 </div></html>
