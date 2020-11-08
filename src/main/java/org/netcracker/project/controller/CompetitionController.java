@@ -2,6 +2,7 @@ package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.CompetitionFilter;
+import org.netcracker.project.filter.CompetitionFilterUnprepared;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
@@ -40,33 +41,9 @@ public class CompetitionController {
     public String getAllCompetitions(
             Model model,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) boolean enableBeforeStart, // Всё это скорее всего можно заменить на один @RequestParam CompetitionFilter (как и в в Team) но у меня пока не получается
-            @RequestParam(required = false) boolean enableEqualsStart,
-            @RequestParam(required = false) boolean enableAfterStart,
-            @RequestParam(required = false) boolean enableBeforeEnd,
-            @RequestParam(required = false) boolean enableEqualsEnd,
-            @RequestParam(required = false) boolean enableAfterEnd,
-            @RequestParam(defaultValue = "", required = false) String beforeStart,
-            @RequestParam(defaultValue = "", required = false) String equalsStart,
-            @RequestParam(defaultValue = "", required = false) String afterStart,
-            @RequestParam(defaultValue = "", required = false) String beforeEnd,
-            @RequestParam(defaultValue = "", required = false) String equalsEnd,
-            @RequestParam(defaultValue = "", required = false) String afterEnd,
-            @RequestParam(defaultValue = "", required = false) String searchString
+            CompetitionFilterUnprepared competitionFilterUnprepared
     ) {
-        DateCallback beforeStartCallback = dateUtil.parseDateFromForm(beforeStart);
-        DateCallback equalsStartCallback = dateUtil.parseDateFromForm(equalsStart);
-        DateCallback afterStartCallback = dateUtil.parseDateFromForm(afterStart);
-        DateCallback beforeEndCallback = dateUtil.parseDateFromForm(beforeEnd);
-        DateCallback equalsEndCallback = dateUtil.parseDateFromForm(equalsEnd);
-        DateCallback afterEndCallback = dateUtil.parseDateFromForm(afterEnd);
-
-        CompetitionFilter competitionFilter = new CompetitionFilter(
-                enableBeforeStart, enableEqualsStart, enableAfterStart, enableBeforeEnd, enableEqualsEnd, enableAfterEnd,
-                beforeStartCallback.getLocalDateTime(), equalsStartCallback.getLocalDateTime(), afterStartCallback.getLocalDateTime(),
-                beforeEndCallback.getLocalDateTime(), equalsEndCallback.getLocalDateTime(), afterEndCallback.getLocalDateTime(),
-                searchString
-        );
+        CompetitionFilter competitionFilter = competitionFilterUnprepared.prepare(dateUtil);
 
         Page<Competition> competitions = service.getPage(pageable, competitionFilter);
         model.addAttribute("page", competitions);
