@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -35,16 +34,10 @@ public class TeamController {
     public String getAllTeams(
             @AuthenticationPrincipal User user,
             Model model,
-            @RequestParam(required = false) boolean alreadyInTheGroup,
-            @RequestParam(required = false) boolean removeEmpty,
-            @RequestParam(required = false) boolean minMembersOn,
-            @RequestParam(required = false) boolean maxMembersOn,
-            @RequestParam(required = false) Integer minMembers,
-            @RequestParam(required = false) Integer maxMembers,
-            @RequestParam(defaultValue = "", required = false) String searchName,
+            TeamFilter teamFilter,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
     ){
-        TeamFilter teamFilter = new TeamFilter(alreadyInTheGroup, removeEmpty, minMembersOn, maxMembersOn, minMembers, maxMembers, UriUtils.decode(searchName, "UTF-8"));
+        teamFilter.validate();
         Page<Team> teams = service.getPage(pageable, teamFilter, user);
         model.addAttribute("page",teams);
         model.addAttribute("add","/team");

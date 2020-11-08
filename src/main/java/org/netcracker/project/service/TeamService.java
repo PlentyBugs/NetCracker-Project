@@ -24,26 +24,26 @@ public class TeamService {
     public Page<Team> getPage(Pageable pageable){return repository.findAll(pageable);}
 
     public Page<Team> getPage(Pageable pageable, TeamFilter filter, User user) {
-        if (filter.isRemoveEmpty()) {
+        if (filter.getRemoveEmpty()) {
             if (filter.getMinMembers() <= 0)
                 filter.setMinMembers(1);
             if (filter.getMaxMembers() <= 0)
                 filter.setMaxMembers(1);
         }
-        if (filter.isNotInTheGroup()) {
+        if (filter.getAlreadyInTheGroup()) {
             return repository.findAllWithFilterAndWithoutMe(
                     pageable,
-                    filter.isMinMembersOn() ? filter.getMinMembers() : filter.isRemoveEmpty() ? 1 : -1,
-                    filter.isMaxMembersOn() ? filter.getMaxMembers() : Integer.MAX_VALUE,
-                    "%" + filter.getSearchName() + "%",
+                    filter.getMinMembersOn() ? filter.getMinMembers() : filter.getRemoveEmpty() ? 1 : -1,
+                    filter.getMaxMembersOn() ? filter.getMaxMembers() : Integer.MAX_VALUE,
+                    filter.getFormattedSearchName(),
                     user
             );
         }
         return repository.findAllWithFilter(
                 pageable,
-                filter.isMinMembersOn() ? filter.getMinMembers() : filter.isRemoveEmpty() ? 1 : -1,
-                filter.isMaxMembersOn() ? filter.getMaxMembers() : Integer.MAX_VALUE,
-                "%" + filter.getSearchName() + "%"
+                filter.getMinMembersOn() ? filter.getMinMembers() : filter.getRemoveEmpty() ? 1 : -1,
+                filter.getMaxMembersOn() ? filter.getMaxMembers() : Integer.MAX_VALUE,
+                filter.getFormattedSearchName()
         );
     }
 
