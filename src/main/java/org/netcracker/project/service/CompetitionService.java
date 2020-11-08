@@ -1,6 +1,7 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.CompetitionRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +30,26 @@ public class CompetitionService {
         return repository.findAll(pageable);
     }
 
-    public Page<Competition> getPage(Pageable pageable, String filter) {
-        String pattern = dateUtil.getDATE_PATTERN();
-        if (filter.matches("after" + pattern)) {
-            return repository.findAllByStartDateAfter(pageable, dateUtil.compileFilter(filter, "after"));
-        } else if (filter.matches("before" + pattern)) {
-            return repository.findAllByStartDateBefore(pageable, dateUtil.compileFilter(filter, "before"));
-        } else if (filter.matches("equals" + pattern)) {
-            return repository.findAllByStartDateEquals(pageable, dateUtil.compileFilter(filter, "equals"));
+    public Page<Competition> getPage(Pageable pageable, CompetitionFilter filter) {
+        if (filter.isEqualsBoundsOn()) {
+            if (filter.isEnableEqualsStart() && filter.isEnableEqualsEnd()) {
+                return repository.findAllByStartDateEqualsAndEndDateEquals(pageable, filter.getEqualsStart(), filter.getEqualsEnd(), filter.getString());
+            } else if (filter.isEnableEqualsStart()) {
+                return repository.findAllByStartDateEquals(pageable, filter.getEqualsStart(), filter.getString());
+            } else {
+                return repository.findAllByEndDateEquals(pageable, filter.getEqualsEnd(), filter.getString());
+            }
         }
-        return getPage(pageable);
+
+        if (filter.isBoundsOn()) {
+            if (!filter.isEnableBeforeStart() || filter.getBeforeStart() == null) filter.setBeforeStart(LocalDateTime.now().plusYears(100));
+            if (!filter.isEnableBeforeEnd() || filter.getBeforeEnd() == null) filter.setBeforeEnd(LocalDateTime.now().plusYears(100));
+            if (!filter.isEnableAfterStart() || filter.getAfterStart() == null) filter.setAfterStart(LocalDateTime.now().minusYears(100));
+            if (!filter.isEnableAfterEnd() || filter.getAfterEnd() == null) filter.setAfterEnd(LocalDateTime.now().minusYears(100));
+            return repository.findAllByBounds(pageable, filter.getBeforeStart(), filter.getAfterStart(), filter.getBeforeEnd(), filter.getAfterEnd(), filter.getFormattedString());
+        }
+
+        return repository.findAllBySearch(pageable, filter.getFormattedString());
     }
 
     public boolean save(Competition competition, MultipartFile title, User user) throws IOException {

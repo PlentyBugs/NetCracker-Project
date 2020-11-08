@@ -1,11 +1,13 @@
 package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.CompetitionService;
+import org.netcracker.project.util.DateUtil;
 import org.netcracker.project.util.ValidationUtils;
 import org.netcracker.project.util.callback.DateCallback;
 import org.springframework.data.domain.Page;
@@ -21,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -33,17 +34,44 @@ import java.util.Map;
 public class CompetitionController {
 
     private final CompetitionService service;
+    private final DateUtil dateUtil;
 
     @GetMapping
     public String getAllCompetitions(
             Model model,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(defaultValue = "", required = false) String filter
+            @RequestParam(required = false) boolean enableBeforeStart, // Всё это скорее всего можно заменить на один @RequestParam CompetitionFilter (как и в в Team) но у меня пока не получается
+            @RequestParam(required = false) boolean enableEqualsStart,
+            @RequestParam(required = false) boolean enableAfterStart,
+            @RequestParam(required = false) boolean enableBeforeEnd,
+            @RequestParam(required = false) boolean enableEqualsEnd,
+            @RequestParam(required = false) boolean enableAfterEnd,
+            @RequestParam(defaultValue = "", required = false) String beforeStart,
+            @RequestParam(defaultValue = "", required = false) String equalsStart,
+            @RequestParam(defaultValue = "", required = false) String afterStart,
+            @RequestParam(defaultValue = "", required = false) String beforeEnd,
+            @RequestParam(defaultValue = "", required = false) String equalsEnd,
+            @RequestParam(defaultValue = "", required = false) String afterEnd,
+            @RequestParam(defaultValue = "", required = false) String searchString
     ) {
-        Page<Competition> competitions = service.getPage(pageable, filter);
+        DateCallback beforeStartCallback = dateUtil.parseDateFromForm(beforeStart);
+        DateCallback equalsStartCallback = dateUtil.parseDateFromForm(equalsStart);
+        DateCallback afterStartCallback = dateUtil.parseDateFromForm(afterStart);
+        DateCallback beforeEndCallback = dateUtil.parseDateFromForm(beforeEnd);
+        DateCallback equalsEndCallback = dateUtil.parseDateFromForm(equalsEnd);
+        DateCallback afterEndCallback = dateUtil.parseDateFromForm(afterEnd);
+
+        CompetitionFilter competitionFilter = new CompetitionFilter(
+                enableBeforeStart, enableEqualsStart, enableAfterStart, enableBeforeEnd, enableEqualsEnd, enableAfterEnd,
+                beforeStartCallback.getLocalDateTime(), equalsStartCallback.getLocalDateTime(), afterStartCallback.getLocalDateTime(),
+                beforeEndCallback.getLocalDateTime(), equalsEndCallback.getLocalDateTime(), afterEndCallback.getLocalDateTime(),
+                searchString
+        );
+
+        Page<Competition> competitions = service.getPage(pageable, competitionFilter);
         model.addAttribute("page", competitions);
         model.addAttribute("url", "/competition");
-        model.addAttribute("filter", UriUtils.encodePath(filter, "UTF-8"));
+        model.addAttribute("filter", competitionFilter);
         return "competition-list";
     }
 

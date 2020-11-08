@@ -1,6 +1,4 @@
 function search() {
-    let token = $('#_csrf').attr('content');
-    let header = $('#_csrf_header').attr('content');
     let filter = {};
     filter["alreadyInTheGroup"] = $("#alreadyInTheGroup").prop('checked');
     filter["removeEmpty"] = $("#removeEmpty").prop('checked');
@@ -21,11 +19,8 @@ function search() {
 }
 
 $("body").keyup(evt => {
-    console.log(1)
     evt.preventDefault();
-    console.log(2)
     if (evt.which === 13) {
-        console.log(3)
         search();
     }
     return false;

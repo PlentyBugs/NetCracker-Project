@@ -17,7 +17,7 @@ public class DateUtil {
 
     public DateUtil(@Value("${date.format}") String dateFormat) {
         this.dateFormat = dateFormat;
-        DATE_PATTERN = "2[0-9][2-9][0-9]-(1[0-2]|0[0-9])-([0-2][0-9]|3[0-1])(\\s|T)(2[0-4]|[01][0-9]):([0-5][0-9]|60)";
+        DATE_PATTERN = "2[0-9][0-9][0-9]-(1[0-2]|0[0-9])-([0-2][0-9]|3[0-1])(\\s|T)(2[0-4]|[01][0-9]):([0-5][0-9]|60)";
         formatter = DateTimeFormatter.ofPattern(dateFormat);
         formDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
     }
@@ -36,16 +36,6 @@ public class DateUtil {
 
     public String getDateFormat() {
         return dateFormat;
-    }
-
-    public LocalDateTime compileFilter(String filter, String command) {
-        return LocalDateTime.parse(
-                LocalDateTime.parse(
-                        filter.replaceFirst(command, "").replaceFirst("T", " "),
-                        getFormDateFormatter()
-                ).format(getFormatter()),
-                getFormatter()
-        );
     }
 
     public DateCallback parseDateFromForm(String formDate) {

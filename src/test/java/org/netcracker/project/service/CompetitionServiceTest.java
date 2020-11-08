@@ -68,38 +68,38 @@ public class CompetitionServiceTest {
         verify(competitionRepository, times(1)).save(competition);
     }
 
-    @Test
-    public void getPageFilterAfterTest() {
-        getPageFilterTest("after");
-    }
-
-    @Test
-    public void getPageFilterBeforeTest() {
-        getPageFilterTest("before");
-    }
-
-    @Test
-    public void getPageFilterEqualsTest() {
-        getPageFilterTest("equals");
-    }
-
-    private void getPageFilterTest(String command) {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Competition> competitionPage = new PageImpl<>(List.of());
-        String date = "2021-10-10T20:20";
-        String filter = command + date;
-
-        when(competitionService.getPage(pageable, filter)).thenReturn(competitionPage);
-
-        Page<Competition> competitions = competitionService.getPage(pageable, filter);
-
-        assertNotNull(competitions);
-        assertEquals(competitions.getNumberOfElements(), 0);
-        switch (command) {
-            case "before": verify(competitionRepository, times(1)).findAllByStartDateBefore(pageable, dateUtil.compileFilter(date, command)); break;
-            case "after": verify(competitionRepository, times(1)).findAllByStartDateAfter(pageable, dateUtil.compileFilter(date, command)); break;
-            case "equals": verify(competitionRepository, times(1)).findAllByStartDateEquals(pageable, dateUtil.compileFilter(date, command)); break;
-            default: break;
-        }
-    }
+//    @Test
+//    public void getPageFilterAfterTest() {
+//        getPageFilterTest("after");
+//    }
+//
+//    @Test
+//    public void getPageFilterBeforeTest() {
+//        getPageFilterTest("before");
+//    }
+//
+//    @Test
+//    public void getPageFilterEqualsTest() {
+//        getPageFilterTest("equals");
+//    }
+//
+//    private void getPageFilterTest(String command) {
+//        Pageable pageable = PageRequest.of(0, 10);
+//        Page<Competition> competitionPage = new PageImpl<>(List.of());
+//        String date = "2021-10-10T20:20";
+//        String filter = command + date;
+//
+//        when(competitionService.getPage(pageable, filter)).thenReturn(competitionPage);
+//
+//        Page<Competition> competitions = competitionService.getPage(pageable, filter);
+//
+//        assertNotNull(competitions);
+//        assertEquals(competitions.getNumberOfElements(), 0);
+//        switch (command) {
+//            case "before": verify(competitionRepository, times(1)).findAllByStartDateBefore(pageable, dateUtil.compileFilter(date, command)); break;
+//            case "after": verify(competitionRepository, times(1)).findAllByStartDateAfter(pageable, dateUtil.compileFilter(date, command)); break;
+//            case "equals": verify(competitionRepository, times(1)).findAllByStartDateEquals(pageable, dateUtil.compileFilter(date, command)); break;
+//            default: break;
+//        }
+//    }
 }

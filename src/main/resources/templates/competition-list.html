@@ -1,5 +1,81 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
+    <div class="container">
+        <a type="button" class="btn btn-warning btn-lg col-sm-6" th:href="@{/calendar}">Calendar</a>
+        <div class="input-group xd-inline-flex float-right col-sm-6 pr-0">
+            <input type="search" class="form-control search-form" placeholder="Search" aria-label="Search" id="searchString"/>
+            <div class="input-group-prepend">
+                <button type="submit" onclick="search();" id="submitButton" class="input-group-text group-prepend"><i class="fa fa-search search-form"></i></button>
+                <button type="button" class="btn btn-outline-secondary group-prepend dropdown-toggle dropdown-toggle-split input-group-text" onclick="$('.dropdown').toggle()"></button>
+            </div>
+        </div>
+        <div class="col-sm-12 dropdown mt-3" style="display: none">
+            <h6>Start Date:</h6>
+            <div class="input-group d-inline-flex col-sm-12 mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="enableBeforeStart" type="checkbox" id="enableBeforeStart" />
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        Before
+                    </div>
+                </div>
+                <input name="beforeStart" class="form-control" type="datetime-local" id="beforeStart"/>
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="enableEqualsStart" type="checkbox" id="enableEqualsStart" />
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        Equals
+                    </div>
+                </div>
+                <input name="equalsStart" class="form-control" type="datetime-local" id="equalsStart"/>
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="enableAfterStart" type="checkbox" id="enableAfterStart" />
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        After
+                    </div>
+                </div>
+                <input name="afterStart" class="form-control" type="datetime-local" id="afterStart"/>
+            </div>
+            <h6>End Date:</h6>
+            <div class="input-group d-inline-flex col-sm-12 mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="enableBeforeEnd" type="checkbox" id="enableBeforeEnd" />
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        Before
+                    </div>
+                </div>
+                <input name="beforeEnd" class="form-control" type="datetime-local" id="beforeEnd"/>
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="enableEqualsEnd" type="checkbox" id="enableEqualsEnd" />
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        Equals
+                    </div>
+                </div>
+                <input name="equalsEnd" class="form-control" type="datetime-local" id="equalsEnd"/>
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend">
+                        <input name="enableAfterEnd" type="checkbox" id="enableAfterEnd" />
+                    </div>
+                    <div class="input-group-text group-prepend">
+                        After
+                    </div>
+                </div>
+                <input name="afterEnd" class="form-control" type="datetime-local" id="afterEnd"/>
+            </div>
+        </div>
+
     <div layout:replace="fragments/pager :: pager (url = ${url}, page = ${page}, filter = ${filter})">
         <div layout:fragment="pagerContent">
             <div class="py-4" id="competition-list">
@@ -21,5 +97,6 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/js/competition.js}"></script>
     <!---->
 </div></html>

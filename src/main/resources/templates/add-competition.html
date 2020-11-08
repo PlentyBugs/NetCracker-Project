@@ -22,13 +22,23 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-12">
+                        <div class="input-group d-inline-flex col-sm-12">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text group-prepend">
+                                    Start Date:
+                                </div>
+                            </div>
                             <input name="startDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="startDate" th:classappend="${startDateError != null} ? 'is-invalid': ''"/>
                             <span class="invalid-feedback" th:if="${startDateError != null}" th:text="${startDateError}"></span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-12">
+                        <div class="input-group d-inline-flex col-sm-12">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text group-prepend">
+                                    End Date:
+                                </div>
+                            </div>
                             <input name="endDate" class="form-control" type="datetime-local" th:text="${#temporals.format(localDateTime, 'dd-MM-yyyy HH:mm')}" id="endDate" th:classappend="${endDateError != null} ? 'is-invalid': ''"/>
                             <span class="invalid-feedback" th:if="${endDateError != null}" th:text="${endDateError}"></span>
                         </div>
