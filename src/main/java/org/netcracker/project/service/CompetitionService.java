@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,10 @@ public class CompetitionService {
     private final CompetitionRepository repository;
     private final ImageUtils imageUtils;
     private final DateUtil dateUtil;
+
+    public List<Competition> getAll() {
+        return repository.findAll();
+    }
 
     public Page<Competition> getPage(Pageable pageable) {
         return repository.findAll(pageable);

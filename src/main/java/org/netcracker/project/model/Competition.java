@@ -1,5 +1,6 @@
 package org.netcracker.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,6 +30,7 @@ public class Competition implements Serializable {
     private String titleFilename = "compTitle.png";
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
+    @JsonIgnore
     private User organizer;
 
     // Надо решить проблему с ленивой подгрузкой
@@ -38,6 +40,7 @@ public class Competition implements Serializable {
             joinColumns = { @JoinColumn(name = "comp_id") },
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
+    @JsonIgnore
     private Set<Team> teams = new HashSet<>();
 
     @Override

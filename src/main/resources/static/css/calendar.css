@@ -24,6 +24,7 @@
 .table-tight > thead > tr > td,
 .table-tight > tbody > tr > td,
 .table-tight > tfoot > tr > td {
+    padding-left: 0;
     padding-right: 0;
 }
 
@@ -35,4 +36,65 @@
 .table-tight-vert > tfoot > tr > td {
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.time-title {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.competition {
+    border-top: 1px solid #ffa914;
+    border-bottom: 1px solid #ffa914;
+    background-image: linear-gradient(to bottom, #ffca7b 0px, #ff9b01 100%);
+    background-repeat: repeat-x;
+    color: #3c763d;
+    font-size: .75em;
+    padding: 0 .75em;
+    line-height: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1px;
+}
+
+.competition.begin {
+    border-left: 1px solid #ffa914;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.competition.end {
+    border-right: 1px solid #ffa914;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.competition.all-day {
+    border-top: 1px solid #ffa914;
+    border-bottom: 1px solid #ffa914;
+    background-image: linear-gradient(to bottom, #ffca7b 0px, #ff9b01 100%);
+    background-repeat: repeat-x;
+    color: #31708f;
+}
+
+.competition.all-day.begin {
+    border-left: 1px solid #ffa914;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.competition.all-day.end {
+    border-right: 1px solid #ffa914;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.competition.clear {
+    background: none;
+    border: 1px solid transparent;
+}
+
+.date {
+    margin-left: 1em;
 }

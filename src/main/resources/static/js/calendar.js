@@ -18,6 +18,47 @@ $.extend(Date.prototype, {
     }
 });
 
+function addCompetition(competition) {
+    let $event = $('<div/>', {'class': 'competition', text: competition.compName, title: competition.compName, 'data-index': competition.id}),
+        e = new Date(competition.startDate),
+        dateClass = e.toDateCssClass(),
+        day = $('.' + e.toDateCssClass()),
+        empty = $('<div/>', {'class':'clear competition', html:' '}),
+        numbCompetitions = 0,
+        endDay = competition.endDate && $('.' + competition.endDate.toDateCssClass()).length > 0,
+        checkAnyway = new Date(e.getFullYear(), e.getMonth(), e.getDate() + 40),
+        existing,
+        i;
+    if (!competition.endDate) {
+        $event.addClass('begin end');
+        $('.' + competition.startDate.toDateCssClass()).append($event);
+        return;
+    }
+
+    while (e <= competition.endDate && (day.length || endDay || date < checkAnyway)) {
+        if(day.length) {
+            existing = day.find('.competition').length;
+            numbCompetitions = Math.max(numbCompetitions, existing);
+            for(i = 0; i < numbCompetitions - existing; i++) {
+                day.append(empty.clone());
+            }
+            let link = $("<a href='/competition/" + competition.id + "'></a>");
+            link.append($event.
+                toggleClass('begin', dateClass === competition.startDate.toDateCssClass()).
+                toggleClass('end', dateClass === competition.endDate.toDateCssClass())
+            );
+            day.append(
+                link
+            );
+            $event = $event.clone();
+            $event.html(' ');
+        }
+        e.setDate(e.getDate() + 1);
+        dateClass = e.toDateCssClass();
+        day = $('.' + dateClass);
+    }
+}
+
 let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let date = (new Date());
@@ -25,6 +66,14 @@ let date = (new Date());
 let dayToday = date.toDateCssClass();
 
 function draw() {
+    $.get("/competition/calendar", (data) => {
+        for (let comp of data) {
+            comp.startDate = new Date(comp.startDate);
+            comp.endDate = new Date(comp.endDate);
+            addCompetition(comp);
+        }
+    });
+
     let dateToday = date || new Date(),
         month = date.getMonth(),
         year = date.getFullYear(),

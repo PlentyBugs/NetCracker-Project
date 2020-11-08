@@ -27,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -144,5 +145,11 @@ public class CompetitionController {
             }
         }
         return "redirect:/competition/{id}";
+    }
+
+    @GetMapping(value = "/calendar", produces = "application/json")
+    @ResponseBody
+    public List<Competition> getAllCompetitions() {
+        return service.getAll();
     }
 }
