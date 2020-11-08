@@ -1,0 +1,29 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+    <!--Блок для написания кода-->
+    <link th:href="@{/css/calendar.css}" rel="stylesheet" />
+    <div class="container theme-showcase">
+        <h1>Calendar</h1>
+        <div id="holder" class="row" ></div>
+    </div>
+
+    <table class="calendar-table table table-condensed table-tight">
+        <thead>
+            <tr>
+                <td colspan="7" style="text-align: center">
+                    <table style="white-space: nowrap; width: 100%">
+                        <tr>
+                            <h1 id="monthYear"></h1>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </thead>
+
+        <thead><tr id="weeksHead" class="c-weeks"></tr></thead>
+
+        <tbody id="days"></tbody>
+    </table>
+
+    <script th:src="@{/js/calendar.js}"></script>
+    <!---->
+</div></html>
