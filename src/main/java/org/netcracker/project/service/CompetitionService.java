@@ -3,6 +3,7 @@ package org.netcracker.project.service;
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.CompetitionRepository;
 import org.netcracker.project.util.DateUtil;
@@ -78,5 +79,13 @@ public class CompetitionService {
 
     public DateCallback parseDateFromForm(String formDate) {
         return dateUtil.parseDateFromForm(formDate);
+    }
+
+    public List<Competition> getAllByUser(User user) {
+        return repository.findAllByUser(user);
+    }
+
+    public List<Competition> getAllByTeam(Team team) {
+        return repository.findAllByTeam(team);
     }
 }

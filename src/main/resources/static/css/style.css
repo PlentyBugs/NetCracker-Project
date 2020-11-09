@@ -141,3 +141,8 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     border: 1px solid #676767 !important;
     color: #ffc107 !important;
 }
+
+.hidden-link, .hidden-link:active, .hidden-link-link:hover, .hidden-link:visited {
+    text-decoration: none;
+    color: #ffc107;
+}

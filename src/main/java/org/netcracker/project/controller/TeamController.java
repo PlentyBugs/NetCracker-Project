@@ -101,4 +101,9 @@ public class TeamController {
         return "redirect:/team/{id}";
     }
 
+    @GetMapping("/name/{id}")
+    @ResponseBody
+    public String getName(@PathVariable("id") Team team) {
+        return team.getTeamName();
+    }
 }

@@ -64,9 +64,11 @@ let months = ["January", "February", "March", "April", "May", "June", "July", "A
 let date = (new Date());
 
 let dayToday = date.toDateCssClass();
+const regexp = /(.+?)calendar(.+)/;
+const url = "/competition/calendar" + document.URL.match(regexp)[2];
 
 function draw() {
-    $.get("/competition/calendar", (data) => {
+    $.get(url, (data) => {
         for (let comp of data) {
             comp.startDate = new Date(comp.startDate);
             comp.endDate = new Date(comp.endDate);
@@ -125,6 +127,23 @@ function draw() {
         date.setMonth(date.getMonth() + 1);
         draw();
     });
+}
+
+let whoseCalendar = $("#whoseCalendar");
+if (url.includes("user")) {
+    const regex = /.+\/calendar\/user\/(.+)/
+    let id = document.URL.match(regex)[1];
+    $.get("/user/name/" + id, (name) => {
+        whoseCalendar.append("<a class='hidden-link' href='/user/" + id + "'><h1>" + name + "</h1></a>");
+    });
+} else if (url.includes("team")) {
+    const regex = /.+\/calendar\/team\/(.+)/
+    let id = document.URL.match(regex)[1];
+    $.get("/team/name/" + id, (name) => {
+        whoseCalendar.append("<a class='hidden-link' href='/team/" + id + "'><h1>" + name + "</h1></a>");
+    });
+} else {
+    whoseCalendar.append("<h1>All Competitions</h1>");
 }
 
 draw();

@@ -36,6 +36,7 @@
                 <h5 class="text-center">Соревнования</h5>
                 <div class="col-sm">
                     <ul class="list-group text-center">
+                        <a th:href="@{/calendar/user/} + ${user.id}" class="hidden-link"><li class="list-group-item competition bg-info">Calendar</li></a>
                         <th:block th:each="team : ${user.teams}">
                             <th:block th:each="comp : ${team.statistics}">
                                 <li class="list-group-item competition bg-dark"><a th:href="@{/competition/} + ${comp.id}" th:text="${comp.compName}"></a></li>

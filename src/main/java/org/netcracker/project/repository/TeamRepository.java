@@ -12,9 +12,9 @@ public interface TeamRepository extends JpaRepository<Team,Long> {
 
     Page<Team> findAll(Pageable pageable);
 
-    @Query("from Team t where t.teammates.size >= :min and t.teammates.size <= :max and lower(t.teamName) like lower(:name) and not :user member of t.teammates")
+    @Query("from Team t where size(t.teammates) >= :min and size(t.teammates) <= :max and lower(t.teamName) like lower(:name) and not :user member of t.teammates")
     Page<Team> findAllWithFilterAndWithoutMe(Pageable pageable, int min, int max, String name, User user);
 
-    @Query("from Team t where t.teammates.size >= :min and t.teammates.size <= :max and lower(t.teamName) like lower(:name) ")
+    @Query("from Team t where size(t.teammates) >= :min and size(t.teammates) <= :max and lower(t.teamName) like lower(:name) ")
     Page<Team> findAllWithFilter(Pageable pageable, int min, int max, String name);
 }

@@ -1,12 +1,15 @@
 package org.netcracker.project.repository;
 
 import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.Team;
+import org.netcracker.project.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface CompetitionRepository extends JpaRepository<Competition,Long> {
     Competition findByCompName(String compName);
@@ -33,4 +36,10 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
 
     @Query("from Competition c where c.startDate <= :beforeStart and c.startDate >= :afterStart and c.endDate <= :beforeEnd and c.endDate >= :afterEnd and (lower(c.description) like lower(:search) or lower(c.compName) like lower(:search))")
     Page<Competition> findAllByBounds(Pageable pageable, LocalDateTime beforeStart, LocalDateTime afterStart, LocalDateTime beforeEnd, LocalDateTime afterEnd, String search);
+
+    @Query("from Competition c where :team member of c.teams")
+    List<Competition> findAllByTeam(Team team);
+
+    @Query("from Competition c where exists (select t.id from Team as t where :user member of t.teammates)")
+    List<Competition> findAllByUser(User user);
 }

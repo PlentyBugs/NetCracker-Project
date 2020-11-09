@@ -67,4 +67,10 @@ public class UserController {
         userService.deleteUser(user);
         return "redirect:/login";
     }
+
+    @GetMapping("/name/{id}")
+    @ResponseBody
+    public String getName(@PathVariable("id") User user) {
+        return user.getSurname() + " " + user.getName() + " " + user.getSecName() + " (" + user.getUsername() + ")";
+    }
 }
