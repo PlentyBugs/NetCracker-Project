@@ -64,7 +64,7 @@ let months = ["January", "February", "March", "April", "May", "June", "July", "A
 let date = (new Date());
 
 let dayToday = date.toDateCssClass();
-const regexp = /(.+?)calendar(.+)/;
+const regexp = /(.+?)calendar(.*)/;
 const url = "/competition/calendar" + document.URL.match(regexp)[2];
 
 function draw() {
