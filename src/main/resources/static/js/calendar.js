@@ -68,14 +68,6 @@ const regexp = /(.+?)calendar(.*)/;
 const url = "/competition/calendar" + document.URL.match(regexp)[2];
 
 function draw() {
-    $.get(url, (data) => {
-        for (let comp of data) {
-            comp.startDate = new Date(comp.startDate);
-            comp.endDate = new Date(comp.endDate);
-            addCompetition(comp);
-        }
-    });
-
     let dateToday = date || new Date(),
         month = date.getMonth(),
         year = date.getFullYear(),
@@ -85,9 +77,17 @@ function draw() {
         thedate = new Date(year, month, 1 - startingDay),
         today = new Date();
 
+    $.get(url + "?startDate=" + JSON.stringify(thedate).replaceAll("\"", "").substr(0, 16), (data) => {
+        for (let comp of data) {
+            comp.startDate = new Date(comp.startDate);
+            comp.endDate = new Date(comp.endDate);
+            addCompetition(comp);
+        }
+    });
+
     let monthYear = $("#monthYear");
     monthYear.empty();
-    monthYear.append("<i class='fa fa-chevron-circle-left' id='prevMonth'></i> " + months[date.getMonth()] + " " + date.getFullYear() + " <i class='fa fa-chevron-circle-right' id='nextMonth'></i>")
+    monthYear.append("<i class='fa fa-chevron-circle-left unselectable' id='prevMonth'></i> <div class='d-inline-block' style='width: 300px;'>" + months[date.getMonth()] + " " + date.getFullYear() + "</div> <i class='fa fa-chevron-circle-right unselectable' id='nextMonth'></i>")
 
     let weeksHead = $("#weeksHead");
     weeksHead.empty();

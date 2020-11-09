@@ -147,22 +147,27 @@ public class CompetitionController {
         return "redirect:/competition/{id}";
     }
 
-    // todo: Добавить оптимизацию, чтобы выдавась соревнования за месяц, а не все (делается просто, пишу, чтобы не забыть)
     @GetMapping(value = "/calendar", produces = "application/json")
     @ResponseBody
-    public List<Competition> getAllCompetitionCalendar() {
-        return service.getAll();
+    public List<Competition> getAllCompetitionCalendar(@RequestParam String startDate) {
+        return service.getAllCalendar(startDate);
     }
 
     @GetMapping(value = "/calendar/user/{id}", produces = "application/json")
     @ResponseBody
-    public List<Competition> getAllCompetitionsForUser(@PathVariable("id") User user) {
-        return service.getAllByUser(user);
+    public List<Competition> getAllCompetitionsForUser(
+            @PathVariable("id") User user,
+            @RequestParam String startDate
+    ) {
+        return service.getAllByUserCalendar(user, startDate);
     }
 
     @GetMapping(value = "/calendar/team/{id}", produces = "application/json")
     @ResponseBody
-    public List<Competition> getAllCompetitionsForTeam(@PathVariable("id") Team team) {
-        return service.getAllByTeam(team);
+    public List<Competition> getAllCompetitionsForTeam(
+            @PathVariable("id") Team team,
+            @RequestParam String startDate
+    ) {
+        return service.getAllByTeamCalendar(team, startDate);
     }
 }

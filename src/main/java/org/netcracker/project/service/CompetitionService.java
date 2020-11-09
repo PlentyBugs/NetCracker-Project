@@ -28,10 +28,6 @@ public class CompetitionService {
     private final ImageUtils imageUtils;
     private final DateUtil dateUtil;
 
-    public List<Competition> getAll() {
-        return repository.findAll();
-    }
-
     public Page<Competition> getPage(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -81,11 +77,18 @@ public class CompetitionService {
         return dateUtil.parseDateFromForm(formDate);
     }
 
-    public List<Competition> getAllByUser(User user) {
-        return repository.findAllByUser(user);
+    public List<Competition> getAllByUserCalendar(User user, String startDate) {
+        LocalDateTime startOfMonthDate = LocalDateTime.parse(startDate);
+        return repository.findAllByUserCalendar(user, startOfMonthDate, startOfMonthDate.plusDays(35));
     }
 
-    public List<Competition> getAllByTeam(Team team) {
-        return repository.findAllByTeam(team);
+    public List<Competition> getAllByTeamCalendar(Team team, String startDate) {
+        LocalDateTime startOfMonthDate = LocalDateTime.parse(startDate);
+        return repository.findAllByTeamCalendar(team, startOfMonthDate, startOfMonthDate.plusDays(35));
+    }
+
+    public List<Competition> getAllCalendar(String startDate) {
+        LocalDateTime startOfMonthDate = LocalDateTime.parse(startDate);
+        return repository.findAllCalendar(startOfMonthDate, startOfMonthDate.plusDays(35));
     }
 }
