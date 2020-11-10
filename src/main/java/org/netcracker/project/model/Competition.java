@@ -41,7 +41,7 @@ public class Competition implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
     @JsonIgnore
-    private Set<Team> teams = new HashSet<>();
+    private Set<RegisteredTeam> teams = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

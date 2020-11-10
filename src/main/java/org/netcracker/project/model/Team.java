@@ -20,6 +20,7 @@ public class Team implements Serializable {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String teamName;
 
     // Надо решить проблему с ленивой подгрузкой

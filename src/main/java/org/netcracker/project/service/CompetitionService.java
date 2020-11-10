@@ -3,9 +3,11 @@ package org.netcracker.project.service;
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.RegisteredTeam;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.CompetitionRepository;
+import org.netcracker.project.repository.RegisteredTeamRepository;
 import org.netcracker.project.util.DateUtil;
 import org.netcracker.project.util.ImageUtils;
 import org.netcracker.project.util.callback.DateCallback;
@@ -19,12 +21,15 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CompetitionService {
 
     private final CompetitionRepository repository;
+    private final RegisteredTeamRepository registeredTeamRepository;
     private final ImageUtils imageUtils;
     private final DateUtil dateUtil;
 
@@ -84,11 +89,29 @@ public class CompetitionService {
 
     public List<Competition> getAllByTeamCalendar(Team team, String startDate) {
         LocalDateTime startOfMonthDate = LocalDateTime.parse(startDate);
-        return repository.findAllByTeamCalendar(team, startOfMonthDate, startOfMonthDate.plusDays(35));
+        return repository.findAllByTeamCalendar(team.getId(), startOfMonthDate, startOfMonthDate.plusDays(35));
     }
 
     public List<Competition> getAllCalendar(String startDate) {
         LocalDateTime startOfMonthDate = LocalDateTime.parse(startDate);
         return repository.findAllCalendar(startOfMonthDate, startOfMonthDate.plusDays(35));
+    }
+
+    public void addTeam(Competition competition, Team team) {
+        RegisteredTeam registeredTeam = RegisteredTeam.of(team);
+        registeredTeamRepository.save(registeredTeam);
+        competition.getTeams().add(registeredTeam);
+        update(competition);
+    }
+
+    public void removeTeamByUser(Competition competition, User user) {
+        Set<Long> teams = competition.getTeams().stream().map(RegisteredTeam::getId).collect(Collectors.toSet());
+        for (Team team : user.getTeams()) {
+            if (teams.contains(team.getId())) {
+                competition.getTeams().remove(RegisteredTeam.of(team));
+                update(competition);
+                break;
+            }
+        }
     }
 }

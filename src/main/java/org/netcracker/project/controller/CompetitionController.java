@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.filter.CompetitionFilterUnprepared;
 import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.RegisteredTeam;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
@@ -29,6 +30,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/competition")
@@ -98,7 +101,7 @@ public class CompetitionController {
             Model model
     ) {
         model.addAttribute(competition);
-        model.addAttribute("participate", user.getTeams().stream().map(e -> competition.getTeams().contains(e)).reduce(false, (x,y) -> x || y));
+        model.addAttribute("participate", user.getTeams().stream().map(RegisteredTeam::of).map(e -> competition.getTeams().contains(e)).reduce(false, (x, y) -> x || y));
         return "competition";
     }
 
@@ -110,7 +113,7 @@ public class CompetitionController {
             @PathVariable("teamID") Team team
     ) {
         if (user.getId() != null && user.getId().equals(competition.getOrganizer().getId())) {
-            competition.getTeams().remove(team);
+            competition.getTeams().remove(RegisteredTeam.of(team));
             // Пока статистика не так проработана и, по сути дела, надо было бы это записывать вроде "был удален организатором"
             team.getStatistics().remove(competition);
             service.update(competition);
@@ -124,8 +127,7 @@ public class CompetitionController {
             @PathVariable("id") Competition competition
     ) {
         if (user.getRoles().contains(Role.PARTICIPANT) && user.getTeams().contains(team)) {
-            competition.getTeams().add(team);
-            service.update(competition);
+            service.addTeam(competition, team);
         }
         return "redirect:/competition/{id}";
     }
@@ -136,13 +138,7 @@ public class CompetitionController {
             @PathVariable("id") Competition competition
     ) {
         if (user.getRoles().contains(Role.PARTICIPANT)) {
-            for (Team team : user.getTeams()) {
-                if (competition.getTeams().contains(team)) {
-                    competition.getTeams().remove(team);
-                    service.update(competition);
-                    break;
-                }
-            }
+            service.removeTeamByUser(competition, user);
         }
         return "redirect:/competition/{id}";
     }
