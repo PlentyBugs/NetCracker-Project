@@ -39,23 +39,28 @@
                 </form>
             </th:block>
         </th:block>
-        <th:block sec:authorize="hasAuthority('ORGANIZER')" th:if="${competition.organizer.id == #authentication.principal.id}">
-            <div class="col-sm-16">
-                <h3 class="text-center">Участники:</h3>
-                <th:block th:each="team : ${competition.teams}">
-                    <div class="list-group-item bg-dark" th:id="'team-id-' + ${team.id}">
-                        Название команды: <i th:text="${#strings.capitalize(team.teamName)}"></i>
-                        <div class="float-right" style="margin-top: -7px;">
-                            <button type="button" class="btn btn-primary">Write</button>
-                            <button type="button" class="btn btn-danger" th:onclick="'removeTeam(' + ${team.id} + ');'">Remove</button>
-                        </div>
+        <div class="col-sm-16">
+            <h3 class="text-center">Участники:</h3>
+            <th:block th:each="team : ${competition.teams}">
+                <div class="list-group-item bg-dark" th:id="'team-id-' + ${team.id}" th:onclick="'$(\'#teammates-team-id-' + ${team.id} + '\').toggle()'">
+                    Название команды: <i th:text="${#strings.capitalize(team.teamName)}"></i>
+                    <div class="float-right" style="margin-top: -7px;" sec:authorize="hasAuthority('ORGANIZER')" th:if="${competition.organizer.id == #authentication.principal.id}">
+                        <button type="button" class="btn btn-primary">Write</button>
+                        <button type="button" class="btn btn-danger" th:onclick="'removeTeam(' + ${team.id} + ');'">Remove</button>
                     </div>
-                </th:block>
-                <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-                <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-                <meta id="_csrf_parameter" name="_csrf_header" th:content="${_csrf.parameterName}"/>
-            </div>
-        </th:block>
+                </div>
+                <div class="list-group-item bg-dark" th:id="'teammates-team-id-' + ${team.id}" style="display: none;">
+                    <ul>
+                        <th:block th:each="teammate : ${team.teammates}">
+                            <li th:text="${teammate.username}"></li>
+                        </th:block>
+                    </ul>
+                </div>
+            </th:block>
+            <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+            <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+            <meta id="_csrf_parameter" name="_csrf_header" th:content="${_csrf.parameterName}"/>
+        </div>
     </div>
     <!---->
 </div></html>
