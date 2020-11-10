@@ -1,7 +1,6 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.repository.UserRepository;
@@ -24,7 +23,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
-@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -69,8 +67,6 @@ public class UserService implements UserDetailsService {
 
         sendMessage(user);
 
-        log.info(user.getUsername() + " is registered!");
-
         return true;
     }
 
@@ -94,7 +90,6 @@ public class UserService implements UserDetailsService {
         User user = repository.findByActivationCode(code);
 
         if (user == null) {
-            log.info("An attempt was made to activate a non-existent user");
             return false;
         }
 
@@ -102,8 +97,6 @@ public class UserService implements UserDetailsService {
         user.setActive(true);
 
         repository.save(user);
-
-        log.info(user.getUsername() + " activated account!");
 
         return true;
     }
