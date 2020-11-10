@@ -10,6 +10,7 @@ $(() => {
 
 function removeTeam(id) {
     $('#team-id-' + id).remove();
+    $('#teammates-team-id-' + id).remove();
     let token = $('#_csrf').attr('content');
     let header = $('#_csrf_header').attr('content');
     $.ajax(
