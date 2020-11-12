@@ -38,6 +38,7 @@ public class Team implements Serializable {
             name = "statistics",
             joinColumns = { @JoinColumn(name = "team_id") },
             inverseJoinColumns = { @JoinColumn(name = "comp_id") }
+
     )
     private Set<Competition> statistics = new HashSet<>();
 

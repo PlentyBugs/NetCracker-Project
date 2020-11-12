@@ -64,4 +64,6 @@ public class Competition implements Serializable {
                 ", description='" + description + '\'' +
                 '}';
     }
+
+   private boolean CompEnded;  //флажок, который можно ставить по окончанию соревнования, чтобы удалять его.
 }

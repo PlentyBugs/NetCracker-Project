@@ -23,6 +23,9 @@
                     <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
                         <a class="nav-link" th:href="@{/admin}">Admin panel</a>
                     </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ORGANIZER')">
+                        <a class="nav-link" th:href="@{/competition-archive}">Archive</a>
+                    </li>
                 </ul>
             </div>
             <div class="d-inline-block w-50 text-right order-1 order-md-last">
