@@ -8,6 +8,7 @@ import org.netcracker.project.model.RegisteredTeam;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Role;
+import org.netcracker.project.model.enums.Theme;
 import org.netcracker.project.service.CompetitionService;
 import org.netcracker.project.util.DateUtil;
 import org.netcracker.project.util.ValidationUtils;
@@ -31,7 +32,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/competition")
@@ -62,10 +62,12 @@ public class CompetitionController {
             @RequestParam("title") MultipartFile title,
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
+            @RequestParam("theme") Set<Theme> themes,
             @Valid Competition competition,
             BindingResult bindingResult,
             Model model
     ) throws IOException {
+        competition.setThemes(themes);
         if (!user.getRoles().contains(Role.ORGANIZER)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         // todo: Решить проблему по которой не получается при редиректе передать Model
         DateCallback startDateCallback = service.parseDateFromForm(startDate);
