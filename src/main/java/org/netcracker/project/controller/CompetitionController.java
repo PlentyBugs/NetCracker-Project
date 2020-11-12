@@ -166,4 +166,28 @@ public class CompetitionController {
     ) {
         return service.getAllByTeamCalendar(team, startDate);
     }
+
+@GetMapping("/archive")
+    public String getArchive(
+            @PageableDefault (sort={"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal User user,
+            Model model
+){
+        Page<Competition> competitions= service.getAllEndedCompetitions(pageable,user);
+         model.addAttribute("page", competitions);
+         model.addAttribute("url", "/competition/archive");
+        return "archive";
+}
+
+@GetMapping("/running")
+    public String getRunningComp(
+        @PageableDefault(sort={"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+        @AuthenticationPrincipal User user,
+        Model model
+){
+    Page<Competition> competitions=service.getAllActingCompetitions(pageable, user);
+    model.addAttribute("page",competitions);
+    model.addAttribute("url","/competition/running");
+    return "running";
+}
 }
