@@ -26,8 +26,8 @@ Array.prototype.remove = function() {
 themeSetJQ.bind('input', function () {
     let option = themeSetJQ.val();
     if(checkExists(option) === true){
-        let op = $("#id-" + option);
-        addTheme($(op).attr('data-theme'), $(op).attr('data-theme-id'));
+        let op = $("#id-" + option.toUpperCase().replaceAll(" ", "_"));
+        addTheme($(op).data('theme'), $(op).data('theme-id'));
         themeSetJQ.val("");
     }
 });
@@ -47,7 +47,7 @@ let themeList = [];
 
 function addTheme(theme, id) {
     if (!themeList.includes(theme)) {
-        themes.append($("<button class='btn btn-warning m-1' type='button' id='" + id + "' onclick='removeTheme(`" + theme + "`, `" + id + "`);'>" + theme + "</button>"));
+        themes.append($("<button class='btn btn-warning m-1' type='button' id='" + id + "' onclick='removeTheme(`" + theme + "`, `" + id + "`);'>" + theme + "<input name='theme' type='hidden' value='" + id + "'/></button>"));
         themeList.push(theme);
     }
 }

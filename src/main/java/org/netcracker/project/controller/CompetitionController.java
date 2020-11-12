@@ -29,7 +29,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,13 +62,14 @@ public class CompetitionController {
             @RequestParam("title") MultipartFile title,
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
-            @RequestParam(value = "theme", required = false) Set<Theme> themes,
+            @RequestParam("theme") Set<Theme> themes,
             @Valid Competition competition,
             BindingResult bindingResult,
             Model model
     ) throws IOException {
-        if (themes != null) competition.setThemes(themes);
+        competition.setThemes(themes);
         if (!user.getRoles().contains(Role.ORGANIZER)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        // todo: Решить проблему по которой не получается при редиректе передать Model
         DateCallback startDateCallback = service.parseDateFromForm(startDate);
         DateCallback endDateCallback = service.parseDateFromForm(endDate);
         Map<String, String> errors = null;
@@ -87,7 +87,7 @@ public class CompetitionController {
             model.addAttribute(competition);
             if (startDateCallback.isFailure()) model.addAttribute("startDateError", "Wrong Format or Empty");
             if (endDateCallback.isFailure()) model.addAttribute("endDateError", "Wrong Format or Empty");
-            return "/add-competition";
+            return "redirect:/add-competition";
         }
         competition.setEndDate(endDateCallback.getLocalDateTime());
         competition.setStartDate(startDateCallback.getLocalDateTime());
@@ -104,25 +104,7 @@ public class CompetitionController {
     ) {
         model.addAttribute(competition);
         model.addAttribute("participate", user.getTeams().stream().map(RegisteredTeam::of).map(e -> competition.getTeams().contains(e)).reduce(false, (x, y) -> x || y));
-        model.addAttribute("expired", competition.getEndDate().compareTo(LocalDateTime.now()) < 0);
         return "competition";
-    }
-
-    @Async
-    @PutMapping("/{id}/grade")
-    @ResponseBody
-    public void grade(
-            @AuthenticationPrincipal User user,
-            @PathVariable("id") Competition competition,
-            @RequestParam("winner") RegisteredTeam winner,
-            @RequestParam(value = "second", required = false, defaultValue = "") RegisteredTeam second,
-            @RequestParam(value = "third", required = false, defaultValue = "") RegisteredTeam third,
-            @RequestParam(value = "spotted", required = false) Set<RegisteredTeam> spotted
-    ) {
-        if (user.getId().equals(competition.getOrganizer().getId())) {
-            service.gradeCompetition(competition, winner, second, third, spotted);
-        }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     @Async
@@ -186,26 +168,4 @@ public class CompetitionController {
     ) {
         return service.getAllByTeamCalendar(team, startDate);
     }
-
-
-    @GetMapping("/mycomp")
-    String getmyComp(@AuthenticationPrincipal User user){ return "mycomp"; }
-
-    @GetMapping(value = "/mycomp/archive", produces = "application/json")
-    @ResponseBody
-    public List<Competition> getArchive(
-            @AuthenticationPrincipal User user
-){
-        return service.getAllEndedCompetitions(user);
-}
-
-@GetMapping(value = "/mycomp/running", produces = "application/json")
-@ResponseBody
-    public List<Competition> getRunningComp(
-        @AuthenticationPrincipal User user
-){
-    return service.getAllActingCompetitions(user);
-}
-
-
 }
