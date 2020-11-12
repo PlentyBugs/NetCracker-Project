@@ -47,7 +47,7 @@ public class TeamControllerTest {
     public void addTeamTest() throws Exception {
         MockHttpServletRequestBuilder multipart=multipart("/team")
                 .file("logo","teamLogo".getBytes())
-                .param("teamName","Team A")
+                .param("teamName","Team A 2")
                 .with(csrf());
 
         assertEquals(teamRepository.findAll().size(),3);
@@ -59,7 +59,7 @@ public class TeamControllerTest {
         assertEquals(teamRepository.findAll().size(),4);
         Team team=teamRepository.findById(10L).orElse(new Team());
         assertEquals(team.getLogoFilename(),"teamLogo.png");
-        assertEquals(team.getTeamName(),"Team A");
+        assertEquals(team.getTeamName(),"Team A 2");
     }
 
     @Test

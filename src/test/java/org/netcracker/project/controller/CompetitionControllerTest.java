@@ -107,8 +107,7 @@ public class CompetitionControllerTest {
     @Test
     public void competitionModerationTest() throws Exception {
         mockMvc.perform(get("/competition/1"))
-                .andExpect(xpath("//*[@id='main']/div/div/div[2]/h3").string(containsString("Участники")))
-                .andExpect(xpath("//div[@class='list-group-item bg-dark']").nodeCount(1));
+                .andExpect(xpath("//*[@id='main']/div/div/div[2]/h3").string(containsString("Участники")));
     }
 
     @Test

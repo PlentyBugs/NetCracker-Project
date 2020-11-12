@@ -43,6 +43,8 @@ public class Competition implements Serializable {
     @JsonIgnore
     private Set<RegisteredTeam> teams = new HashSet<>();
 
+    private boolean CompEnded;  //флажок, который можно ставить по окончанию соревнования, чтобы удалять его.
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,6 +66,4 @@ public class Competition implements Serializable {
                 ", description='" + description + '\'' +
                 '}';
     }
-
-   private boolean CompEnded;  //флажок, который можно ставить по окончанию соревнования, чтобы удалять его.
 }

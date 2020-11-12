@@ -1,13 +1,25 @@
 delete from statistics;
 delete from usr_team;
+delete from usr_registered_team;
 delete from team_profession;
 delete from team;
+delete from registered_team;
 
 insert into team(id, logo_filename, team_name) VALUES
 (1, 'teamLogo.png', 'Team A'),
 (2, 'teamLogo.png', 'Train B'),
 (3, 'teamLogo.png', 'FunCo');
+insert into registered_team(id, team_name) VALUES
+(1, 'Team A'),
+(2, 'Train B'),
+(3, 'FunCo');
 insert into usr_team(usr_id, team_id) values
+(1, 1),
+(1, 2),
+(3, 3),
+(4, 3),
+(4, 1);
+insert into usr_registered_team(usr_id, team_id) values
 (1, 1),
 (1, 2),
 (3, 3),
