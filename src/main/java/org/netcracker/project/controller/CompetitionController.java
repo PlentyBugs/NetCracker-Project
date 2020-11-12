@@ -62,14 +62,13 @@ public class CompetitionController {
             @RequestParam("title") MultipartFile title,
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
-            @RequestParam("theme") Set<Theme> themes,
+            @RequestParam(value = "theme", required = false) Set<Theme> themes,
             @Valid Competition competition,
             BindingResult bindingResult,
             Model model
     ) throws IOException {
-        competition.setThemes(themes);
+        if (themes != null) competition.setThemes(themes);
         if (!user.getRoles().contains(Role.ORGANIZER)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        // todo: Решить проблему по которой не получается при редиректе передать Model
         DateCallback startDateCallback = service.parseDateFromForm(startDate);
         DateCallback endDateCallback = service.parseDateFromForm(endDate);
         Map<String, String> errors = null;
@@ -87,7 +86,7 @@ public class CompetitionController {
             model.addAttribute(competition);
             if (startDateCallback.isFailure()) model.addAttribute("startDateError", "Wrong Format or Empty");
             if (endDateCallback.isFailure()) model.addAttribute("endDateError", "Wrong Format or Empty");
-            return "redirect:/add-competition";
+            return "/add-competition";
         }
         competition.setEndDate(endDateCallback.getLocalDateTime());
         competition.setStartDate(startDateCallback.getLocalDateTime());
