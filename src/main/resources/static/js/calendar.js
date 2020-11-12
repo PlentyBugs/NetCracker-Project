@@ -18,7 +18,23 @@ $.extend(Date.prototype, {
     }
 });
 
+
+let colors = new Map();
+
+function randomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+function randomColor() {
+    return "rgb(" + randomInt(255) + ", " + randomInt(125) + ", " + randomInt(125) + ")";
+}
+
 function addCompetition(competition) {
+
+    if (!colors.has(competition.id)) {
+        colors.set(competition.id, randomColor());
+    }
+
     let $event = $('<div/>', {'class': 'competition', text: competition.compName, title: competition.compName, 'data-index': competition.id}),
         e = new Date(competition.startDate),
         dateClass = e.toDateCssClass(),
@@ -34,6 +50,8 @@ function addCompetition(competition) {
         $('.' + competition.startDate.toDateCssClass()).append($event);
         return;
     }
+
+    $event.css("background-image", "linear-gradient(to bottom, #ffca7b 0px, " + colors.get(competition.id) + " 100%)");
 
     while (e <= competition.endDate && (day.length || endDay || date < checkAnyway)) {
         if(day.length) {
