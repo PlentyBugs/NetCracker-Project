@@ -23,10 +23,10 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
 
     Page<Competition> findAllByStartDateBefore(Pageable pageable, LocalDateTime startDate);
 
-    @Query("from Competition  c where c.endDate < :endDate and (c.organizer = :usr)")
+    @Query("from Competition  c where c.endDate < :endDate and (c.organizer = :user)")
     Page<Competition> getArchiveByUser(Pageable pageable, LocalDateTime endDate, User user);
 
-    @Query("from Competition  c where c.endDate >= :endDate and (c.organizer = :usr)")
+    @Query("from Competition  c where c.endDate >= :endDate and (c.organizer = :user)")
     Page<Competition> getRunningCompByUser(Pageable pageable, LocalDateTime endDate,User user);
 
     @Query("from Competition c where c.startDate = :startDate and (lower(c.description) like lower(:search) or lower(c.compName) like lower(:search))")
