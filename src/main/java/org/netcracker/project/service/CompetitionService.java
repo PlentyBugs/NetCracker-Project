@@ -1,6 +1,7 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.RegisteredTeam;
@@ -61,6 +62,7 @@ public class CompetitionService {
 
     public boolean save(Competition competition, MultipartFile title, User user) throws IOException {
         competition.setOrganizer(user);
+        competition.setCompEnded(false);  //флаг окончания сначала false, после соревнования - true. Можно использовать, чтобы дизейблить.
         saveTitle(competition, title);
         repository.save(competition);
         return true;
@@ -70,6 +72,7 @@ public class CompetitionService {
         repository.save(competition);
         return true;
     }
+
 
     private void saveTitle(@Valid Competition competition, @RequestParam("avatar") MultipartFile file) throws IOException {
         String resultFilename = imageUtils.saveFile(file);
@@ -113,5 +116,15 @@ public class CompetitionService {
                 break;
             }
         }
+    }
+
+    public Page <Competition> getAllEndedCompetitions(Pageable pageable,User user){   //прошедшие соревнования
+                 LocalDateTime today = LocalDateTime.now();
+                    return repository.getArchiveByUser(pageable,today,user);
+    }
+
+    public Page <Competition> getAllActingCompetitions(Pageable pageable, User user){
+        LocalDateTime today=LocalDateTime.now();
+        return repository.getRunningCompByUser(pageable,today,user);
     }
 }

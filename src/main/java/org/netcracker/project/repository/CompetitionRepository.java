@@ -1,5 +1,6 @@
 package org.netcracker.project.repository;
 
+import org.apache.tomcat.jni.Local;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
@@ -7,14 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CompetitionRepository extends JpaRepository<Competition,Long> {
     Competition findByCompName(String compName);
-    // @Query(...)
-    Competition queryByStartDate(LocalDateTime startDate);
 
     Page<Competition> findAll(Pageable pageable);
 
@@ -25,11 +23,17 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
 
     Page<Competition> findAllByStartDateBefore(Pageable pageable, LocalDateTime startDate);
 
+    @Query("from Competition  c where c.endDate < :endDate and (c.organizer = :usr)")
+    Page<Competition> getArchiveByUser(Pageable pageable, LocalDateTime endDate, User user);
+
+    @Query("from Competition  c where c.endDate >= :endDate and (c.organizer = :usr)")
+    Page<Competition> getRunningCompByUser(Pageable pageable, LocalDateTime endDate,User user);
+
     @Query("from Competition c where c.startDate = :startDate and (lower(c.description) like lower(:search) or lower(c.compName) like lower(:search))")
     Page<Competition> findAllByStartDateEquals(Pageable pageable, LocalDateTime startDate, String search);
 
-    @Query("from Competition c where c.startDate = :startDate and (lower(c.description) like lower(:search) or lower(c.compName) like lower(:search))")
-    Page<Competition> findAllByEndDateEquals(Pageable pageable, LocalDateTime startDate, String search);
+    @Query("from Competition c where c.endDate = :endDate and (lower(c.description) like lower(:search) or lower(c.compName) like lower(:search))")
+    Page<Competition> findAllByEndDateEquals(Pageable pageable, LocalDateTime endDate, String search);
 
     @Query("from Competition c where c.startDate = :startDate and c.endDate = :endDate and (lower(c.description) like lower(:search) or lower(c.compName) like lower(:search))")
     Page<Competition> findAllByStartDateEqualsAndEndDateEquals(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate, String search);
