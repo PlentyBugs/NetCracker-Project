@@ -54,10 +54,10 @@ public class TeamController {
                           )
         throws IOException{
             if(bindingResult.hasErrors()){
-            Map<String,String> errors= ValidationUtils.getErrors(bindingResult);
-            model.mergeAttributes(errors);
-            model.addAttribute(team);
-            return "redirect:/add-team";
+                Map<String,String> errors= ValidationUtils.getErrors(bindingResult);
+                model.mergeAttributes(errors);
+                model.addAttribute(team);
+                return "/add-team";
             }
             service.save(team,logo,user);
         return "redirect:/team";

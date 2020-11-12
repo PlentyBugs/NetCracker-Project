@@ -1,7 +1,6 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.netcracker.project.filter.CompetitionFilter;
 import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.RegisteredTeam;
