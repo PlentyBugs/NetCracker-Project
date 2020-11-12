@@ -43,6 +43,27 @@
                             <span class="invalid-feedback" th:if="${endDateError != null}" th:text="${endDateError}"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="input-group d-inline-flex col-sm-12">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text group-prepend">
+                                    Tags:
+                                </div>
+                            </div>
+                            <template id="themesTemplate">
+                                <th:block th:each="theme : ${T(org.netcracker.project.model.enums.Theme).values()}">
+                                    <option th:id="'id-' + ${theme.name()}" th:data-theme="${theme.toString()}" th:data-theme-id="${theme.name()}" th:text="${#strings.capitalize(theme.toString())}"></option>
+                                </th:block>
+                            </template>
+                            <input type="text" class="form-control" placeholder="Enter Tag" list="themesDatalist" id="themeSet" name="themeSet" autocomplete="off" autocapitalize="off">
+                            <datalist id="themesDatalist"></datalist>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="d-inline-flex col-sm-12" id="themes">
+
+                        </div>
+                    </div>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="customFile" name="title" accept="image/png, image/jpeg"/>
                         <label class="custom-file-label file-label" for="customFile">Choose title image</label>
@@ -53,6 +74,7 @@
                 </form>
             </div>
         </div>
+        <script th:src="@{/js/addCompetition.js}"></script>
     </div>
     <!---->
 </div></html>
