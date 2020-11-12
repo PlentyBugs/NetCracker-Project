@@ -52,7 +52,7 @@
                             </div>
                             <template id="themesTemplate">
                                 <th:block th:each="theme : ${T(org.netcracker.project.model.enums.Theme).values()}">
-                                    <option th:id="'id-' + ${theme.name()}" th:data-theme="${theme.toString()}" th:data-theme-id="${theme.name()}" th:text="${#strings.capitalize(theme.toString())}"></option>
+                                    <option th:id="'id-' + ${#strings.capitalize(theme.toString())}" th:data-theme="${theme.toString()}" th:data-theme-id="${theme.name()}" th:text="${#strings.capitalize(theme.toString())}"></option>
                                 </th:block>
                             </template>
                             <input type="text" class="form-control" placeholder="Enter Tag" list="themesDatalist" id="themeSet" name="themeSet" autocomplete="off" autocapitalize="off">
