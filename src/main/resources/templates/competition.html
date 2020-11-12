@@ -6,6 +6,11 @@
             <h1 class="card-title" th:text="${competition.compName}"></h1>
             <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}"></h6>
             <p class="card-text" th:text="${competition.description}"></p>
+            <p class="card-text" >
+                <th:block th:each="theme : ${competition.themes}">
+                    <span>#</span><i th:text="${#strings.capitalize(theme.toString())}"></i><span> </span>
+                </th:block>
+            </p>
             <p class="card-text">Start: <span th:text="${#strings.replace(competition.startDate, 'T', ' ')}"></span></p>
             <p class="card-text">End: <span th:text="${#strings.replace(competition.endDate, 'T', ' ')}"></span></p>
         </div>

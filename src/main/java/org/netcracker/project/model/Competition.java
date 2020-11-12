@@ -2,9 +2,11 @@ package org.netcracker.project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.netcracker.project.model.enums.Theme;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -44,6 +46,14 @@ public class Competition implements Serializable {
     private Set<RegisteredTeam> teams = new HashSet<>();
 
     private boolean CompEnded;  //флажок, который можно ставить по окончанию соревнования, чтобы удалять его.
+
+    @Min(0)
+    private Long prizeFund;
+
+    @ElementCollection(targetClass = Theme.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "competition_theme", joinColumns = @JoinColumn(name = "comp_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Theme> themes;
 
     @Override
     public boolean equals(Object o) {
