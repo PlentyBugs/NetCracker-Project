@@ -88,6 +88,11 @@
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="${competition.compName}"></h5>
                                     <p class="card-text" th:text="${competition.description}"></p>
+                                    <p class="card-text" >
+                                        <th:block th:each="theme : ${competition.themes}">
+                                            <span>#</span><i th:text="${#strings.capitalize(theme.toString())}"></i><span> </span>
+                                        </th:block>
+                                    </p>
                                     <a th:href="@{/competition/} + ${competition.id}">Go to competition</a>
                                     <p class="card-text"><small class="text-muted" th:text="${#strings.replace(competition.startDate, 'T', ' ')}"></small> : <small class="text-muted" th:text="${#strings.replace(competition.endDate, 'T', ' ')}"></small></p>
                                 </div>
