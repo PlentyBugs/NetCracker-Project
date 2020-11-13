@@ -31,7 +31,6 @@ public class CompetitionService {
 
     private final CompetitionRepository repository;
     private final RegisteredTeamRepository registeredTeamRepository;
-    private final TeamService teamService;
     private final ImageUtils imageUtils;
     private final DateUtil dateUtil;
 
@@ -167,7 +166,7 @@ public class CompetitionService {
                 result = Result.SECOND;
             } else if (team.equals(third)) {
                 result = Result.THIRD;
-            } else if (spotted.contains(team)) {
+            } else if (team.equals(second)) {
                 result = Result.SPOTTED;
             }
             gradeOneTeam(team, result, competition);
@@ -176,7 +175,6 @@ public class CompetitionService {
 
     private void gradeOneTeam(RegisteredTeam team, Result result, Competition competition) {
         // Установить для команды
-        teamService.getOne(team.getId());
         for (User u : team.getTeammates()) {
             // Установить для каждого пользователя
         }
