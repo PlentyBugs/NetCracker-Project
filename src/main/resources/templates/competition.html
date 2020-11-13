@@ -3,16 +3,16 @@
     <div class="container">
         <img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title" th:onerror="'this.onerror=null; this.src=`' + @{/img/compTitle.png} + '`;'"/>
         <div class="card-body">
-            <h1 class="card-title" th:text="${competition.compName}"></h1>
-            <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}"></h6>
-            <p class="card-text" th:text="${competition.description}"></p>
-            <p class="card-text" >
+            <h1 class="card-title" th:text="${competition.compName}" id="compNameHeader"></h1>
+            <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}" id="organizedByHeader"></h6>
+            <p class="card-text" th:text="${competition.description}" id="descriptionHeader"></p>
+            <p class="card-text">
                 <th:block th:each="theme : ${competition.themes}">
                     <span>#</span><i th:text="${#strings.capitalize(theme.toString())}"></i><span> </span>
                 </th:block>
             </p>
-            <p class="card-text">Start: <span th:text="${#strings.replace(competition.startDate, 'T', ' ')}"></span></p>
-            <p class="card-text">End: <span th:text="${#strings.replace(competition.endDate, 'T', ' ')}"></span></p>
+            <p class="card-text" id="startDateHeader">Start: <span th:text="${#strings.replace(competition.startDate, 'T', ' ')}"></span></p>
+            <p class="card-text" id="endDateHeader">End: <span th:text="${#strings.replace(competition.endDate, 'T', ' ')}"></span></p>
             <n id="nnn" th:value="${competition.organizer.id}" class="d-none"></n>
             <n id="mmm" th:value="${#authentication.principal.id}" class="d-none"></n>
         </div>
@@ -93,7 +93,7 @@
         </div>
 
         <div class="col-sm-16 mt-2">
-            <h3 class="text-center">Участники:</h3>
+            <h3 class="text-center" id="participantsHeader">Participants:</h3>
             <th:block th:each="team : ${competition.teams}">
                 <div class="list-group-item bg-dark" th:id="'team-id-' + ${team.id}" th:onclick="'$(\'#teammates-team-id-' + ${team.id} + '\').toggle()'">
                     Название команды: <i th:text="${#strings.capitalize(team.teamName)}"></i>

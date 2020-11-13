@@ -1,5 +1,6 @@
 package org.netcracker.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.netcracker.project.model.enums.Result;
@@ -14,6 +15,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 public class Team implements Serializable {
+    private static final long serialVersionUID = 7609590770964470381L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,15 +39,21 @@ public class Team implements Serializable {
     @Enumerated(EnumType.STRING)
     private  Set<Result> result = new HashSet<>();
 
-    // Надо решить проблему с ленивой подгрузкой
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "statistics",
+            name = "team_competition",
             joinColumns = { @JoinColumn(name = "team_id") },
             inverseJoinColumns = { @JoinColumn(name = "comp_id") }
-
     )
-    private Map<Result,Competition> statistics=new HashMap<>();
+    @JsonIgnore
+    private Set<Competition> competitionHistory = new HashSet<>();
+
+    // Надо решить проблему с ленивой подгрузкой
+    @ManyToMany(fetch = FetchType.EAGER)
+    @CollectionTable(name = "team_statistics", joinColumns = @JoinColumn(name = "team_id"))
+    @MapKeyColumn(name = "result")
+    @MapKeyEnumerated(EnumType.STRING)
+    private Map<Result, Competition> statistics = new HashMap<>();
     //private Set<Competition> statistics = new HashSet<>();
 
     // Сюда роли добавляются при изменении (добавлении, обновлении) команды через post/put запросы, т.е. это никак не связано с usr_team_role таблицей

@@ -72,10 +72,11 @@ public class User implements UserDetails {
     @ElementCollection(targetClass = Result.class, fetch = FetchType.EAGER)
     @CollectionTable(name="result_type", joinColumns = @JoinColumn(name="usr_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Result> result=new HashSet<>();
+    private Set<Result> result = new HashSet<>();
 
-    @ManyToMany
-    private Map<Result,Competition> statistics=new HashMap<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Map<Result, Competition> statistics = new HashMap<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

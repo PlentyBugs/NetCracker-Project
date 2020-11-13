@@ -166,7 +166,7 @@ public class CompetitionService {
                 result = Result.SECOND;
             } else if (team.equals(third)) {
                 result = Result.THIRD;
-            } else if (team.equals(second)) {
+            } else if (spotted.contains(team)) {
                 result = Result.SPOTTED;
             }
             gradeOneTeam(team, result, competition);
