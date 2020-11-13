@@ -61,8 +61,8 @@ public class CompetitionControllerTest {
                 .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/h5").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")))
                 .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[1]").string(containsString("Participate and be a part of history, let megacorporations spot you and reserve a spot for you")))
                 .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/a").string(containsString("Go to competition")))
-                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[2]/small[1]").string(containsString("2021-01-12 17:55")))
-                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[2]/small[2]").string(containsString("2021-09-12 18:15")));
+                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[3]/small[1]").string(containsString("2021-01-12 17:55")))
+                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[3]/small[2]").string(containsString("2021-09-12 18:15")));
     }
 
     @Test
@@ -70,11 +70,11 @@ public class CompetitionControllerTest {
         mockMvc.perform(get("/competition/4"))
                 .andExpect(authenticated())
                 .andExpect(xpath("//div[@id='main']/div/div/img").exists())
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/h1").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/h6").string(containsString("Organized by Жора")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/p[1]").string(containsString("Participate and be a part of history, let megacorporations spot you and reserve a spot for you")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/p[2]").string(containsString("2021-01-12 17:55")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/p[3]").string(containsString("2021-09-12 18:15")));
+                .andExpect(xpath("//h1[@id='compNameHeader']").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")))
+                .andExpect(xpath("//h6[@id='organizedByHeader']").string(containsString("Organized by Zhora")))
+                .andExpect(xpath("//p[@id='descriptionHeader']").string(containsString("Participate and be a part of history, let megacorporations spot you and reserve a spot for you")))
+                .andExpect(xpath("//p[@id='startDateHeader']").string(containsString("2021-01-12 17:55")))
+                .andExpect(xpath("//p[@id='endDateHeader']").string(containsString("2021-09-12 18:15")));
     }
 
     @Test
@@ -92,11 +92,11 @@ public class CompetitionControllerTest {
         mockMvc.perform(get("/competition/3"))
                 .andExpect(authenticated())
                 .andExpect(xpath("//div[@id='main']/div/div/img").exists())
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/h1").string(containsString("Hackathon 3")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/h6").string(containsString("Organized by Жора")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/p[1]").string(containsString("Hackathon 3")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/p[2]").string(containsString("2024-01-12 12:45")))
-                .andExpect(xpath("//div[@id='main']/div/div/div[1]/p[3]").string(containsString("2024-08-12 12:45")))
+                .andExpect(xpath("//h1[@id='compNameHeader']").string(containsString("Hackathon 3")))
+                .andExpect(xpath("//h6[@id='organizedByHeader']").string(containsString("Organized by Zhora")))
+                .andExpect(xpath("//p[@id='descriptionHeader']").string(containsString("Hackathon 3")))
+                .andExpect(xpath("//p[@id='startDateHeader']").string(containsString("2024-01-12 12:45")))
+                .andExpect(xpath("//p[@id='endDateHeader']").string(containsString("2024-08-12 12:45")))
                 .andExpect(xpath("//button[@id='join-button']").exists());
 
         mockMvc.perform(post("/competition/3/join").with(csrf()))
@@ -107,7 +107,7 @@ public class CompetitionControllerTest {
     @Test
     public void competitionModerationTest() throws Exception {
         mockMvc.perform(get("/competition/1"))
-                .andExpect(xpath("//*[@id='main']/div/div/div[2]/h3").string(containsString("Участники")));
+                .andExpect(xpath("//h3[@id='participantsHeader']").string(containsString("Participants")));
     }
 
     @Test
@@ -147,8 +147,7 @@ public class CompetitionControllerTest {
                 .with(csrf());
 
         mockMvc.perform(multipart)
-                .andExpect(authenticated())
-                .andExpect(redirectedUrl("/add-competition"));
+                .andExpect(authenticated());
     }
 
     @Test
@@ -161,8 +160,7 @@ public class CompetitionControllerTest {
                 .with(csrf());
 
         mockMvc.perform(multipart)
-                .andExpect(authenticated())
-                .andExpect(redirectedUrl("/add-competition"));
+                .andExpect(authenticated());
     }
 
     @Test
@@ -175,7 +173,6 @@ public class CompetitionControllerTest {
                 .with(csrf());
 
         mockMvc.perform(multipart)
-                .andExpect(authenticated())
-                .andExpect(redirectedUrl("/add-competition"));
+                .andExpect(authenticated());
     }
 }

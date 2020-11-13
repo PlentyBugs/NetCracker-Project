@@ -11,11 +11,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -69,8 +67,7 @@ public class TeamControllerTest {
                 .with(csrf());
 
         mockMvc.perform(multipart)
-                .andExpect(authenticated())
-                .andExpect(redirectedUrl("/add-team"));
+                .andExpect(authenticated());
     }
     @Test
     public void joinTeamTest()throws Exception{
