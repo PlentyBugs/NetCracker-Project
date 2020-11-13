@@ -1,7 +1,9 @@
 package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.dto.SimpleTeam;
 import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -72,5 +77,11 @@ public class UserController {
     @ResponseBody
     public String getName(@PathVariable("id") User user) {
         return user.getSurname() + " " + user.getName() + " " + user.getSecName() + " (" + user.getUsername() + ")";
+    }
+
+    @GetMapping(value = "/team/{id}", produces = "application/json")
+    @ResponseBody
+    public Set<SimpleTeam> getTeams(@PathVariable("id") User user) {
+        return user.getTeams().stream().map(SimpleTeam::of).collect(Collectors.toSet());
     }
 }

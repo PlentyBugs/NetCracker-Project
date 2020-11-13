@@ -100,6 +100,7 @@ public class CompetitionService {
     }
 
     public void addTeam(Competition competition, Team team) {
+        team.getTeammates().remove(competition.getOrganizer());
         RegisteredTeam registeredTeam = RegisteredTeam.of(team);
         registeredTeamRepository.save(registeredTeam);
         competition.getTeams().add(registeredTeam);

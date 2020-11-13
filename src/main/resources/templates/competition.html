@@ -13,6 +13,8 @@
             </p>
             <p class="card-text">Start: <span th:text="${#strings.replace(competition.startDate, 'T', ' ')}"></span></p>
             <p class="card-text">End: <span th:text="${#strings.replace(competition.endDate, 'T', ' ')}"></span></p>
+            <n id="nnn" th:value="${competition.organizer.id}" class="d-none"></n>
+            <n id="mmm" th:value="${#authentication.principal.id}" class="d-none"></n>
         </div>
         <th:block sec:authorize="hasAuthority('PARTICIPANT')" th:if="${competition.organizer.id != #authentication.principal.id}">
             <th:block th:if="${!participate}">
@@ -34,6 +36,7 @@
                                 I agree to sell my soul to the devil for the right to participate in this competition
                             </label>
                         </div>
+                        <p class="text-danger" style="display: none" id="org-danger-message">Your team contains the organizer of this competition! He will not be counted as a participant!</p>
                         <button type="submit" class="btn btn-success btn-lg btn-block mt-2" id="join-button">Sign up for a competition</button>
                     </form>
                 </div>
@@ -67,5 +70,6 @@
             <meta id="_csrf_parameter" name="_csrf_header" th:content="${_csrf.parameterName}"/>
         </div>
     </div>
+    <script th:src="@{/js/competitionChecker.js}"></script>
     <!---->
 </div></html>
