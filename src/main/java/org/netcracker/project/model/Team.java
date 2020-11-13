@@ -14,6 +14,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 public class Team implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,7 +33,7 @@ public class Team implements Serializable {
     private Set<User> teammates = new HashSet<>();
 
     @ElementCollection(targetClass = Result.class, fetch=FetchType.EAGER)
-    @CollectionTable(name="result_type",joinColumns = @JoinColumn(name = "usr_id"))
+    @CollectionTable(name="result_type",joinColumns = @JoinColumn(name = "team_id"))
     @Enumerated(EnumType.STRING)
     private  Set<Result> result = new HashSet<>();
 
