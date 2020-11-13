@@ -8,9 +8,11 @@ import org.netcracker.project.repository.TeamRepository;
 import org.netcracker.project.util.ImageUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -64,5 +66,9 @@ public class TeamService {
         if(!"".equals(resultFilename)){
             team.setLogoFilename(resultFilename);
         }
+    }
+
+    public Team getOne(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

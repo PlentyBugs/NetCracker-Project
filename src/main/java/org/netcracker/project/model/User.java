@@ -14,6 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
@@ -21,6 +22,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 public class User implements UserDetails {
+    private static final long serialVersionUID = 5473465011414867583L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -67,16 +69,6 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
     private Set<Team> teams = new HashSet<>();
-
-    @ElementCollection(targetClass = Result.class, fetch=FetchType.EAGER)
-    @CollectionTable(name="result_type",joinColumns = @JoinColumn(name = "usr_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Result> results=new HashSet<>();
-
-
-    @ElementCollection
-    @CollectionTable(name="statistics")
-    private Map<Competition,Result> statistics=new HashMap<>();
 
 
     @Override
