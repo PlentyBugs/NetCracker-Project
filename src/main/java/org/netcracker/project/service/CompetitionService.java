@@ -155,4 +155,28 @@ public class CompetitionService {
             // Установить для каждого пользователя
         }
     }
+
+    public void gradeCompetition(Competition competition, RegisteredTeam winner, RegisteredTeam second, RegisteredTeam third, Set<RegisteredTeam> spotted) {
+        Set<RegisteredTeam> teams = competition.getTeams();
+        for (RegisteredTeam team : teams) {
+            Result result = Result.PARTICIPATE;
+            if (team.equals(winner)) {
+                result = Result.WIN;
+            } else if (team.equals(second)) {
+                result = Result.SECOND;
+            } else if (team.equals(third)) {
+                result = Result.THIRD;
+            } else if (team.equals(second)) {
+                result = Result.SPOTTED;
+            }
+            gradeOneTeam(team, result);
+        }
+    }
+
+    private void gradeOneTeam(RegisteredTeam team, Result result, Competition competition) {
+        // Установить для команды
+        for (User u : team.getTeammates()) {
+            // Установить для каждого пользователя
+        }
+    }
 }

@@ -47,7 +47,52 @@
                 </form>
             </th:block>
         </th:block>
-        <div class="col-sm-16">
+
+        <div sec:authorize="hasAuthority('ORGANIZER')" th:if="${competition.organizer.id == #authentication.principal.id and expired}" class="col-sm-16 mt-2">
+            <h5 class="text-center">The competition is over, indicate its results:</h5>
+
+
+            <div class="input-group d-inline-flex col-sm-12 m-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend" style="width: 150px;">
+                        Winner:
+                    </div>
+                </div>
+                <input type="text" class="form-control" placeholder="Winner" id="winner" name="winner" list="teamList"/>
+            </div>
+
+            <div class="input-group d-inline-flex col-sm-12 m-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend" style="width: 150px;">
+                        Second Place:
+                    </div>
+                </div>
+                <input type="text" class="form-control" placeholder="Second Place" id="second" name="winner" list="teamList"/>
+            </div>
+
+            <div class="input-group d-inline-flex col-sm-12 m-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text group-prepend" style="width: 150px;">
+                        Third Place:
+                    </div>
+                </div>
+                <input type="text" class="form-control" placeholder="Third Place" id="third" name="winner" list="teamList"/>
+            </div>
+
+            <div class="input-group d-inline-flex col-sm-12 m-1">
+                <button id="newSpotted" class="btn-info btn btn-lg btn-block">Was someone noticed by the sponsor? Add them:</button>
+            </div>
+
+            <datalist id="teamList">
+                <th:block th:each="team : ${competition.teams}">
+                    <option th:value="${team.teamName}" th:text="${team.teamName}"></option>
+                </th:block>
+            </datalist>
+
+            <button onclick="grade();" class="btn-success btn btn-lg btn-block mt-3 mb-5">Grade</button>
+        </div>
+
+        <div class="col-sm-16 mt-2">
             <h3 class="text-center">Участники:</h3>
             <th:block th:each="team : ${competition.teams}">
                 <div class="list-group-item bg-dark" th:id="'team-id-' + ${team.id}" th:onclick="'$(\'#teammates-team-id-' + ${team.id} + '\').toggle()'">
@@ -70,6 +115,7 @@
             <meta id="_csrf_parameter" name="_csrf_header" th:content="${_csrf.parameterName}"/>
         </div>
     </div>
-    <script th:src="@{/js/competitionChecker.js}"></script>
+    <script th:if="${competition.organizer.id != #authentication.principal.id}" th:src="@{/js/competitionChecker.js}"></script>
+    <script th:if="${competition.organizer.id == #authentication.principal.id}" th:src="@{/js/competitionAdmin.js}"></script>
     <!---->
 </div></html>
