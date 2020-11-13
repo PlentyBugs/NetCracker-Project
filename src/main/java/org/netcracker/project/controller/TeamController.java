@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.TeamFilter;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.TeamService;
 import org.netcracker.project.util.SecurityUtils;
@@ -66,6 +67,26 @@ public class TeamController {
     public String getTeam(@PathVariable("id") Team team,
                            Model model)
     {
+        int winCount=0;
+        int secondCount=0;
+        int thirdCount=0;
+        int participate=0;
+        int spottedBySponsors=0;
+        for(Result result:team.getStatistics().keySet() )
+        {
+            switch(result){
+                case WIN:winCount++;break;
+                case SECOND:secondCount++;break;
+                case THIRD:thirdCount++;break;
+                case PARTICIPATE:participate++;break;
+                case SPOTTED:spottedBySponsors++;break;
+            }
+        }
+            model.addAttribute("winCount",winCount);
+            model.addAttribute("secondCount",secondCount);
+            model.addAttribute("thirdCount",thirdCount);
+            model.addAttribute("participate",participate);
+            model.addAttribute("spotted",spottedBySponsors);
             model.addAttribute(team);
             return "team";
     }
