@@ -1,8 +1,8 @@
 package org.netcracker.project.config.formatter;
 
 import lombok.RequiredArgsConstructor;
-import org.netcracker.project.model.Team;
-import org.netcracker.project.repository.TeamRepository;
+import org.netcracker.project.model.RegisteredTeam;
+import org.netcracker.project.repository.RegisteredTeamRepository;
 import org.springframework.format.Formatter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -13,24 +13,24 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class TeamFormatter implements Formatter<Team> {
+public class RegisteredTeamFormatter implements Formatter<RegisteredTeam> {
 
-    private final TeamRepository repository;
+    private final RegisteredTeamRepository repository;
 
     @Override
-    public Team parse(String s, Locale locale) throws ResponseStatusException {
+    public RegisteredTeam parse(String s, Locale locale) throws ResponseStatusException {
         if (s.length() > 2048) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         if (s.matches("\\d+")) {
-            Optional<Team> optionalTeam = repository.findById(Long.parseLong(s));
+            Optional<RegisteredTeam> optionalTeam = repository.findById(Long.parseLong(s));
             return optionalTeam.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         }
-        Team byName = repository.findByTeamName(s);
+        RegisteredTeam byName = repository.findByTeamName(s);
         if (byName == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return byName;
     }
 
     @Override
-    public String print(Team Team, Locale locale) {
+    public String print(RegisteredTeam Team, Locale locale) {
         return Team.getTeamName();
     }
 }
