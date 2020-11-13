@@ -154,3 +154,7 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     -ms-user-select: none;
     user-select: none;
 }
+
+.prepend-text {
+    width: 150px;
+}

@@ -29,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,7 +104,25 @@ public class CompetitionController {
     ) {
         model.addAttribute(competition);
         model.addAttribute("participate", user.getTeams().stream().map(RegisteredTeam::of).map(e -> competition.getTeams().contains(e)).reduce(false, (x, y) -> x || y));
+        model.addAttribute("expired", competition.getEndDate().compareTo(LocalDateTime.now()) < 0);
         return "competition";
+    }
+
+    @Async
+    @PutMapping("/{id}/grade")
+    @ResponseBody
+    public void grade(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Competition competition,
+            @RequestParam("winner") RegisteredTeam winner,
+            @RequestParam(value = "second", required = false, defaultValue = "") RegisteredTeam second,
+            @RequestParam(value = "third", required = false, defaultValue = "") RegisteredTeam third,
+            @RequestParam(value = "spotted", required = false) Set<RegisteredTeam> spotted
+    ) {
+        if (user.getId().equals(competition.getOrganizer().getId())) {
+            service.gradeCompetition(competition, winner, second, third, spotted);
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     @Async
