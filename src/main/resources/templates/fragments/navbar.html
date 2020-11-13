@@ -24,7 +24,7 @@
                         <a class="nav-link" th:href="@{/admin}">Admin panel</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('ORGANIZER')">
-                        <a class="nav-link" th:href="@{/my-competitions}">My competitions</a>
+                        <a class="nav-link" th:href="@{/competition/my-competitions}">My competitions</a>
                     </li>
                 </ul>
             </div>

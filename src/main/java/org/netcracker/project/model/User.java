@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,7 +21,6 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 public class User implements UserDetails {
-    private static final long serialVersionUID = 3856464070955127754L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -68,14 +68,16 @@ public class User implements UserDetails {
     )
     private Set<Team> teams = new HashSet<>();
 
-
-    @ElementCollection(targetClass = Result.class, fetch = FetchType.EAGER)
-    @CollectionTable(name="result_type", joinColumns = @JoinColumn(name="usr_id"))
+    @ElementCollection(targetClass = Result.class, fetch=FetchType.EAGER)
+    @CollectionTable(name="result_type",joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Result> result = new HashSet<>();
+    private Set<Result> results=new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Map<Result, Competition> statistics = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name="statistics")
+    private Map<Competition,Result> statistics=new HashMap<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
