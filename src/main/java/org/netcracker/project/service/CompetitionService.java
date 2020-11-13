@@ -103,6 +103,9 @@ public class CompetitionService {
     public void addTeam(Competition competition, Team team) {
         team.getTeammates().remove(competition.getOrganizer());
         RegisteredTeam registeredTeam = RegisteredTeam.of(team);
+        System.out.println(competition);
+        System.out.println(team);
+        System.out.println(registeredTeam);
         registeredTeamRepository.save(registeredTeam);
         competition.getTeams().add(registeredTeam);
         update(competition);
@@ -139,7 +142,7 @@ public class CompetitionService {
                 result = Result.SECOND;
             } else if (team.equals(third)) {
                 result = Result.THIRD;
-            } else if (team.equals(second)) {
+            } else if (spotted.contains(team)) {
                 result = Result.SPOTTED;
             }
             gradeOneTeam(team, result, competition);

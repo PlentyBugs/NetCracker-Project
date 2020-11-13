@@ -38,7 +38,7 @@ public class Competition implements Serializable {
     // Надо решить проблему с ленивой подгрузкой
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "statistics",
+            name = "team_competition",
             joinColumns = { @JoinColumn(name = "comp_id") },
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
