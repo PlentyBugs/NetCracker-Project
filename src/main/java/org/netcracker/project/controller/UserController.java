@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleTeam;
-import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.http.HttpStatus;
@@ -34,25 +33,6 @@ public class UserController {
             @PathVariable("id") User user,
             Model model
     ){
-        int winCount=0;
-        int secondCount=0;
-        int thirdCount=0;
-        int participate=0;
-        int spottedBySponsors=0;
-       for(Result result:user.getStatistics().keySet()){
-           switch(result){
-                case WIN:winCount++;break;
-                case SECOND:secondCount++;break;
-                case THIRD:thirdCount++;break;
-                case PARTICIPATE:participate++;break;
-               case SPOTTED:spottedBySponsors++;break;
-            }
-        }
-        model.addAttribute("winCount",winCount);
-        model.addAttribute("secondCount",secondCount);
-        model.addAttribute("thirdCount",thirdCount);
-        model.addAttribute("participate",participate);
-        model.addAttribute("spotted",spottedBySponsors);
         model.addAttribute(user);
         return "user";
     }
