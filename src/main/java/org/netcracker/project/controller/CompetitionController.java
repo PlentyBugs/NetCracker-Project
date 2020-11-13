@@ -175,9 +175,10 @@ public class CompetitionController {
             Model model
 ){
         Page<Competition> competitions= service.getAllEndedCompetitions(pageable,user);
+         model.addAttribute("pageName","Archive");
          model.addAttribute("page", competitions);
          model.addAttribute("url", "/competition/archive");
-        return "archive";
+        return "my-competitions";
 }
 
 @GetMapping("/running")
@@ -187,8 +188,9 @@ public class CompetitionController {
         Model model
 ){
     Page<Competition> competitions=service.getAllActingCompetitions(pageable, user);
+    model.addAttribute("pageName","Running");
     model.addAttribute("page",competitions);
     model.addAttribute("url","/competition/running");
-    return "running";
+    return "my-competitions";
 }
 }
