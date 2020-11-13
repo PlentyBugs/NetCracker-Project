@@ -2,14 +2,13 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.TeamRole;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -32,6 +31,11 @@ public class Team implements Serializable {
     )
     private Set<User> teammates = new HashSet<>();
 
+    @ElementCollection(targetClass = Result.class, fetch=FetchType.EAGER)
+    @CollectionTable(name="result_type",joinColumns = @JoinColumn(name = "usr_id"))
+    @Enumerated(EnumType.STRING)
+    private  Set<Result> result = new HashSet<>();
+
     // Надо решить проблему с ленивой подгрузкой
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -40,7 +44,8 @@ public class Team implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "comp_id") }
 
     )
-    private Set<Competition> statistics = new HashSet<>();
+    private Map<Result,Competition> statistics=new HashMap<>();
+    //private Set<Competition> statistics = new HashSet<>();
 
     // Сюда роли добавляются при изменении (добавлении, обновлении) команды через post/put запросы, т.е. это никак не связано с usr_team_role таблицей
     // Так как пользователь, возможно не хочет вступать в команду со всеми его ролями
