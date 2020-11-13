@@ -87,7 +87,6 @@ public class TeamController {
             model.addAttribute("thirdCount",thirdCount);
             model.addAttribute("participate",participate);
             model.addAttribute("spotted",spottedBySponsors);
-
             model.addAttribute(team);
             return "team";
     }
