@@ -3,6 +3,7 @@ package org.netcracker.project.service;
 
 import org.junit.jupiter.api.Test;
 import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.repository.CompetitionRepository;
 import org.netcracker.project.util.DateUtil;
@@ -63,7 +64,7 @@ public class CompetitionServiceTest {
     @Test
     public void updateTest() {
         Competition competition = new Competition();
-
+        Team team= new Team();
         assertTrue(competitionService.update(competition));
         verify(competitionRepository, times(1)).save(competition);
     }
