@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MessageNotification {
     private String id;
-    private String senderId;
-    private String senderName;
+    private Long senderId;
+    private Long senderName;
 }

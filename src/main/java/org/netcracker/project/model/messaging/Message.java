@@ -8,7 +8,7 @@ import org.netcracker.project.model.enums.MessageStatus;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,11 +19,11 @@ public class Message {
     @Id
     private String id;
     private String chatId;
-    private String senderId;
-    private String recipientId;
+    private Long senderId;
+    private Long recipientId;
     private String senderName;
     private String recipientName;
     private String content;
-    private Date time;
+    private LocalDateTime time;
     private MessageStatus status;
 }

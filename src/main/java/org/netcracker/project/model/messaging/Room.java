@@ -17,8 +17,6 @@ public class Room {
     @Id
     private String id;
     private String chatId;
-    private String senderId;
-    private String recipientId;
-    private String senderName;
-    private String recipientName;
+    private Long senderId;
+    private Long recipientId;
 }

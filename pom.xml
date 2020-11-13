@@ -40,12 +40,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-websocket</artifactId>
-			<version>5.2.7.RELEASE</version>
+			<version>5.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-messaging</artifactId>
-			<version>5.2.7.RELEASE</version>
+			<version>5.3.0</version>
 		</dependency>
 
 
@@ -156,11 +156,6 @@
 			<groupId>org.webjars.bowergithub.fortawesome</groupId>
 			<artifactId>font-awesome</artifactId>
 			<version>4.6.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>stomp-websocket</artifactId>
-			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
