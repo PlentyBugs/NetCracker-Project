@@ -48,7 +48,7 @@ public class TeamService {
     }
 
     public boolean save(Team team, MultipartFile logo, User user) throws IOException {
-        //...mb creator
+
         saveLogo(team,logo);
         repository.save(team);
         return true;
