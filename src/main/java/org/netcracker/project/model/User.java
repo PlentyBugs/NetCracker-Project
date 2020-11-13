@@ -2,8 +2,10 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,9 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="usr")
@@ -67,6 +67,17 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "team_id") }
     )
     private Set<Team> teams = new HashSet<>();
+
+    @ElementCollection(targetClass = Result.class, fetch=FetchType.EAGER)
+    @CollectionTable(name="result_type",joinColumns = @JoinColumn(name = "usr_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Result> results=new HashSet<>();
+
+
+    @ElementCollection
+    @CollectionTable(name="statistics")
+    private Map<Competition,Result> statistics=new HashMap<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
