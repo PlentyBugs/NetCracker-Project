@@ -122,4 +122,8 @@ public class UserService implements UserDetailsService {
         repository.save(user);
         return true;
     }
+
+    public String findUsernameById(Long id) {
+        return repository.findById(id).map(User::getUsername).orElse("");
+    }
 }
