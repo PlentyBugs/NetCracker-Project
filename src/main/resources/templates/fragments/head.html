@@ -2,6 +2,9 @@
     <head th:fragment="head">
         <title>NetHacker</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+        <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <meta id="_csrf_parameter" name="_csrf_header" th:content="${_csrf.parameterName}"/>
         <link th:href="@{/css/style.css}" rel="stylesheet" />
         <link th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}" rel="stylesheet" />
         <link th:href="@{/webjars/font-awesome/css/font-awesome.min.css}" rel="stylesheet" />
