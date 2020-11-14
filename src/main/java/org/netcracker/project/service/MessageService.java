@@ -7,8 +7,6 @@ import org.netcracker.project.repository.MessageRepository;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class MessageService {
@@ -20,9 +18,5 @@ public class MessageService {
     public Message save(Message message) {
         message.setStatus(MessageStatus.RECEIVED);
         return repository.save(message);
-    }
-
-    public List<Message> findByChatId(String chatId) {
-        return repository.findByChatId(chatId);
     }
 }
