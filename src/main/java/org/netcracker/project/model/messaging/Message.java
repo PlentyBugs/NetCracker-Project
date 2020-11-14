@@ -19,8 +19,8 @@ public class Message {
     @Id
     private String id;
     private String chatId;
-    private Long senderId;
-    private Long recipientId;
+    private String senderId;
+    private String recipientId;
     private String senderName;
     private String recipientName;
     private String content;

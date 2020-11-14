@@ -23,6 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf()
+                    .ignoringAntMatchers("/ws/**")
+                .and()
                 .authorizeRequests()
                     .antMatchers("/", "/registration", "/css/**", "/js/**", "/registration/activate/*", "/webjars/**", "/img/**").permitAll()
                     .antMatchers("/add-competition")
