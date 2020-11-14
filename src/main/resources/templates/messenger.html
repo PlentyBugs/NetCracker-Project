@@ -2,18 +2,16 @@
 
     <div class="container">
         <div class="row" style="height: 90%;">
-            <div class="col-sm-3 bg-dark" id="chats">
-                <input type="text" placeholder="Search" class="w-100 mt-2 mb-4 p-1" id="search-chat" autocapitalize="off" autocomplete="off"/>
+            <div class="col-sm-3 bg-info">
                 <th:block th:each="chat : ${chats}">
                     <div th:text="${usernames.get(chat.recipientId)}" class="chat-in-menu text-center m-1" th:onclick="'showChat(' + ${T(Long).parseLong(chat.recipientId)} + ');'"></div>
                 </th:block>
             </div>
-            <div class="col-sm-9 bg-dark p-3" id="chat-block">
-                <div id="chat-window"></div>
+            <div class="col-sm-9 bg-dark">
+
             </div>
         </div>
     </div>
-    <script th:src="@{/js/websocketUtil.js}"></script>
     <script th:src="@{/js/messenger.js}"></script>
 
 </div></html>

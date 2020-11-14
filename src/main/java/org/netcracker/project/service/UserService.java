@@ -126,8 +126,4 @@ public class UserService implements UserDetailsService {
     public String findUsernameById(Long id) {
         return repository.findById(id).map(User::getUsername).orElse("");
     }
-
-    public String findFullNameAndUsernameById(Long id) {
-        return repository.findById(id).map(u -> u.getSurname() + " " + u.getName() + " (" + u.getUsername() + ")").orElse("");
-    }
 }
