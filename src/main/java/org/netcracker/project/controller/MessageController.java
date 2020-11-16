@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -39,15 +40,24 @@ public class MessageController {
         return "messenger";
     }
 
-    @GetMapping(value = "/messenger/{id}/chat/{recipientId}", produces = "application/json")
+    @GetMapping(value = "/messenger/{userId}/chat/{recipientId}", produces = "application/json")
     @ResponseBody
     public Room getChat(
             @AuthenticationPrincipal User user,
-            @PathVariable("id") User sender,
-            @PathVariable() String recipientId
+            @PathVariable("userId") String senderId,
+            @PathVariable("recipientId") String recipientId
     ) {
-        if (!sender.equals(user)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        return roomService.findByRecipientId(recipientId);
+        if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        return roomService.findBySenderAndRecipientId(senderId, recipientId);
+    }
+
+    @GetMapping(value = "/messenger/{chatId}/messages", produces = "application/json")
+    @ResponseBody
+    public List<Message> getMessages(
+            @AuthenticationPrincipal User user,
+            @PathVariable("chatId") String chatId
+    ) {
+        return messageService.findByChatId(chatId);
     }
 
     @MessageMapping("/chat")
