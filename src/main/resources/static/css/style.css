@@ -286,7 +286,7 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 
 #chat-window {
     flex: 0 1 auto;
-    height: 460px;
+    height: 60vh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 5px;
@@ -302,6 +302,7 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     width: 90%; max-width: 90%;
     height: 6rem;
     resize: none;
+    margin-top: 1rem;
 }
 
 #send-button {
