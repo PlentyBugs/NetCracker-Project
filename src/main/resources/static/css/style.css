@@ -184,12 +184,19 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     border-radius: 60px;
 }
 
+.chat-in-menu:hover {
+    height: 2.2rem;
+    font-size: 1.1em;
+}
+
 #chat {
     width: 300px;
     border: solid 1px #EEE;
     display: flex;
     flex-direction: column;
     padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .messages {
@@ -303,6 +310,9 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     height: 6rem;
     resize: none;
     margin-top: 1rem;
+    padding-top: 7px;
+    padding-left: 7px;
+    border-radius: 6px;
 }
 
 #send-button {
