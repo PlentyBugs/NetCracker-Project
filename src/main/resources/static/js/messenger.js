@@ -4,6 +4,22 @@ let header = $('#_csrf_header').attr('content');
 let userId = $("#zzz").attr("value");
 let currentChatId = "";
 let currentRecipientId = "";
+let chatSearch = $("#search-chat");
+let chats = $(".chat-in-menu");
+
+chatSearch.keyup(() => {
+    sort(chatSearch.val());
+});
+
+function sort(filter) {
+    for (let chat of chats) {
+        if ($(chat).text().toLowerCase().includes(filter.toLowerCase())) {
+            $(chat).css("display", "block");
+        } else {
+            $(chat).css("display", "none");
+        }
+    }
+}
 
 function connect() {
     let socket = new SockJS("/ws");
@@ -49,13 +65,15 @@ function send(recipientId, senderName, recipientName) {
     let input = $("#message-text");
     let content = input.val();
     input.val("");
-    sendMessage(content, userId, recipientId, senderName, recipientName);
+    if (content !== "") {
+        sendMessage(content, userId, recipientId, senderName, recipientName);
 
-    setTimeout(() => {
-        showChat(currentRecipientId);
-        let chatWindow = document.getElementById("chat-window");
-        chatWindow.scrollTop = chatWindow.scrollHeight
-    }, 500);
+        setTimeout(() => {
+            showChat(currentRecipientId);
+            let chatWindow = document.getElementById("chat-window");
+            chatWindow.scrollTop = chatWindow.scrollHeight
+        }, 500);
+    }
 }
 
 function getPosition(message) {
@@ -123,7 +141,22 @@ function showChat(recipientId) {
 
     $("#input-message").remove();
 
-    chatWindow.after($("<div id='input-message'><textarea placeholder='Message...' name='message' id='message-text'></textarea><i class='fa fa-paper-plane' id='send-button' onclick='send(`" + recipientId + "`, `" + senderName + "`, `" + recipientName + "`);'></i></div>"));
+    let inputMessageBlock = $("<div id='input-message'></div>");
+    let messageTextBlock = $("<textarea placeholder='Message...' name='message' id='message-text'></textarea>");
+    let sendIconBlock = $("<i class='fa fa-paper-plane' id='send-button' onclick='send(`" + recipientId + "`, `" + senderName + "`, `" + recipientName + "`);'></i>");
+
+    inputMessageBlock.keyup(evt => {
+        evt.preventDefault();
+        if (evt.which === 13) {
+            send(recipientId, senderName, recipientName);
+        }
+        return false;
+    })
+
+    inputMessageBlock.append(messageTextBlock);
+    inputMessageBlock.append(sendIconBlock);
+
+    chatWindow.after(inputMessageBlock);
 }
 
 $(() => connect());

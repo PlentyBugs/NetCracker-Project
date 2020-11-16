@@ -3,6 +3,7 @@
     <div class="container">
         <div class="row" style="height: 90%;">
             <div class="col-sm-3 bg-info" id="chats">
+                <input type="text" placeholder="Search" class="w-100 mt-2 mb-4 p-1" id="search-chat" autocapitalize="off" autocomplete="off"/>
                 <th:block th:each="chat : ${chats}">
                     <div th:text="${usernames.get(chat.recipientId)}" class="chat-in-menu text-center m-1" th:onclick="'showChat(' + ${T(Long).parseLong(chat.recipientId)} + ');'"></div>
                 </th:block>
