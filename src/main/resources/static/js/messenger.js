@@ -2,6 +2,7 @@ let stompClient = null;
 let token = $('#_csrf').attr('content');
 let header = $('#_csrf_header').attr('content');
 let userId = $("#zzz").attr("value");
+let currentChatId = "";
 
 function connect() {
     let socket = new SockJS("/ws");
@@ -36,6 +37,13 @@ const sendMessage = (msg, senderId, recipientId, senderName, recipientName) => {
     }
 };
 
+function send(recipientId, senderName, recipientName) {
+    let input = $("#message-text");
+    let content = input.val();
+    input.val("");
+    sendMessage(content, userId, recipientId, senderName, recipientName);
+}
+
 function getPosition(message) {
     let position = "yours";
     if (message.senderId === userId) {
@@ -48,6 +56,9 @@ function showChat(recipientId) {
     let chat = {};
     const regexp = /(.+?)messenger(.*)/;
     const url = document.URL.match(regexp)[1] + "messenger/";
+    let senderName = "";
+    let recipientName = "";
+
     $.ajax({
         type: 'GET',
         url: url + userId + "/chat/" + recipientId,
@@ -56,7 +67,6 @@ function showChat(recipientId) {
         cache: false,
         async: false
     });
-    console.log(chat);
     let chatMessages = {};
     $.ajax({
         type: 'GET',
@@ -66,12 +76,19 @@ function showChat(recipientId) {
         cache: false,
         async: false
     });
-    console.log(chatMessages);
+
+    currentChatId = chat.chatId;
+
     let chatWindow = $("#chat-window");
     chatWindow.empty();
     let length = chatMessages.length;
+
     for (let i = 0; i < length; i++) {
         let message = chatMessages[i];
+        if (senderName === "" && recipientName === "") {
+            senderName = message.senderName;
+            recipientName = message.recipientName;
+        }
         let position = getPosition(message);
 
         let messages = $("<div class='" + position + " messages'></div>")
@@ -89,7 +106,7 @@ function showChat(recipientId) {
 
     $("#input-message").remove();
 
-    chatWindow.after($("<div id='input-message'><textarea name='message' id='message-text'></textarea><i class='fa fa-paper-plane' id='send-button'></i></div>"));
+    chatWindow.after($("<div id='input-message'><textarea name='message' id='message-text'></textarea><i class='fa fa-paper-plane' id='send-button' onclick='send(`" + recipientId + "`, `" + senderName + "`, `" + recipientName + "`);'></i></div>"));
 }
 
 $(() => connect());
