@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.messaging.Room;
 import org.netcracker.project.repository.RoomRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -62,7 +64,7 @@ public class RoomService {
         return map;
     }
 
-    public Room findByRecipientId(String recipientId) {
-        return roomRepository.findById(recipientId).get();
+    public Room findBySenderAndRecipientId(String senderId, String recipientId) {
+        return roomRepository.findBySenderIdAndRecipientId(senderId, recipientId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }
