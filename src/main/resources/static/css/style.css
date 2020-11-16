@@ -4,6 +4,23 @@ html, body {
     height: 100%;
 }
 
+::-webkit-scrollbar {
+    width: 3px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ffc107;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffc54d;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -269,16 +286,22 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 
 #chat-window {
     flex: 0 1 auto;
+    height: 460px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 5px;
 }
 
 #input-message {
     width: 100%; max-width: 100%;
     position: relative;
+    padding-top: 3px;
 }
 
 #message-text {
     width: 90%; max-width: 90%;
     height: 6rem;
+    resize: none;
 }
 
 #send-button {
