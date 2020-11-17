@@ -6,8 +6,8 @@ let teams = $.get("/user/team/" + mmm, (data) => teams = data);
 function check() {
     let id = team.val();
     let flag = false;
-    for (let t of teams) {
-        if (t.id == id) {
+    for (let t of Object.entries(teams)) {
+        if (t.id == id && typeof (t.teammatesId) != "undefined") {
             for (let i of t.teammatesId) {
                 if (i == nnn) {
                     flag = true;

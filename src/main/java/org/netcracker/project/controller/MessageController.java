@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,7 +34,19 @@ public class MessageController {
     @GetMapping("/messenger")
     public String getPage(
             @AuthenticationPrincipal User user,
-            Model model
+            Model model,
+            @PathVariable(value = "recipientId", required = false) String recipientId
+    ) {
+        model.addAttribute("chats", roomService.findAllByUser(user));
+        model.addAttribute("usernames", roomService.findAllUsernamesMapByUser(user));
+        return "messenger";
+    }
+
+    @GetMapping("/messenger/{recipientId}")
+    public String getPageWithRecipient(
+            @AuthenticationPrincipal User user,
+            Model model,
+            @PathVariable(value = "recipientId") String recipientId
     ) {
         model.addAttribute("chats", roomService.findAllByUser(user));
         model.addAttribute("usernames", roomService.findAllUsernamesMapByUser(user));
@@ -49,6 +62,17 @@ public class MessageController {
     ) {
         if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return roomService.findBySenderAndRecipientId(senderId, recipientId);
+    }
+
+    @PostMapping(value = "/messenger/{userId}/chat/{recipientId}")
+    @ResponseBody
+    public void createChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable("userId") String senderId,
+            @PathVariable("recipientId") String recipientId
+    ) {
+        if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        roomService.create(senderId, recipientId);
     }
 
     @GetMapping(value = "/messenger/{chatId}/messages", produces = "application/json")

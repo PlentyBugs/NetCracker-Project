@@ -111,6 +111,8 @@ function showChat(recipientId) {
     });
 
     currentChatId = chat.chatId;
+    senderName = chat.senderName;
+    recipientName = chat.recipientName;
 
     let chatWindow = $("#chat-window");
     chatWindow.empty();
@@ -118,10 +120,6 @@ function showChat(recipientId) {
 
     for (let i = 0; i < length; i++) {
         let message = chatMessages[i];
-        if (senderName === "" && recipientName === "") {
-            senderName = message.senderName;
-            recipientName = message.recipientName;
-        }
         let position = getPosition(message);
 
         let messages = $("<div class='" + position + " messages'></div>")
@@ -157,6 +155,22 @@ function showChat(recipientId) {
     inputMessageBlock.append(sendIconBlock);
 
     chatWindow.after(inputMessageBlock);
+
+    $("#chat-header").remove();
+
+    let chatHeader = $("<span class='text-center' id='chat-header'>" + (typeof (recipientName) == "undefined" ? "Nobody": recipientName) + "</span>");
+
+    chatWindow.before(chatHeader);
 }
 
-$(() => connect());
+$(() => {
+    connect();
+    const regexp = /(.+?)messenger\/?(.*)/;
+    currentRecipientId = document.URL.match(regexp)[2];
+    if (currentRecipientId === "") {
+        showChat(userId);
+    } else {
+        showChat(currentRecipientId);
+    }
+    $("#chats").outerHeight($("#chat-block").outerHeight);
+});
