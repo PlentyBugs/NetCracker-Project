@@ -1,4 +1,5 @@
 let userId = $("#zzz").attr("value");
+let name = $("#mmm").attr("value");
 let writeButtons = $(".write-button");
 
 for (let button of writeButtons) {
@@ -20,4 +21,18 @@ function write(recipientId) {
         async: false
     });
     window.location.href = url + recipientId;
+}
+
+function writeToEveryone() {
+    let message = $("#message-text").val();
+    if (message !== "") {
+        for (let user of writeButtons) {
+            let id = $(user).attr("data-recipientId");
+            let username = $(user).attr("data-recipientName");
+            sendMessage(message, userId, id, name, username);
+        }
+    }
+    let modal = $("#modal-body-id");
+    modal.empty();
+    modal.text("Message sent successfully");
 }
