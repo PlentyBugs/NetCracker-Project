@@ -329,6 +329,7 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 }
 
 #chats {
+    background-color: rgba(52,58,64,0.99) !important;
     overflow-y: auto;
     overflow-x: hidden;
 }
