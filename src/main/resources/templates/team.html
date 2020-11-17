@@ -14,16 +14,18 @@
 
     <div class="card-columns">
         <th:block th:each="user: ${team.teammates}" >
-            <a th:href="@{/user/} + ${user.id}" class="card-link">
-                <div class="card text-white bg-dark mb-3 text-center" style="max-width: 18rem;">
-                    <div class="card-header" th:text="${user.surname} + ' ' + ${user.name}">Full name</div>
+            <div class="card text-white bg-dark mb-3 text-center" style="max-width: 18rem;">
+                <a th:href="@{/user/} + ${user.id}" class="card-link">
+                    <div class="card-header" th:text="${user.surname} + ' ' + ${user.name} + ' (' + ${user.username} + ')'">Full name</div>
                     <div class="card-body">
                         <img th:src="@{/img/} + ${user.avatarFilename}" style="width: 100px; height: auto;" class="card-img-top" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
                         <!--                    <h5 class="card-title">Тут можно написать главную командную роль этого человека</h5>-->
                     </div>
-                </div>
-            </a>
+                </a>
+                <button type="button" class="btn btn-primary btn-block write-button" th:data-recipientId="${user.id}">Write</button>
+            </div>
         </th:block>
     </div>
+    <script th:src="@{/js/messengerUtil.js}"></script>
     <!---->
 </div></html>

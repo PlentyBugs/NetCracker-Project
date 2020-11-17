@@ -25,17 +25,20 @@ public class RoomService {
                 .or(create(senderId, recipientId, createIfNotExists));
     }
 
-    private Supplier<Optional<String>> create(String senderId, String recipientId, boolean createIfNotExists) {
-        return () -> {
-            if (!createIfNotExists) return Optional.empty();
-
+    public String create(String senderId, String recipientId) {
+        Optional<Room> room = roomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
+        if (room.isEmpty()) {
             String chatId = UUID.randomUUID().toString();
+            String senderName = userService.findFullNameAndUsernameById(Long.parseLong(senderId));
+            String recipientName = userService.findFullNameAndUsernameById(Long.parseLong(recipientId));
 
             Room senderRecipient = Room
                     .builder()
                     .chatId(chatId)
                     .senderId(senderId)
                     .recipientId(recipientId)
+                    .senderName(senderName)
+                    .recipientName(recipientName)
                     .build();
 
             roomRepository.save(senderRecipient);
@@ -46,9 +49,21 @@ public class RoomService {
                         .chatId(chatId)
                         .senderId(recipientId)
                         .recipientId(senderId)
+                        .senderName(senderName)
+                        .recipientName(recipientName)
                         .build();
                 roomRepository.save(recipientSender);
             }
+            return chatId;
+        }
+        return room.get().getChatId();
+    }
+
+    public Supplier<Optional<String>> create(String senderId, String recipientId, boolean createIfNotExists) {
+        return () -> {
+            if (!createIfNotExists) return Optional.empty();
+
+            String chatId = create(senderId, recipientId);
 
             return Optional.of(chatId);
         };
