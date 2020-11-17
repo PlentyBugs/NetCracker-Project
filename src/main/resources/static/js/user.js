@@ -1,0 +1,1 @@
+$(() => $("#write-button-user").outerWidth($("#user-avatar").outerWidth()));

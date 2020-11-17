@@ -195,8 +195,6 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     display: flex;
     flex-direction: column;
     padding: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 .messages {
@@ -293,7 +291,7 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 
 #chat-window {
     flex: 0 1 auto;
-    height: 60vh;
+    height: 57vh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 5px;
@@ -328,4 +326,14 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 
 #send-button:hover {
     font-size: 2.2em;
+}
+
+#chats {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#chat-header {
+    height: 3vh;
+    font-size: 1.2em;
 }

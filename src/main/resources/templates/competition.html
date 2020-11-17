@@ -105,7 +105,10 @@
                 <div class="list-group-item bg-dark" th:id="'teammates-team-id-' + ${team.id}" style="display: none;">
                     <ul>
                         <th:block th:each="teammate : ${team.teammates}">
-                            <li th:text="${teammate.username}"></li>
+                            <div class="row mt-2">
+                                <li th:text="${teammate.username}"></li>
+                                <button type="button" class="btn btn-primary float-right write-button" style="margin-top: -4px; margin-left: auto" th:data-recipientId="${teammate.id}">Write</button>
+                            </div>
                         </th:block>
                     </ul>
                 </div>
@@ -114,5 +117,6 @@
     </div>
     <script th:if="${competition.organizer.id != #authentication.principal.id}" th:src="@{/js/competitionChecker.js}"></script>
     <script th:if="${competition.organizer.id == #authentication.principal.id}" th:src="@{/js/competitionAdmin.js}"></script>
+    <script th:src="@{/js/messengerUtil.js}"></script>
     <!---->
 </div></html>
