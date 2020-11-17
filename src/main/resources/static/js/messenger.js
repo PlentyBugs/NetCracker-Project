@@ -1,4 +1,3 @@
-let stompClient = null;
 let token = $('#_csrf').attr('content');
 let header = $('#_csrf_header').attr('content');
 let userId = $("#zzz").attr("value");
@@ -20,38 +19,6 @@ function sort(filter) {
         }
     }
 }
-
-function connect() {
-    let socket = new SockJS("/ws");
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        stompClient.subscribe("/user/" + userId + "/queue/messages", function (message) {
-            messageReceive(message);
-        });
-    });
-}
-
-function disconnect() {
-    if (stompClient != null) {
-        stompClient.disconnect();
-    }
-    console.log("disconnected")
-}
-
-const sendMessage = (msg, senderId, recipientId, senderName, recipientName) => {
-    if (msg.trim() !== "") {
-        const message = {
-            senderId: senderId,
-            recipientId: recipientId,
-            senderName: senderName,
-            recipientName: recipientName,
-            content: msg,
-            time: new Date()
-        };
-
-        stompClient.send("/app/chat", {}, JSON.stringify(message));
-    }
-};
 
 const messageReceive = (msg) => {
     const notification = JSON.parse(msg.body);
@@ -164,7 +131,6 @@ function showChat(recipientId) {
 }
 
 $(() => {
-    connect();
     const regexp = /(.+?)messenger\/?(.*)/;
     currentRecipientId = document.URL.match(regexp)[2];
     if (currentRecipientId === "") {
