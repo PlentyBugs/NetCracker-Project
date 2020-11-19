@@ -122,14 +122,14 @@ public class CompetitionService {
         }
     }
 
-    public Page <Competition> getAllEndedCompetitions(Pageable pageable,User user){   //прошедшие соревнования
+    public List<Competition> getAllEndedCompetitions(User user){   //прошедшие соревнования
                  LocalDateTime today = LocalDateTime.now();
-                    return repository.getArchiveByUser(pageable,today,user);
+                    return repository.getArchiveByUser(today,user);
     }
 
-    public Page <Competition> getAllActingCompetitions(Pageable pageable, User user){
+    public List<Competition> getAllActingCompetitions(User user){
         LocalDateTime today=LocalDateTime.now();
-        return repository.getRunningCompByUser(pageable,today,user);
+        return repository.getRunningCompByUser(today,user);
     }
 
     public void gradeCompetition(Competition competition, RegisteredTeam winner, RegisteredTeam second, RegisteredTeam third, Set<RegisteredTeam> spotted) {

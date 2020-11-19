@@ -187,29 +187,25 @@ public class CompetitionController {
         return service.getAllByTeamCalendar(team, startDate);
     }
 
-@GetMapping("/archive")
-    public String getArchive(
-            @PageableDefault (sort={"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-            @AuthenticationPrincipal User user,
-            Model model
+
+    @GetMapping("/mycomp")
+    String getmyComp(@AuthenticationPrincipal User user){ return "mycomp"; }
+
+    @GetMapping(value = "/mycomp/archive", produces = "application/json")
+    @ResponseBody
+    public List<Competition> getArchive(
+            @AuthenticationPrincipal User user
 ){
-        Page<Competition> competitions= service.getAllEndedCompetitions(pageable,user);
-         model.addAttribute("pageName","Archive");
-         model.addAttribute("page", competitions);
-         model.addAttribute("url", "/competition/archive");
-        return "my-competitions";
+        return service.getAllEndedCompetitions(user);
 }
 
-@GetMapping("/running")
-    public String getRunningComp(
-        @PageableDefault(sort={"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-        @AuthenticationPrincipal User user,
-        Model model
+@GetMapping(value = "/mycomp/running", produces = "application/json")
+@ResponseBody
+    public List<Competition> getRunningComp(
+        @AuthenticationPrincipal User user
 ){
-    Page<Competition> competitions=service.getAllActingCompetitions(pageable, user);
-    model.addAttribute("pageName","Running");
-    model.addAttribute("page",competitions);
-    model.addAttribute("url","/competition/running");
-    return "my-competitions";
+    return service.getAllActingCompetitions(user);
 }
+
+
 }
