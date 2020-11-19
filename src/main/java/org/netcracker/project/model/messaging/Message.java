@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.netcracker.project.model.enums.MessageStatus;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
@@ -25,5 +24,4 @@ public class Message {
     private String recipientName;
     private String content;
     private Date time;
-    private MessageStatus status;
 }

@@ -49,8 +49,8 @@ public class RoomService {
                         .chatId(chatId)
                         .senderId(recipientId)
                         .recipientId(senderId)
-                        .senderName(senderName)
-                        .recipientName(recipientName)
+                        .senderName(recipientName)
+                        .recipientName(senderName)
                         .build();
                 roomRepository.save(recipientSender);
             }
