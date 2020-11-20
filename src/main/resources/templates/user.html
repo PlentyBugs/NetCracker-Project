@@ -24,6 +24,41 @@
                         </th:block>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        Всего хакатонов:
+                        <th:block th:text="${participate}">
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        Победы:
+                        <th:block th:text="${winCount}">
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        2 место:
+                        <th:block th:text="${secondCount}">
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        3 место:
+                        <th:block th:text="${thirdCount}">
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        Заметили спонсоры:
+                        <th:block th:text="${spotted}">
+                        </th:block>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -48,26 +83,26 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-sm">
-                <h5 class="text-center">Моя статистика</h5>
-                <ul class="list-group text-center">
-                    <div class="card-body">
-                        <p>Количество побед</p>
-                        <p class="card-text" th:text="${winCount}"></p>
-                        <p>2 место</p>
-                        <p class="card-text" th:text="${secondCount}"></p>
-                        <p>3 место</p>
-                        <p class="card-text" th:text="${thirdCount}"></p>
-                        <p>Всего соревнований</p>
-                        <p class="card-text" th:text="${participate}"></p>
-                        <p>Замечен спонсорами</p>
-                        <p class="card-text" th:text="${spotted}"></p>
-                    </div>
-                </ul>
+        </div>
+
+        <!--Проблема: диаграмма не отображается по центру. -->
+        <div class="d-none" id="winCount" th:data-winCount="${winCount}"></div>
+        <div class="d-none" id="secondCount" th:data-secondCount="${secondCount}"></div>
+        <div class="d-none" id="thirdCount" th:data-thirdCount="${thirdCount}"></div>
+        <div class="d-none" id="spotted" th:data-spotted="${spotted}"></div>
+        <div class="row py-2">
+        <div class="col-md-6 py-1">
+            <div class="card">
+                <div class="card-body">
+                 <canvas id="chDonut"></canvas>
+                </div>
             </div>
         </div>
+
+       </div>
     </div>
     <script th:src="@{/js/messengerUtil.js}"></script>
     <script th:src="@{/js/user.js}"></script>
+    <script th:src="@{/js/statDiagram.js}"></script>
     <!---->
 </div></html>
