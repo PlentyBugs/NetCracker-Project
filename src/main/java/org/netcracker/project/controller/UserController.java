@@ -39,13 +39,13 @@ public class UserController {
         int thirdCount=0;
         int participate=0;
         int spottedBySponsors=0;
-       for(Result result:user.getStatistics().keySet()){
-           switch(result){
+        for(Result result:user.getStatistics().keySet()){
+            switch(result){
                 case WIN:winCount++;break;
                 case SECOND:secondCount++;break;
                 case THIRD:thirdCount++;break;
                 case PARTICIPATE:participate++;break;
-               case SPOTTED:spottedBySponsors++;break;
+                case SPOTTED:spottedBySponsors++;break;
             }
         }
         model.addAttribute("winCount",winCount);
