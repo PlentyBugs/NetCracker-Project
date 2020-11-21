@@ -34,11 +34,9 @@ public class MessageController {
     @GetMapping("/messenger")
     public String getPage(
             @AuthenticationPrincipal User user,
-            Model model,
-            @PathVariable(value = "recipientId", required = false) String recipientId
+            Model model
     ) {
-        model.addAttribute("chats", roomService.findAllByUser(user));
-        model.addAttribute("usernames", roomService.findAllUsernamesMapByUser(user));
+        roomService.getPage(model, user);
         return "messenger";
     }
 
@@ -48,8 +46,7 @@ public class MessageController {
             Model model,
             @PathVariable(value = "recipientId") String recipientId
     ) {
-        model.addAttribute("chats", roomService.findAllByUser(user));
-        model.addAttribute("usernames", roomService.findAllUsernamesMapByUser(user));
+        roomService.getPage(model, user);
         return "messenger";
     }
 
@@ -61,7 +58,7 @@ public class MessageController {
             @PathVariable("recipientId") String recipientId
     ) {
         if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        return roomService.findBySenderAndRecipientId(senderId, recipientId);
+        return roomService.findRoomBySenderAndRecipientId(senderId, recipientId);
     }
 
     @PostMapping(value = "/messenger/{userId}/chat/{recipientId}")
@@ -72,7 +69,7 @@ public class MessageController {
             @PathVariable("recipientId") String recipientId
     ) {
         if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        roomService.create(senderId, recipientId);
+        roomService.createRoom(senderId, recipientId);
     }
 
     @GetMapping(value = "/messenger/{chatId}/messages", produces = "application/json")
@@ -86,7 +83,7 @@ public class MessageController {
 
     @MessageMapping("/chat")
     public void processMessage(@Payload Message message) {
-        Optional<String> chatId = roomService.getChatId(message.getSenderId(), message.getRecipientId(), true);
+        Optional<String> chatId = roomService.getRoomId(message.getSenderId(), message.getRecipientId(), true);
         message.setChatId(chatId.get());
 
         Message savedMessage = messageService.save(message);

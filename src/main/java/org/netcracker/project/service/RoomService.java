@@ -2,10 +2,13 @@ package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.messaging.GroupRoom;
 import org.netcracker.project.model.messaging.Room;
+import org.netcracker.project.repository.GroupRoomRepository;
 import org.netcracker.project.repository.RoomRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -16,16 +19,17 @@ import java.util.function.Supplier;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final GroupRoomRepository groupRoomRepository;
     private final UserService userService;
 
-    public Optional<String> getChatId(String senderId, String recipientId, boolean createIfNotExists) {
+    public Optional<String> getRoomId(String senderId, String recipientId, boolean createIfNotExists) {
         return roomRepository
                 .findBySenderIdAndRecipientId(senderId, recipientId)
                 .map(Room::getChatId)
-                .or(create(senderId, recipientId, createIfNotExists));
+                .or(createRoom(senderId, recipientId, createIfNotExists));
     }
 
-    public String create(String senderId, String recipientId) {
+    public String createRoom(String senderId, String recipientId) {
         Optional<Room> room = roomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
         if (room.isEmpty()) {
             String chatId = UUID.randomUUID().toString();
@@ -59,27 +63,37 @@ public class RoomService {
         return room.get().getChatId();
     }
 
-    public Supplier<Optional<String>> create(String senderId, String recipientId, boolean createIfNotExists) {
+    public Supplier<Optional<String>> createRoom(String senderId, String recipientId, boolean createIfNotExists) {
         return () -> {
             if (!createIfNotExists) return Optional.empty();
 
-            String chatId = create(senderId, recipientId);
+            String chatId = createRoom(senderId, recipientId);
 
             return Optional.of(chatId);
         };
     }
 
-    public List<Room> findAllByUser(User user) {
-        return roomRepository.findAllBySenderId(String.valueOf(user.getId()));
+    public List<GroupRoom> findAllGroupRoomsByUser(User user) {
+        return groupRoomRepository.findAllByParticipantIdsContains(user.getId().toString());
+    }
+
+    public List<Room> findAllRoomsByUser(User user) {
+        return roomRepository.findAllBySenderId(user.getId().toString());
     }
 
     public Map<String, String> findAllUsernamesMapByUser(User user) {
         Map<String, String> map = new HashMap<>();
-        findAllByUser(user).stream().map(Room::getRecipientId).forEach(e -> map.put(e, userService.findUsernameById(Long.parseLong(e))));
+        findAllRoomsByUser(user).stream().map(Room::getRecipientId).forEach(e -> map.put(e, userService.findUsernameById(Long.parseLong(e))));
         return map;
     }
 
-    public Room findBySenderAndRecipientId(String senderId, String recipientId) {
+    public Room findRoomBySenderAndRecipientId(String senderId, String recipientId) {
         return roomRepository.findBySenderIdAndRecipientId(senderId, recipientId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public void getPage(Model model, User user) {
+        model.addAttribute("chats", findAllRoomsByUser(user));
+        model.addAttribute("groupChats", findAllGroupRoomsByUser(user));
+        model.addAttribute("usernames", findAllUsernamesMapByUser(user));
     }
 }
