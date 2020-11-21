@@ -2,12 +2,14 @@ package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.messaging.GroupRoom;
 import org.netcracker.project.model.messaging.Message;
 import org.netcracker.project.model.messaging.MessageNotification;
 import org.netcracker.project.model.messaging.Room;
 import org.netcracker.project.service.MessageService;
 import org.netcracker.project.service.RoomService;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -50,18 +52,29 @@ public class MessageController {
         return "messenger";
     }
 
-    @GetMapping(value = "/messenger/{userId}/chat/{recipientId}", produces = "application/json")
+    @GetMapping(value = "/messenger/{userId}/chat/personal/{chatId}", produces = "application/json")
     @ResponseBody
     public Room getChat(
             @AuthenticationPrincipal User user,
             @PathVariable("userId") String senderId,
-            @PathVariable("recipientId") String recipientId
+            @PathVariable("chatId") String chatId
     ) {
         if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        return roomService.findRoomBySenderAndRecipientId(senderId, recipientId);
+        return roomService.findRoomByChatId(chatId);
     }
 
-    @PostMapping(value = "/messenger/{userId}/chat/{recipientId}")
+    @GetMapping(value = "/messenger/{userId}/chat/group/{chatId}", produces = "application/json")
+    @ResponseBody
+    public GroupRoom getGroupChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable("userId") String senderId,
+            @PathVariable("chatId") String chatId
+    ) {
+        if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        return roomService.findGroupRoomByChatId(chatId);
+    }
+
+    @PostMapping(value = "/messenger/{userId}/chat/personal/{recipientId}")
     @ResponseBody
     public void createChat(
             @AuthenticationPrincipal User user,
@@ -72,7 +85,7 @@ public class MessageController {
         roomService.createRoom(senderId, recipientId);
     }
 
-    @GetMapping(value = "/messenger/{chatId}/messages", produces = "application/json")
+    @GetMapping(value = "/messenger/messages/{chatId}", produces = "application/json")
     @ResponseBody
     public List<Message> getMessages(
             @AuthenticationPrincipal User user,
@@ -88,13 +101,41 @@ public class MessageController {
 
         Message savedMessage = messageService.save(message);
 
+        MessageNotification notification = new MessageNotification(
+                savedMessage.getId(),
+                savedMessage.getChatId(),
+                savedMessage.getSenderId(),
+                savedMessage.getRecipientId()
+        );
+
+        messagingTemplate.convertAndSendToUser(
+                message.getSenderId(), "/queue/messages",
+                notification
+        );
         messagingTemplate.convertAndSendToUser(
                 message.getRecipientId(), "/queue/messages",
-                new MessageNotification(
-                        savedMessage.getId(),
-                        savedMessage.getSenderId(),
-                        savedMessage.getRecipientId()
-                )
+                notification
         );
+    }
+
+    @MessageMapping("/chat/{chatId}")
+    public void processGroupMessage(@Payload Message message, @DestinationVariable String chatId) {
+        message.setChatId(chatId);
+
+        Message savedMessage = messageService.save(message);
+
+        GroupRoom groupRoom = roomService.findGroupRoomByChatId(chatId);
+
+        for (String recipientId : groupRoom.getParticipantIds()) {
+            messagingTemplate.convertAndSendToUser(
+                    recipientId, "/queue/messages",
+                    new MessageNotification(
+                            savedMessage.getId(),
+                            savedMessage.getChatId(),
+                            savedMessage.getSenderId(),
+                            savedMessage.getRecipientId()
+                    )
+            );
+        }
     }
 }

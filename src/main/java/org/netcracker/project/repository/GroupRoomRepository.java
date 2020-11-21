@@ -9,5 +9,5 @@ public interface GroupRoomRepository extends MongoRepository<GroupRoom, String> 
 
     List<GroupRoom> findAllByParticipantIdsContains(String userId);
 
-    List<GroupRoom> findAllByAdminId(String adminId);
+    GroupRoom findByChatId(String chatId);
 }

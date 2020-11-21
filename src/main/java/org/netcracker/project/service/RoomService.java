@@ -6,10 +6,8 @@ import org.netcracker.project.model.messaging.GroupRoom;
 import org.netcracker.project.model.messaging.Room;
 import org.netcracker.project.repository.GroupRoomRepository;
 import org.netcracker.project.repository.RoomRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -18,8 +16,8 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class RoomService {
 
-    private final RoomRepository roomRepository;
     private final GroupRoomRepository groupRoomRepository;
+    private final RoomRepository roomRepository;
     private final UserService userService;
 
     public Optional<String> getRoomId(String senderId, String recipientId, boolean createIfNotExists) {
@@ -35,29 +33,18 @@ public class RoomService {
             String chatId = UUID.randomUUID().toString();
             String senderName = userService.findFullNameAndUsernameById(Long.parseLong(senderId));
             String recipientName = userService.findFullNameAndUsernameById(Long.parseLong(recipientId));
+            String chatName = senderId.equals(recipientId) ? "You": senderName + " and " + recipientName;
 
             Room senderRecipient = Room
                     .builder()
                     .chatId(chatId)
                     .senderId(senderId)
                     .recipientId(recipientId)
-                    .senderName(senderName)
-                    .recipientName(recipientName)
+                    .chatName(chatName)
                     .build();
 
             roomRepository.save(senderRecipient);
 
-            if (!senderId.equals(recipientId)) {
-                Room recipientSender = Room
-                        .builder()
-                        .chatId(chatId)
-                        .senderId(recipientId)
-                        .recipientId(senderId)
-                        .senderName(recipientName)
-                        .recipientName(senderName)
-                        .build();
-                roomRepository.save(recipientSender);
-            }
             return chatId;
         }
         return room.get().getChatId();
@@ -73,12 +60,29 @@ public class RoomService {
         };
     }
 
+    public String createGroupRoom(String adminId, Set<String> participantIds, String chatName) {
+        String chatId = UUID.randomUUID().toString();
+
+        GroupRoom groupRoom = GroupRoom
+                .builder()
+                .chatId(chatId)
+                .chatName(chatName)
+                .adminId(adminId)
+                .participantIds(participantIds)
+                .build();
+
+        groupRoomRepository.save(groupRoom);
+
+        return chatId;
+    }
+
     public List<GroupRoom> findAllGroupRoomsByUser(User user) {
         return groupRoomRepository.findAllByParticipantIdsContains(user.getId().toString());
     }
 
     public List<Room> findAllRoomsByUser(User user) {
-        return roomRepository.findAllBySenderId(user.getId().toString());
+        String id = user.getId().toString();
+        return roomRepository.findAllBySenderIdOrRecipientId(id, id);
     }
 
     public Map<String, String> findAllUsernamesMapByUser(User user) {
@@ -87,13 +91,17 @@ public class RoomService {
         return map;
     }
 
-    public Room findRoomBySenderAndRecipientId(String senderId, String recipientId) {
-        return roomRepository.findBySenderIdAndRecipientId(senderId, recipientId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
     public void getPage(Model model, User user) {
         model.addAttribute("chats", findAllRoomsByUser(user));
         model.addAttribute("groupChats", findAllGroupRoomsByUser(user));
         model.addAttribute("usernames", findAllUsernamesMapByUser(user));
+    }
+
+    public GroupRoom findGroupRoomByChatId(String chatId) {
+        return groupRoomRepository.findByChatId(chatId);
+    }
+
+    public Room findRoomByChatId(String chatId) {
+        return roomRepository.findByChatId(chatId);
     }
 }

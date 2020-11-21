@@ -21,7 +21,6 @@ public class Message {
     private String senderId;
     private String recipientId;
     private String senderName;
-    private String recipientName;
     private String content;
     private Date time;
 }
