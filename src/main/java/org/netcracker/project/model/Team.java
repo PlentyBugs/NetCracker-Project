@@ -25,6 +25,13 @@ public class Team implements Serializable {
     @Column(unique = true)
     private String teamName;
 
+    @ManyToOne
+    @JoinColumn(name = "usr_id")
+    @JsonIgnore
+    private User organizer;
+
+    private String groupChatId;
+
     // Надо решить проблему с ленивой подгрузкой
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

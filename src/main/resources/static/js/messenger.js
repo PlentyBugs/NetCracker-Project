@@ -4,6 +4,7 @@ let currentChatId = "";
 let chatSearch = $("#search-chat");
 let chats = $(".chat-in-menu");
 let currentRecipientId = "";
+let currentIsGroup = false;
 const userId = $("#zzz").attr("value");
 const username = $("#mmm").attr("value");
 const regexp = /(.+?)messenger(.*)/;
@@ -27,10 +28,11 @@ const messageReceive = (msg) => {
     const notification = JSON.parse(msg.body);
 
     if (currentChatId == notification.chatId) {
-        showChat(currentChatId);
+        showChat(currentChatId, currentIsGroup);
         let chatWindow = document.getElementById("chat-window");
-        chatWindow.scrollTop = chatWindow.scrollHeight
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     }
+    $("#message-text").focus();
 };
 
 function send(chatId) {
@@ -57,8 +59,9 @@ function getPosition(message) {
 function showChat(chatId, isGroup) {
     let chat = {};
     let chatName;
-    currentChatId = chatId;
     let chatUrl = url;
+    currentChatId = chatId;
+    currentIsGroup = isGroup;
 
     currentRecipientId = "";
 
@@ -116,7 +119,7 @@ function showChat(chatId, isGroup) {
     $("#input-message").remove();
 
     let inputMessageBlock = $("<div id='input-message'></div>");
-    let messageTextBlock = $("<textarea placeholder='Message...' name='message' id='message-text'></textarea>");
+    let messageTextBlock = $("<textarea placeholder='Message...' name='message' id='message-text' autofocus></textarea>");
     let sendIconBlock = $("<i class='fa fa-paper-plane' id='send-button' onclick='send(`" + chatId + "`);'></i>");
 
     inputMessageBlock.keyup(evt => {
@@ -144,16 +147,22 @@ $(() => {
     currentRecipientId = document.URL.match(regexp)[2];
     let found = false;
     let startChatId = "";
+    let startIsGroup = false;
 
     for (let chat of chats) {
         let chatId = $(chat).attr("data-chatId");
         let isGroup = $(chat).attr("data-group");
+        if (!found) {
+            startChatId = chatId
+            startIsGroup = isGroup;
+        }
         if (isGroup == "false") {
-            if (!found) {
-                startChatId = chatId
-            }
             let recipientId = $(chat).attr("data-recipientId");
             if (recipientId == currentRecipientId) {
+                found = true;
+            }
+        } else {
+            if (currentRecipientId == chatId) {
                 found = true;
             }
         }
@@ -163,7 +172,7 @@ $(() => {
     }
 
     if (startChatId !== "") {
-        showChat(startChatId);
+        showChat(startChatId, startIsGroup);
     }
 
     $("#chats").outerHeight($("#chat-block").outerHeight);

@@ -63,6 +63,12 @@ public class RoomService {
     public String createGroupRoom(String adminId, Set<String> participantIds, String chatName) {
         String chatId = UUID.randomUUID().toString();
 
+        createGroupRoomWithGivenChatId(adminId, participantIds, chatName, chatId);
+
+        return chatId;
+    }
+
+    public void createGroupRoomWithGivenChatId(String adminId, Set<String> participantIds, String chatName, String chatId) {
         GroupRoom groupRoom = GroupRoom
                 .builder()
                 .chatId(chatId)
@@ -72,8 +78,6 @@ public class RoomService {
                 .build();
 
         groupRoomRepository.save(groupRoom);
-
-        return chatId;
     }
 
     public List<GroupRoom> findAllGroupRoomsByUser(User user) {
@@ -103,5 +107,17 @@ public class RoomService {
 
     public Room findRoomByChatId(String chatId) {
         return roomRepository.findByChatId(chatId);
+    }
+
+    public void addGroupMember(String groupChatId, String userId) {
+        GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
+        groupRoom.getParticipantIds().add(userId);
+        groupRoomRepository.save(groupRoom);
+    }
+
+    public void removeGroupMember(String groupChatId, String userId) {
+        GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
+        groupRoom.getParticipantIds().remove(userId);
+        groupRoomRepository.save(groupRoom);
     }
 }

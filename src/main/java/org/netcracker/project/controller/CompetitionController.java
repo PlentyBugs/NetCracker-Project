@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/competition")
@@ -91,6 +92,7 @@ public class CompetitionController {
         }
         competition.setEndDate(endDateCallback.getLocalDateTime());
         competition.setStartDate(startDateCallback.getLocalDateTime());
+        competition.setGroupChatId(UUID.randomUUID().toString());
         service.save(competition, title, user);
 
         return "redirect:/competition";

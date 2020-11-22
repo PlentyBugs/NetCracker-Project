@@ -8,7 +8,7 @@
                     <div th:text="${usernames.get(chat.recipientId)}" class="chat-in-menu text-center m-1" th:id="${chat.chatId}" th:data-recipientId="${chat.recipientId}" th:data-chatId="${chat.chatId}" th:data-group="${false}"></div>
                 </th:block>
                 <th:block th:each="groupChat : ${groupChats}">
-                    <div th:text="${groupChat.chatName}" class="chat-in-menu text-center m-1" th:id="${chat.chatId}" th:data-chatId="${chat.chatId}" th:data-group="${true}"></div>
+                    <div th:text="${groupChat.chatName}" class="chat-in-menu text-center m-1" th:id="${groupChat.chatId}" th:data-chatId="${groupChat.chatId}" th:data-group="${true}"></div>
                 </th:block>
             </div>
             <div class="col-sm-9 bg-dark p-3" id="chat-block">
