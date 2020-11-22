@@ -5,10 +5,10 @@ delete from team_profession;
 delete from team;
 delete from registered_team;
 
-insert into team(id, logo_filename, team_name) VALUES
-(1, 'teamLogo.png', 'Team A'),
-(2, 'teamLogo.png', 'Train B'),
-(3, 'teamLogo.png', 'FunCo');
+insert into team(id, logo_filename, team_name, group_chat_id, usr_id) VALUES
+(1, 'teamLogo.png', 'Team A', 'e179e6eb-d67c-4e6f-1945-e752b6d11549', 1),
+(2, 'teamLogo.png', 'Train B', 'e179e6eb-d67c-4e6f-1945-e752a6q11549', 2),
+(3, 'teamLogo.png', 'FunCo', 'e179g9zb-d67c-4e6f-1945-e752a6q11549', 3);
 insert into registered_team(id, team_name) VALUES
 (1, 'Team A'),
 (2, 'Train B'),

@@ -56,6 +56,7 @@ public class CompetitionServiceTest {
         MultipartFile file = new MockMultipartFile("abc.png", "123".getBytes());
         Competition competition = new Competition();
         User user = new User();
+        user.setId(3L);
 
         assertTrue(competitionService.save(competition, file, user));
         verify(competitionRepository, times(1)).save(competition);
