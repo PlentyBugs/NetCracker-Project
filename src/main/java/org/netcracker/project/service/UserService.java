@@ -2,11 +2,13 @@ package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.repository.UserRepository;
 import org.netcracker.project.util.ImageUtils;
 import org.netcracker.project.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -129,5 +132,16 @@ public class UserService implements UserDetailsService {
 
     public String findFullNameAndUsernameById(Long id) {
         return repository.findById(id).map(u -> u.getSurname() + " " + u.getName() + " (" + u.getUsername() + ")").orElse("");
+    }
+
+    public SimpleUser findSimpleUserById(Long userId) {
+        User user = repository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return SimpleUser
+                .builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .username(user.getUsername())
+                .build();
     }
 }

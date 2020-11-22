@@ -2,6 +2,7 @@ package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.messaging.GroupRoom;
 import org.netcracker.project.model.messaging.Message;
 import org.netcracker.project.model.messaging.MessageNotification;
@@ -24,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -92,6 +94,24 @@ public class MessageController {
             @PathVariable("chatId") String chatId
     ) {
         return messageService.findByChatId(chatId);
+    }
+
+    @GetMapping(value = "/messenger/users/group/{chatId}", produces = "application/json")
+    @ResponseBody
+    public Set<SimpleUser> getParticipantsGroup(
+            @AuthenticationPrincipal User user,
+            @PathVariable("chatId") String chatId
+    ) {
+        return roomService.getSimpleParticipantsGroup(chatId, user);
+    }
+
+    @GetMapping(value = "/messenger/users/personal/{chatId}", produces = "application/json")
+    @ResponseBody
+    public Set<SimpleUser> getParticipantsPersonal(
+            @AuthenticationPrincipal User user,
+            @PathVariable("chatId") String chatId
+    ) {
+        return roomService.getSimpleParticipants(chatId, user);
     }
 
     @MessageMapping("/chat")

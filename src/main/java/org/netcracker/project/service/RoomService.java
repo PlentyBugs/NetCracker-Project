@@ -2,15 +2,19 @@ package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.messaging.GroupRoom;
 import org.netcracker.project.model.messaging.Room;
 import org.netcracker.project.repository.GroupRoomRepository;
 import org.netcracker.project.repository.RoomRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,5 +135,18 @@ public class RoomService {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
         groupRoom.getParticipantIds().removeAll(userIds);
         groupRoomRepository.save(groupRoom);
+    }
+
+    public Set<SimpleUser> getSimpleParticipantsGroup(String chatId, User user) {
+        GroupRoom groupRoom = groupRoomRepository.findByChatId(chatId);
+        if (!groupRoom.getParticipantIds().contains(user.getId().toString())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        return groupRoom.getParticipantIds().stream().map(Long::parseLong).map(userService::findSimpleUserById).collect(Collectors.toSet());
+    }
+
+    public Set<SimpleUser> getSimpleParticipants(String chatId, User user) {
+        Room room = roomRepository.findByChatId(chatId);
+        Set<String> participants = Set.of(room.getSenderId(), room.getRecipientId());
+        if (!participants.contains(user.getId().toString())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        return participants.stream().map(Long::parseLong).map(userService::findSimpleUserById).collect(Collectors.toSet());
     }
 }

@@ -28,7 +28,7 @@ const messageReceive = (msg) => {
     const notification = JSON.parse(msg.body);
 
     if (currentChatId == notification.chatId) {
-        showChat(currentChatId, currentIsGroup);
+        printMessages(currentChatId);
         let chatWindow = document.getElementById("chat-window");
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
@@ -56,33 +56,7 @@ function getPosition(message) {
     return position;
 }
 
-function showChat(chatId, isGroup) {
-    let chat = {};
-    let chatName;
-    let chatUrl = url;
-    currentChatId = chatId;
-    currentIsGroup = isGroup;
-
-    currentRecipientId = "";
-
-    if (isGroup == "true") {
-        chatUrl += userId + "/chat/group/" + chatId;
-    } else {
-        chatUrl += userId + "/chat/personal/" + chatId;
-        currentRecipientId = $("#" + chatId).attr("data-recipientId");
-    }
-
-    $.ajax({
-        type: 'GET',
-        url: chatUrl,
-        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
-        success: (data) => chat = data,
-        cache: false,
-        async: false
-    });
-
-    chatName = chat.chatName;
-
+function printMessages(chatId) {
     let chatMessages = {};
     $.ajax({
         type: 'GET',
@@ -116,6 +90,38 @@ function showChat(chatId, isGroup) {
     let chatWindow2 = document.getElementById("chat-window");
     chatWindow2.scrollTop = chatWindow2.scrollHeight;
 
+    return chatWindow;
+}
+
+function showChat(chatId, isGroup) {
+    let chat = {};
+    let chatName;
+    let chatUrl = url;
+    currentChatId = chatId;
+    currentIsGroup = isGroup;
+
+    currentRecipientId = "";
+
+    if (isGroup == "true") {
+        chatUrl += userId + "/chat/group/" + chatId;
+    } else {
+        chatUrl += userId + "/chat/personal/" + chatId;
+        currentRecipientId = $("#" + chatId).attr("data-recipientId");
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: chatUrl,
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        success: (data) => chat = data,
+        cache: false,
+        async: false
+    });
+
+    chatName = chat.chatName;
+
+    let chatWindow = printMessages(chatId);
+
     $("#input-message").remove();
 
     let inputMessageBlock = $("<div id='input-message'></div>");
@@ -137,9 +143,50 @@ function showChat(chatId, isGroup) {
 
     $("#chat-header").remove();
 
-    let chatHeader = $("<span class='text-center' id='chat-header'>" + (typeof (chatName) == "undefined" ? "Nobody": chatName) + "</span>");
+    let chatHeader = $("<div class='text-center' id='chat-header'></div>");
+    let chatNameHeader = $("<span>" + (typeof (chatName) == "undefined" ? "Nobody": chatName) + "</span>");
+    let chatMenuHeader = $("<i class='fa fa-bars float-right' id='messenger-menu-button'></i>");
+    $("#messenger-participants-parent").remove();
+    let participantsMenuBlock = $("<div class='w-100' style='display: none; height: 0' id='messenger-participants-parent'></div>");
+    let participantsMenu = $("<div class='p-2' id='messenger-participants'></div>");
+
+    participantsMenu.append($("<h6 class='text-center mb-3'>Participants</h6>"));
+
+    let participantsBlock = $("<div class='container'></div>");
+
+    let participantsURL = "";
+
+    if (isGroup == "true") {
+        participantsURL = url + "users/group/" + chatId;
+    } else {
+        participantsURL = url + "users/personal/" + chatId;
+    }
+    $.ajax({
+        type: "GET",
+        url: participantsURL,
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        success: (participants) => {
+            for (let user of participants) {
+                participantsBlock.append($("<div class='row'>" + user.surname + " " + user.name + " (" + user.username + ")</div>"));
+            }
+        },
+        cache: false,
+        async: false
+    });
+
+    participantsMenu.append(participantsBlock);
+
+    participantsMenuBlock.append(participantsMenu);
+
+    chatMenuHeader.click(() => {
+        participantsMenuBlock.toggle();
+    })
+
+    chatHeader.append(chatMenuHeader);
+    chatHeader.append(chatNameHeader);
 
     chatWindow.before(chatHeader);
+    chatHeader.after(participantsMenuBlock);
 }
 
 $(() => {
