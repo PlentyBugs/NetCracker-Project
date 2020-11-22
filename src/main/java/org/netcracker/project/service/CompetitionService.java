@@ -106,9 +106,7 @@ public class CompetitionService {
     public void addTeam(Competition competition, Team team) {
         team.getTeammates().remove(competition.getOrganizer());
         RegisteredTeam registeredTeam = RegisteredTeam.of(team);
-        System.out.println(competition);
-        System.out.println(team);
-        System.out.println(registeredTeam);
+        roomService.addGroupMembers(competition.getGroupChatId(), registeredTeam.getTeammates().stream().map(User::getId).map(Object::toString).collect(Collectors.toSet()));
         registeredTeamRepository.save(registeredTeam);
         competition.getTeams().add(registeredTeam);
         update(competition);
@@ -118,7 +116,9 @@ public class CompetitionService {
         Set<Long> teams = competition.getTeams().stream().map(RegisteredTeam::getId).collect(Collectors.toSet());
         for (Team team : user.getTeams()) {
             if (teams.contains(team.getId())) {
-                competition.getTeams().remove(RegisteredTeam.of(team));
+                RegisteredTeam registeredTeam = RegisteredTeam.of(team);
+                competition.getTeams().remove(registeredTeam);
+                roomService.removeGroupMembers(competition.getGroupChatId(), registeredTeam.getTeammates().stream().map(User::getId).map(Object::toString).collect(Collectors.toSet()));
                 update(competition);
                 break;
             }

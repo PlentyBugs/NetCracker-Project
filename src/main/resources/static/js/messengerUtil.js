@@ -32,6 +32,18 @@ function writeToEveryone() {
             sendMessage(message, userId, id, name, username);
         }
     }
+    clear();
+}
+
+function writeToGroup(chatId) {
+    let message = $("#message-text").val();
+    if (message !== "") {
+        sendMessageWithChatId(message, userId, chatId, name, chatId);
+    }
+    clear();
+}
+
+function clear() {
     let modal = $("#modal-body-id");
     modal.empty();
     modal.text("Message sent successfully");

@@ -120,4 +120,16 @@ public class RoomService {
         groupRoom.getParticipantIds().remove(userId);
         groupRoomRepository.save(groupRoom);
     }
+
+    public void addGroupMembers(String groupChatId, Set<String> userIds) {
+        GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
+        groupRoom.getParticipantIds().addAll(userIds);
+        groupRoomRepository.save(groupRoom);
+    }
+
+    public void removeGroupMembers(String groupChatId, Set<String> userIds) {
+        GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
+        groupRoom.getParticipantIds().removeAll(userIds);
+        groupRoomRepository.save(groupRoom);
+    }
 }
