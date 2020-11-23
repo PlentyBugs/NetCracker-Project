@@ -36,7 +36,7 @@ public class RoomService {
     }
 
     public String createRoom(String senderId, String recipientId) {
-        Optional<Room> room = roomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
+        Optional<Room> room = roomRepository.findBySenderIdAndRecipientId(senderId, recipientId).or(() -> roomRepository.findBySenderIdAndRecipientId(recipientId, senderId));
         if (room.isEmpty()) {
             String chatId = UUID.randomUUID().toString();
             String senderName = userService.findFullNameAndUsernameById(Long.parseLong(senderId));
@@ -103,16 +103,25 @@ public class RoomService {
         return roomRepository.findAllBySenderIdOrRecipientId(id, id);
     }
 
-    public Map<String, String> findAllUsernamesMapByUser(User user) {
+    public Map<String, String> findAllUsernamesMapBySender(User user) {
+        String id = user.getId().toString();
         Map<String, String> map = new HashMap<>();
-        findAllRoomsByUser(user).stream().map(Room::getRecipientId).forEach(e -> map.put(e, userService.findUsernameById(Long.parseLong(e))));
+        roomRepository.findAllBySenderId(id).stream().map(Room::getRecipientId).forEach(e -> map.put(e, userService.findUsernameById(Long.parseLong(e))));
+        return map;
+    }
+
+    public Map<String, String> findAllUsernamesMapByRecipient(User user) {
+        String id = user.getId().toString();
+        Map<String, String> map = new HashMap<>();
+        roomRepository.findAllByRecipientId(id).stream().map(Room::getSenderId).forEach(e -> map.put(e, userService.findUsernameById(Long.parseLong(e))));
         return map;
     }
 
     public void getPage(Model model, User user) {
         model.addAttribute("chats", findAllRoomsByUser(user));
         model.addAttribute("groupChats", findAllGroupRoomsByUser(user));
-        model.addAttribute("usernames", findAllUsernamesMapByUser(user));
+        model.addAttribute("recipientUsernames", findAllUsernamesMapBySender(user));
+        model.addAttribute("senderUsernames", findAllUsernamesMapByRecipient(user));
     }
 
     public GroupRoom findGroupRoomByChatId(String chatId) {
@@ -132,6 +141,16 @@ public class RoomService {
 
     public void removeGroupMember(String groupChatId, String userId) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
+        groupRoom.getParticipantIds().remove(userId);
+        groupRoomRepository.save(groupRoom);
+        sendGroupNotification(groupRoom, userId, ChatStatus.REMOVE);
+    }
+
+    public void removeGroupMemberWithAuthCheck(String groupChatId, String userId, String adminId) {
+        GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
+        if (!groupRoom.getAdminId().equals(adminId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         groupRoom.getParticipantIds().remove(userId);
         groupRoomRepository.save(groupRoom);
         sendGroupNotification(groupRoom, userId, ChatStatus.REMOVE);
@@ -159,7 +178,7 @@ public class RoomService {
 
     public Set<SimpleUser> getSimpleParticipants(String chatId, User user) {
         Room room = roomRepository.findByChatId(chatId);
-        Set<String> participants = Set.of(room.getSenderId(), room.getRecipientId());
+        Set<String> participants = room.getRecipientId().equals(room.getSenderId()) ? Set.of(room.getSenderId()): Set.of(room.getSenderId(), room.getRecipientId());
         if (!participants.contains(user.getId().toString())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return participants.stream().map(Long::parseLong).map(userService::findSimpleUserById).collect(Collectors.toSet());
     }

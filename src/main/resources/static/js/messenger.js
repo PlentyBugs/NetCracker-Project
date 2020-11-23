@@ -40,6 +40,9 @@ const updateChat = (chat) => {
 
     if (notification.status == "ADD") {
         let newChat = $("<div class='chat-in-menu text-center m-1' id='" + notification.chatId + "' data-recipientId='" + notification.recipientId + "' data-chatId='" + notification.chatId + "' data-group='" + notification.group + "'>" + notification.chatName + "</div>");
+        newChat.click(() => {
+            showChat(notification.chatId, notification.group);
+        });
         chatSearch.after(newChat);
     } else if (notification.status == "REMOVE") {
         $("#" + notification.chatId).remove();
@@ -57,6 +60,27 @@ function send(chatId) {
             sendMessage(content, userId, currentRecipientId, username);
         }
     }
+}
+
+function write(recipientId) {
+    $.ajax({
+        type: 'POST',
+        url: url + userId + "/chat/personal/" + recipientId,
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        cache: false,
+        async: false
+    });
+    window.location.href = url + recipientId;
+}
+
+function kick(chatId, recipientId) {
+    $.ajax({
+        type: 'POST',
+        url: url + userId + "/chat/group/" + chatId + "/kick/" + recipientId,
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        cache: false,
+        async: false
+    });
 }
 
 function getPosition(message) {
@@ -108,6 +132,7 @@ function showChat(chatId, isGroup) {
     let chat = {};
     let chatName;
     let chatUrl = url;
+    let isAdmin = false;
     currentChatId = chatId;
     currentIsGroup = isGroup;
 
@@ -130,6 +155,10 @@ function showChat(chatId, isGroup) {
     });
 
     chatName = chat.chatName;
+
+    if (isGroup == "true") {
+        isAdmin = chat.adminId == userId;
+    }
 
     let chatWindow = printMessages(chatId);
 
@@ -172,13 +201,30 @@ function showChat(chatId, isGroup) {
     } else {
         participantsURL = url + "users/personal/" + chatId;
     }
+
     $.ajax({
         type: "GET",
         url: participantsURL,
         beforeSend: (xhr) => xhr.setRequestHeader(header, token),
         success: (participants) => {
             for (let user of participants) {
-                participantsBlock.append($("<div class='row'>" + user.surname + " " + user.name + " (" + user.username + ")</div>"));
+                let row = $("<div class='row'></div>");
+                let username = $("<span>" + user.surname + " " + user.name + " (" + user.username + ")</span>");
+                row.append(username);
+                let buttonGroup = $("<div class='btn-group' id='participants-admin-button-group' role='group'></div>");
+                let writeButton = $("<button type='button' class='btn btn-primary'>Write</button>");
+                writeButton.click(() => write(user.id));
+                buttonGroup.append(writeButton);
+                if (isAdmin) {
+                    let kickButton = $("<button type='button' class='btn btn-danger'>Kick</button>");
+                    kickButton.click(() => {
+                        kick(chatId, user.id);
+                        row.remove();
+                    });
+                    buttonGroup.append(kickButton);
+                }
+                row.append(buttonGroup);
+                participantsBlock.append(row);
             }
         },
         cache: false,

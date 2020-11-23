@@ -106,8 +106,8 @@ public class TeamController {
                        @PathVariable("id") Team team
     ){
         if(user.getRoles().contains(Role.PARTICIPANT)){
-                for(User u:team.getTeammates()){
-                    if(team.getTeammates().contains(u)){
+                for(User u : team.getTeammates()){
+                    if(team.getTeammates().contains(user)){
                         service.quitTeam(team, u);
                         break;
                     }

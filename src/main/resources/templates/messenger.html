@@ -5,7 +5,7 @@
             <div class="col-sm-3 bg-dark" id="chats">
                 <input type="text" placeholder="Search" class="w-100 mt-2 mb-4 p-1" id="search-chat" autocapitalize="off" autocomplete="off"/>
                 <th:block th:each="chat : ${chats}">
-                    <div th:text="${usernames.get(chat.recipientId)}" class="chat-in-menu text-center m-1" th:id="${chat.chatId}" th:data-recipientId="${chat.recipientId}" th:data-chatId="${chat.chatId}" th:data-group="${false}"></div>
+                    <div th:text="${T(Long).compare(chat.senderId, #authentication.principal.id) == 0 ? recipientUsernames.get(chat.recipientId) : senderUsernames.get(chat.senderId)}" class="chat-in-menu text-center m-1" th:id="${chat.chatId}" th:data-recipientId="${chat.recipientId}" th:data-chatId="${chat.chatId}" th:data-group="${false}"></div>
                 </th:block>
                 <th:block th:each="groupChat : ${groupChats}">
                     <div th:text="${groupChat.chatName}" class="chat-in-menu text-center m-1" th:id="${groupChat.chatId}" th:data-chatId="${groupChat.chatId}" th:data-group="${true}"></div>

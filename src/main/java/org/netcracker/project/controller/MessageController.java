@@ -76,6 +76,18 @@ public class MessageController {
         return roomService.findGroupRoomByChatId(chatId);
     }
 
+    @PostMapping(value = "/messenger/{userId}/chat/group/{chatId}/kick/{recipientId}", produces = "application/json")
+    @ResponseBody
+    public void kickFromGroupChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable("userId") String adminId,
+            @PathVariable("chatId") String chatId,
+            @PathVariable("recipientId") String recipientId
+    ) {
+        if (!String.valueOf(user.getId()).equals(adminId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        roomService.removeGroupMemberWithAuthCheck(chatId, recipientId, adminId);
+    }
+
     @PostMapping(value = "/messenger/{userId}/chat/personal/{recipientId}")
     @ResponseBody
     public void createChat(

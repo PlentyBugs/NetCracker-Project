@@ -12,4 +12,8 @@ public interface RoomRepository extends MongoRepository<Room, String> {
     List<Room> findAllBySenderIdOrRecipientId(String senderId, String recipientId);
 
     Room findByChatId(String chatId);
+
+    List<Room> findAllBySenderId(String id);
+
+    List<Room> findAllByRecipientId(String id);
 }
