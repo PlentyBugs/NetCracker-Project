@@ -7,6 +7,9 @@ function connect() {
         stompClient.subscribe("/user/" + userId + "/queue/messages", function (message) {
             messageReceive(message);
         });
+        stompClient.subscribe("/user/" + userId + "/queue/chats", function (chat) {
+            updateChat(chat);
+        });
     });
 }
 

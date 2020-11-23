@@ -35,6 +35,17 @@ const messageReceive = (msg) => {
     $("#message-text").focus();
 };
 
+const updateChat = (chat) => {
+    const notification = JSON.parse(chat.body);
+
+    if (notification.status == "ADD") {
+        let newChat = $("<div class='chat-in-menu text-center m-1' id='" + notification.chatId + "' data-recipientId='" + notification.recipientId + "' data-chatId='" + notification.chatId + "' data-group='" + notification.group + "'>" + notification.chatName + "</div>");
+        chatSearch.after(newChat);
+    } else if (notification.status == "REMOVE") {
+        $("#" + notification.chatId).remove();
+    }
+};
+
 function send(chatId) {
     let input = $("#message-text");
     let content = input.val();

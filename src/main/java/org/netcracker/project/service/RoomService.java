@@ -3,11 +3,14 @@ package org.netcracker.project.service;
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleUser;
+import org.netcracker.project.model.enums.ChatStatus;
+import org.netcracker.project.model.messaging.ChatNotification;
 import org.netcracker.project.model.messaging.GroupRoom;
 import org.netcracker.project.model.messaging.Room;
 import org.netcracker.project.repository.GroupRoomRepository;
 import org.netcracker.project.repository.RoomRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoomService {
 
+    private final SimpMessagingTemplate messagingTemplate;
     private final GroupRoomRepository groupRoomRepository;
     private final RoomRepository roomRepository;
     private final UserService userService;
@@ -48,6 +52,12 @@ public class RoomService {
                     .build();
 
             roomRepository.save(senderRecipient);
+
+            sendPersonalNotification(senderRecipient, senderId, userService.findUsernameById(Long.parseLong(recipientId)), ChatStatus.ADD);
+
+            if (!senderId.equals(recipientId)) {
+                sendPersonalNotification(senderRecipient, recipientId, userService.findUsernameById(Long.parseLong(senderId)), ChatStatus.ADD);
+            }
 
             return chatId;
         }
@@ -117,24 +127,28 @@ public class RoomService {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
         groupRoom.getParticipantIds().add(userId);
         groupRoomRepository.save(groupRoom);
+        sendGroupNotification(groupRoom, userId, ChatStatus.ADD);
     }
 
     public void removeGroupMember(String groupChatId, String userId) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
         groupRoom.getParticipantIds().remove(userId);
         groupRoomRepository.save(groupRoom);
+        sendGroupNotification(groupRoom, userId, ChatStatus.REMOVE);
     }
 
     public void addGroupMembers(String groupChatId, Set<String> userIds) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
         groupRoom.getParticipantIds().addAll(userIds);
         groupRoomRepository.save(groupRoom);
+        userIds.forEach(id -> sendGroupNotification(groupRoom, id, ChatStatus.ADD));
     }
 
     public void removeGroupMembers(String groupChatId, Set<String> userIds) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
         groupRoom.getParticipantIds().removeAll(userIds);
         groupRoomRepository.save(groupRoom);
+        userIds.forEach(id -> sendGroupNotification(groupRoom, id, ChatStatus.REMOVE));
     }
 
     public Set<SimpleUser> getSimpleParticipantsGroup(String chatId, User user) {
@@ -148,5 +162,31 @@ public class RoomService {
         Set<String> participants = Set.of(room.getSenderId(), room.getRecipientId());
         if (!participants.contains(user.getId().toString())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return participants.stream().map(Long::parseLong).map(userService::findSimpleUserById).collect(Collectors.toSet());
+    }
+
+    public void sendGroupNotification(GroupRoom room, String userId, ChatStatus status) {
+        messagingTemplate.convertAndSendToUser(
+                userId, "/queue/chats",
+                new ChatNotification(
+                        room.getChatId(),
+                        room.getChatName(),
+                        room.getChatId(),
+                        status,
+                        true
+                )
+        );
+    }
+
+    public void sendPersonalNotification(Room room, String recipientId, String recipientName, ChatStatus status) {
+        messagingTemplate.convertAndSendToUser(
+                recipientId, "/queue/chats",
+                new ChatNotification(
+                        room.getChatId(),
+                        recipientName,
+                        room.getRecipientId(),
+                        status,
+                        false
+                )
+        );
     }
 }
