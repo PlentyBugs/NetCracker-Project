@@ -118,7 +118,7 @@ function printMessages(chatId) {
             message = chatMessages[++i];
         }
 
-        messages.append($("<div class='message last'>" + message.content + "</div>"));
+        messages.append($("<div class='message last'>" + message.content + "<div class='message-author'>By " + message.senderName + "</div></div>"));
 
         chatWindow.append(messages);
     }

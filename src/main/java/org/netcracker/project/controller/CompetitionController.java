@@ -29,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -105,6 +106,7 @@ public class CompetitionController {
     ) {
         model.addAttribute(competition);
         model.addAttribute("participate", user.getTeams().stream().map(RegisteredTeam::of).map(e -> competition.getTeams().contains(e)).reduce(false, (x, y) -> x || y));
+        model.addAttribute("expired", competition.getEndDate().compareTo(LocalDateTime.now()) < 0);
         return "competition";
     }
 

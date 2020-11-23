@@ -12,8 +12,9 @@
                 </div>
                 <div class="modal-body" id="modal-body-id">
                     <div class="btn-group w-100" role="group">
-                        <button type="button" id="send-everyone" class="btn btn-warning" style="max-width: 50%;">For everyone personally</button>
-                        <button type="button" id="send-to-group" class="btn btn-warning">To Group Chat</button>
+                        <button type="button" id="send-everyone" class="btn btn-warning modal-button-choice">For everyone personally</button>
+                        <button type="button" id="send-to-group" class="btn btn-warning modal-button-choice">To Group Chat</button>
+                        <button type="button" id="send-to-each-team" class="btn btn-warning modal-button-choice">To each team</button>
                     </div>
                     <textarea class="p-2 w-100" name="message" id="message-text" th:data-chatId="${competition.groupChatId}" placeholder="Message..." style="min-width: 100%"></textarea>
                     <button type="button" class="btn btn-warning btn-block mt-2" onclick="writeToCompetition();">Write</button>
@@ -127,6 +128,7 @@
                         <button type="button" class="btn btn-primary">Write</button>
                         <button type="button" class="btn btn-danger" th:onclick="'removeTeam(' + ${team.id} + ');'">Remove</button>
                     </div>
+                    <div class="d-none team-gci" th:data-gci="${team.groupChatId}"></div>
                 </div>
                 <div class="list-group-item bg-dark" th:id="'teammates-team-id-' + ${team.id}" style="display: none;">
                     <ul>

@@ -43,6 +43,16 @@ function writeToGroup(chatId) {
     clear();
 }
 
+function writeToEachTeam(teamChatIds) {
+    let message = $("#message-text").val();
+    if (message !== "") {
+        for (let team of teamChatIds) {
+            sendMessageWithChatId(message, userId, team, name, team);
+        }
+    }
+    clear();
+}
+
 function clear() {
     let modal = $("#modal-body-id");
     modal.empty();
