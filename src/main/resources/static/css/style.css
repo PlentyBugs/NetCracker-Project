@@ -354,3 +354,11 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     border: solid 1px #666;
     background-color: #343a40;
 }
+
+.prize-fund-dollar {
+    background-color: #767676;
+    font-size: 1.5em !important;
+    width: 1.5rem;
+    text-align: center;
+    padding-top: 0.4rem;
+}
