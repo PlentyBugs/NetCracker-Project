@@ -1,4 +1,4 @@
-var colors = ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"];
+var colors = ["#F7464A", "#46BFBD", "#FDB45C", "#9b59cb"];
 
 let winCount=$("#winCount");
 let secondCount=$("#secondCount");
@@ -16,8 +16,7 @@ var chDonutData1 = {
     labels: ['Wins', '2nd', '3rd','Spotted'],
     datasets: [
         {
-
-            backgroundColor: colors.slice(0,3),
+            backgroundColor: [colors[0],colors[1],colors[2],colors[3]],
             borderWidth: 0,
             data: [winCount, secondCount, thirdCount,spotted]
         }
