@@ -1,17 +1,17 @@
 package org.netcracker.project.model.messaging;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.enums.ChatStatus;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class MessageNotification {
-    private String id;
+public class ChatNotification {
     private String chatId;
-    private String senderId;
-    private String senderName;
+    private String chatName;
+    private String recipientId;
+    private ChatStatus status;
+    private boolean group;
 }

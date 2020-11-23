@@ -29,7 +29,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TeamController {
     private final TeamService service;
-    private final SecurityUtils securityUtils;
 
     @GetMapping
     public String getAllTeams(
@@ -60,7 +59,7 @@ public class TeamController {
                 model.addAttribute(team);
                 return "/add-team";
             }
-            service.save(team,logo,user);
+            service.save(team, logo, user);
         return "redirect:/team";
     }
     @GetMapping("/{id}")
@@ -97,10 +96,7 @@ public class TeamController {
                        @PathVariable("id") Team team
     ){
         if(user.getRoles().contains(Role.PARTICIPANT)){
-            team.getTeammates().add(user);
-            user.getTeams().add(team);
-            service.update(team);
-            securityUtils.updateContext(user);
+            service.joinTeam(team, user);
         }
         return "redirect:/team/{id}";
     }
@@ -110,12 +106,9 @@ public class TeamController {
                        @PathVariable("id") Team team
     ){
         if(user.getRoles().contains(Role.PARTICIPANT)){
-                for(User u:team.getTeammates()){
-                    if(team.getTeammates().contains(u)){
-                        team.getTeammates().remove(u);
-                        u.getTeams().remove(team);
-                        service.update(team);
-                        securityUtils.updateContext(u);
+                for(User u : team.getTeammates()){
+                    if(team.getTeammates().contains(user)){
+                        service.quitTeam(team, u);
                         break;
                     }
                 }

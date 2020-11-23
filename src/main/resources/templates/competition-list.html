@@ -87,6 +87,7 @@
                                 <a th:href="@{/competition/} + ${competition.id}"><img th:src="@{/img/} + ${competition.titleFilename}" class="card-img-top" alt="title" th:onerror="'this.onerror=null; this.src=`' + @{/img/compTitle.png} + '`;'"/></a>
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="${competition.compName}"></h5>
+                                    <h6 th:if="${competition.prizeFund != null}">Prize fund: <span th:text="${competition.prizeFund}"></span>$</h6>
                                     <p class="card-text" th:text="${competition.description}"></p>
                                     <p class="card-text" >
                                         <th:block th:each="theme : ${competition.themes}">
@@ -103,6 +104,6 @@
             </div>
         </div>
     </div>
-    <script th:src="@{/js/competition.js}"></script>
+    <script th:src="@{/js/competitionList.js}"></script>
     <!---->
 </div></html>

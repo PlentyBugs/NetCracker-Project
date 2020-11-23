@@ -15,7 +15,7 @@ function write(recipientId) {
     let url = document.URL.match(regexp)[1] + "messenger/";
     $.ajax({
         type: 'POST',
-        url: url + userId + "/chat/" + recipientId,
+        url: url + userId + "/chat/personal/" + recipientId,
         beforeSend: (xhr) => xhr.setRequestHeader(header, token),
         cache: false,
         async: false
@@ -32,6 +32,18 @@ function writeToEveryone() {
             sendMessage(message, userId, id, name, username);
         }
     }
+    clear();
+}
+
+function writeToGroup(chatId) {
+    let message = $("#message-text").val();
+    if (message !== "") {
+        sendMessageWithChatId(message, userId, chatId, name, chatId);
+    }
+    clear();
+}
+
+function clear() {
     let modal = $("#modal-body-id");
     modal.empty();
     modal.text("Message sent successfully");

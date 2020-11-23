@@ -7,20 +7,18 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Document
-public class Message {
+public class GroupRoom {
     @Id
     private String id;
     private String chatId;
-    private String senderId;
-    private String recipientId;
-    private String senderName;
-    private String content;
-    private Date time;
+    private String chatName;
+    private String adminId;
+    private Set<String> participantIds;
 }

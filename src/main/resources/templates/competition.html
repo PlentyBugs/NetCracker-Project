@@ -11,8 +11,12 @@
                     </button>
                 </div>
                 <div class="modal-body" id="modal-body-id">
-                    <textarea class="p-2 w-100" name="message" id="message-text" placeholder="Message..." style="min-width: 100%"></textarea>
-                    <button type="button" class="btn btn-warning btn-block mt-2" onclick="writeToEveryone();">Write</button>
+                    <div class="btn-group w-100" role="group">
+                        <button type="button" id="send-everyone" class="btn btn-warning" style="max-width: 50%;">For everyone personally</button>
+                        <button type="button" id="send-to-group" class="btn btn-warning">To Group Chat</button>
+                    </div>
+                    <textarea class="p-2 w-100" name="message" id="message-text" th:data-chatId="${competition.groupChatId}" placeholder="Message..." style="min-width: 100%"></textarea>
+                    <button type="button" class="btn btn-warning btn-block mt-2" onclick="writeToCompetition();">Write</button>
                 </div>
             </div>
         </div>
@@ -23,6 +27,7 @@
         <div class="card-body">
             <h1 class="card-title" th:text="${competition.compName}" id="compNameHeader"></h1>
             <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}" id="organizedByHeader"></h6>
+            <h6 th:if="${competition.prizeFund != null}">Prize fund: <span th:text="${competition.prizeFund}"></span>$</h6>
             <p class="card-text" th:text="${competition.description}" id="descriptionHeader"></p>
             <p class="card-text">
                 <th:block th:each="theme : ${competition.themes}">
@@ -140,5 +145,6 @@
     <script th:if="${competition.organizer.id != #authentication.principal.id}" th:src="@{/js/competitionChecker.js}"></script>
     <script th:if="${competition.organizer.id == #authentication.principal.id}" th:src="@{/js/competitionAdmin.js}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
+    <script th:src="@{/js/competition.js}"></script>
     <!---->
 </div></html>

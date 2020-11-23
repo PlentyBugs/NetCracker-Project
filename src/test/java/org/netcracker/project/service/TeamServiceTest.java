@@ -51,8 +51,10 @@ public class TeamServiceTest {
     @Test
     public void saveTest() throws Exception{
         MultipartFile logo=new MockMultipartFile("logo.png","111".getBytes());
-        Team team=new Team();
-        User user=new User();
+        Team team = new Team();
+        User user = new User();
+        user.setId(3L);
+
         assertTrue(teamService.save(team,logo,user));
         verify(teamRepository,times(1)).save(team);
     }

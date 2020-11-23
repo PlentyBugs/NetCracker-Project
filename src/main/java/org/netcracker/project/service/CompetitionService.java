@@ -23,14 +23,16 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CompetitionService {
 
-    private final CompetitionRepository repository;
     private final RegisteredTeamRepository registeredTeamRepository;
+    private final CompetitionRepository repository;
+    private final RoomService roomService;
     private final ImageUtils imageUtils;
     private final DateUtil dateUtil;
 
@@ -64,6 +66,7 @@ public class CompetitionService {
         competition.setOrganizer(user);
         competition.setCompEnded(false);  //флаг окончания сначала false, после соревнования - true. Можно использовать, чтобы дизейблить.
         saveTitle(competition, title);
+        createGroupChat(competition);
         repository.save(competition);
         return true;
     }
@@ -103,9 +106,7 @@ public class CompetitionService {
     public void addTeam(Competition competition, Team team) {
         team.getTeammates().remove(competition.getOrganizer());
         RegisteredTeam registeredTeam = RegisteredTeam.of(team);
-        System.out.println(competition);
-        System.out.println(team);
-        System.out.println(registeredTeam);
+        roomService.addGroupMembers(competition.getGroupChatId(), registeredTeam.getTeammates().stream().map(User::getId).map(Object::toString).collect(Collectors.toSet()));
         registeredTeamRepository.save(registeredTeam);
         competition.getTeams().add(registeredTeam);
         update(competition);
@@ -115,7 +116,9 @@ public class CompetitionService {
         Set<Long> teams = competition.getTeams().stream().map(RegisteredTeam::getId).collect(Collectors.toSet());
         for (Team team : user.getTeams()) {
             if (teams.contains(team.getId())) {
-                competition.getTeams().remove(RegisteredTeam.of(team));
+                RegisteredTeam registeredTeam = RegisteredTeam.of(team);
+                competition.getTeams().remove(registeredTeam);
+                roomService.removeGroupMembers(competition.getGroupChatId(), registeredTeam.getTeammates().stream().map(User::getId).map(Object::toString).collect(Collectors.toSet()));
                 update(competition);
                 break;
             }
@@ -154,5 +157,12 @@ public class CompetitionService {
         for (User u : team.getTeammates()) {
             // Установить для каждого пользователя
         }
+    }
+
+    public void createGroupChat(Competition competition) {
+        String groupChatId = UUID.randomUUID().toString();
+        competition.setGroupChatId(groupChatId);
+        String adminId = competition.getOrganizer().getId().toString();
+        roomService.createGroupRoomWithGivenChatId(adminId, Set.of(adminId), competition.getCompName(), groupChatId);
     }
 }
