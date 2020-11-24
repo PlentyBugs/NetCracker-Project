@@ -9,10 +9,10 @@ insert into team(id, logo_filename, team_name, group_chat_id, usr_id) VALUES
 (1, 'teamLogo.png', 'Team A', 'e179e6eb-d67c-4e6f-1945-e752b6d11549', 1),
 (2, 'teamLogo.png', 'Train B', 'e179e6eb-d67c-4e6f-1945-e752a6q11549', 2),
 (3, 'teamLogo.png', 'FunCo', 'e179g9zb-d67c-4e6f-1945-e752a6q11549', 3);
-insert into registered_team(id, team_name) VALUES
-(1, 'Team A'),
-(2, 'Train B'),
-(3, 'FunCo');
+insert into registered_team(id, group_chat_id, team_name) VALUES
+(1, 'e179e6eb-d67c-4e6f-1945-e752b6d11549', 'Team A'),
+(2, 'e179e6eb-d67c-4e6f-1945-e752a6q11549', 'Train B'),
+(3, 'e179g9zb-d67c-4e6f-1945-e752a6q11549', 'FunCo');
 insert into usr_team(usr_id, team_id) values
 (1, 1),
 (1, 2),

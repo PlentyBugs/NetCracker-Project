@@ -50,7 +50,7 @@ public class UserControllerTest {
                 .andExpect(authenticated())
                 .andExpect(xpath("//img[@id='user-avatar']").exists())
                 .andExpect(xpath("//h3[@id='user-full-name']").string(containsString("Zhukov Egor Konstantinovich (steam)")))
-                .andExpect(xpath("//div[@id='user-team-roles']").string(containsString("Командные роли:")))
+                .andExpect(xpath("//div[@id='user-team-roles']").string(containsString("Team roles:")))
                 .andExpect(xpath("//li[@class='list-group-item team bg-dark'][1]/a").string(containsString("Team A")))
                 .andExpect(xpath("//li[@class='list-group-item team bg-dark'][2]/a").string(containsString("FunCo")))
                 .andExpect(xpath("//li[@class='list-group-item competition bg-dark'][1]/a").string(containsString("Hackathon 2")))
