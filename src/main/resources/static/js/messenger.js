@@ -9,17 +9,20 @@ const userId = $("#zzz").attr("value");
 const username = $("#mmm").attr("value");
 const regexp = /(.+?)messenger(.*)/;
 const url = document.URL.match(regexp)[1] + "messenger/";
+const userList = $(".user-modal");
+const userListInput = $("#user-list-input");
+const chatList = $("#chat-list");
 
-chatSearch.keyup(() => {
-    filter(chatSearch.val());
-});
+chatSearch.keyup(() => filter(chatSearch.val(), chats));
 
-function filter(filter) {
-    for (let chat of chats) {
-        if ($(chat).text().toLowerCase().includes(filter.toLowerCase())) {
-            $(chat).css("display", "block");
+userListInput.keyup(() => filter(userListInput.val(), userList));
+
+function filter(filter, items) {
+    for (let item of items) {
+        if ($(item).text().toLowerCase().includes(filter.toLowerCase())) {
+            $(item).css("display", "block");
         } else {
-            $(chat).css("display", "none");
+            $(item).css("display", "none");
         }
     }
 }
@@ -35,15 +38,43 @@ const messageReceive = (msg) => {
     $("#message-text").focus();
 };
 
+function createGroupChat() {
+    let chatName = $("#group-chat-name");
+    let checkboxes = $(".user-modal-checkbox-input");
+    let userIds = [];
+    for (let checkbox of checkboxes) {
+        if ($(checkbox).is(':checked')) {
+            userIds.push($(checkbox).attr("data-user-id"));
+        }
+    }
+    $.ajax({
+        type: 'POST',
+        url: url + userId + "/chat/group?chatName=" + JSON.stringify(chatName.val()),
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(userIds),
+        cache: false,
+        async: false,
+        success: () => {
+            chatName.empty();
+            userListInput.val('');
+            filter(userListInput.val(), userList);
+            userList.each((user) => $(user).css("display", "block"));
+            for (let checkbox of checkboxes) {
+                $(checkbox).prop('checked', false);
+            }
+        }
+    });
+}
+
 const updateChat = (chat) => {
     const notification = JSON.parse(chat.body);
 
     if (notification.status == "ADD") {
         let newChat = $("<div class='chat-in-menu text-center m-1' id='" + notification.chatId + "' data-recipientId='" + notification.recipientId + "' data-chatId='" + notification.chatId + "' data-group='" + notification.group + "'>" + notification.chatName + "</div>");
-        newChat.click(() => {
-            showChat(notification.chatId, notification.group);
-        });
-        chatSearch.after(newChat);
+        newChat.click(() => showChat(notification.chatId, notification.group ? 'true' : 'false'));
+        chatList.prepend(newChat);
     } else if (notification.status == "REMOVE") {
         $("#" + notification.chatId).remove();
     }
@@ -279,5 +310,11 @@ $(() => {
         showChat(startChatId, startIsGroup);
     }
 
-    $("#chats").outerHeight($("#chat-block").outerHeight);
+    $("#chats").outerHeight($("#chat-block").outerHeight());
+
+    let addGroupClassButton = $("#add-group-class-button");
+    let chatSearchHeight = chatSearch.outerHeight();
+    addGroupClassButton.outerWidth(chatSearchHeight);
+    addGroupClassButton.outerHeight(chatSearchHeight);
+    addGroupClassButton.css('line-height', chatSearchHeight + 'px');
 });

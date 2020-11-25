@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -143,5 +144,9 @@ public class UserService implements UserDetailsService {
                 .surname(user.getSurname())
                 .username(user.getUsername())
                 .build();
+    }
+
+    public List<User> findAll() {
+        return repository.findAll();
     }
 }

@@ -294,8 +294,8 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     flex-direction: column;
     justify-content: space-between;
     align-content: stretch;
-
-    min-height: 100%;
+    min-height: 85vh;
+    max-height: 85vh;
 }
 
 #chat-window {
@@ -340,8 +340,12 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 
 #chats {
     background-color: rgba(52,58,64,0.99) !important;
+}
+
+#chat-list {
     overflow-y: auto;
     overflow-x: hidden;
+    height: 73.5vh;
 }
 
 #chat-header {
@@ -379,4 +383,73 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 
 .modal-button-choice {
     max-width: 33.3%;
+}
+
+#add-group-class-button {
+    background-color: #767676;
+    border-left: solid #6a6a6a 0.125rem;
+}
+
+#messenger-modal-body-users {
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.user-modal-checkbox {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.user-modal-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.user-modal-checkbox-mark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 1.3rem;
+    width: 1.3rem;
+    background-color: #eee;
+    border-radius: 1rem;
+}
+
+.user-modal-checkbox:hover input ~ .user-modal-checkbox-mark {
+    background-color: #ccc;
+}
+
+.user-modal-checkbox input:checked ~ .user-modal-checkbox-mark {
+    background-color: #2196F3;
+}
+
+.user-modal-checkbox-mark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.user-modal-checkbox input:checked ~ .user-modal-checkbox-mark:after {
+    display: block;
+}
+
+.user-modal-checkbox .user-modal-checkbox-mark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }

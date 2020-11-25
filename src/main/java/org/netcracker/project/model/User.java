@@ -101,4 +101,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
+    public String getFullNameWithUsername() {
+        return surname + " " + name + " (" + username + ")";
+    }
 }

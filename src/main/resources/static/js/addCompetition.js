@@ -1,16 +1,4 @@
-let themeSet = document.querySelector('#themeSet');
 let themeSetJQ = $('#themeSet');
-let themesDataList = document.querySelector('#themesDatalist');
-let templateContent = document.querySelector('#themesTemplate').content;
-themeSet.addEventListener('keyup', function handler(event) {
-    while (themesDataList.children.length) themesDataList.removeChild(themesDataList.firstChild);
-    let inputVal = new RegExp(themeSet.value.trim(), 'i');
-    let set = Array.prototype.reduce.call(templateContent.cloneNode(true).children, function searchFilter(frag, item, i) {
-        if (inputVal.test(item.textContent) && frag.children.length < 6) frag.appendChild(item);
-        return frag;
-    }, document.createDocumentFragment());
-    themesDataList.appendChild(set);
-});
 
 Array.prototype.remove = function() {
     let what, a = arguments, L = a.length, ax;
@@ -34,6 +22,7 @@ themeSetJQ.bind('input', function () {
 
 function checkExists(inputValue) {
     let flag;
+    let themesDataList = document.querySelector('#themesDatalist');
     for (let i = 0; i < themesDataList.options.length; i++) {
         if(inputValue === themesDataList.options[i].value){
             flag = true;
@@ -56,3 +45,5 @@ function removeTheme(theme, id) {
     themeList.remove(theme);
     $("#" + id).remove();
 }
+
+$(() => setDataChoice('themeSet', 'themesDatalist', 'themesTemplate'));

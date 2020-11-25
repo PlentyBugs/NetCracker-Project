@@ -74,12 +74,9 @@ public class RoomService {
         };
     }
 
-    public String createGroupRoom(String adminId, Set<String> participantIds, String chatName) {
+    public void createGroupRoom(String adminId, Set<String> participantIds, String chatName) {
         String chatId = UUID.randomUUID().toString();
-
         createGroupRoomWithGivenChatId(adminId, participantIds, chatName, chatId);
-
-        return chatId;
     }
 
     public void createGroupRoomWithGivenChatId(String adminId, Set<String> participantIds, String chatName, String chatId) {
@@ -92,6 +89,8 @@ public class RoomService {
                 .build();
 
         groupRoomRepository.save(groupRoom);
+
+        participantIds.forEach(id -> sendGroupNotification(groupRoom, id, ChatStatus.ADD));
     }
 
     public List<GroupRoom> findAllGroupRoomsByUser(User user) {
@@ -122,6 +121,7 @@ public class RoomService {
         model.addAttribute("groupChats", findAllGroupRoomsByUser(user));
         model.addAttribute("recipientUsernames", findAllUsernamesMapBySender(user));
         model.addAttribute("senderUsernames", findAllUsernamesMapByRecipient(user));
+        model.addAttribute("userList", userService.findAll());
     }
 
     public GroupRoom findGroupRoomByChatId(String chatId) {

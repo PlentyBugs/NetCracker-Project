@@ -17,10 +17,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -74,6 +71,19 @@ public class MessageController {
     ) {
         if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return roomService.findGroupRoomByChatId(chatId);
+    }
+
+    @PostMapping(value = "/messenger/{userId}/chat/group")
+    @ResponseBody
+    public void createGroupChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable("userId") String senderId,
+            @RequestParam("chatName") String chatName,
+            @RequestBody Set<String> userIds
+    ) {
+        if (!String.valueOf(user.getId()).equals(senderId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        userIds.add(senderId);
+        roomService.createGroupRoom(senderId, userIds, chatName.substring(1, chatName.length() - 1));
     }
 
     @PostMapping(value = "/messenger/{userId}/chat/group/{chatId}/kick/{recipientId}", produces = "application/json")
