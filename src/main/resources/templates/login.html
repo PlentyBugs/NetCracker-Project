@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/generalLayout"><div layout:fragment="generalContent">
     <!--Блок для написания кода-->
     <div th:if="${param.error}" class="alert alert-warning text-center" role="alert" style="opacity: 0.6;">Invalid username and password or account isn't activated.</div>
     <div th:replace="fragments/form :: log_form(type='login')"></div>

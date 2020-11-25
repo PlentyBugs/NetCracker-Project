@@ -21,7 +21,7 @@
                         <a class="nav-link" th:href="@{/team}">Teams</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('USER')">
-                        <a class="nav-link" th:href="@{/messenger}">Messenger</a>
+                        <a class="nav-link" id="messenger-navbar" th:href="@{/messenger}">Messenger</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
                         <a class="nav-link" th:href="@{/admin}">Admin panel</a>

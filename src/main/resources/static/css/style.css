@@ -464,3 +464,13 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 .add-participant-plus:hover {
     color: #00D0EA;
 }
+
+.messenger-notification:after {
+    display: inline-block;
+    background-color: #ffc107;
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 1rem;
+    margin-left: 2px;
+}
