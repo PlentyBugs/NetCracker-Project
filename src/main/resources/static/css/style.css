@@ -362,10 +362,12 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     width: 50%;
     float: right;
     z-index: 999;
-    height: 57vh;
+    height: 60vh;
     position: relative;
     border: solid 1px #666;
     background-color: #343a40;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .prize-fund-dollar {
@@ -452,4 +454,13 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+.add-participant-plus {
+    line-height: 2rem;
+    font-size: 1.4em;
+}
+
+.add-participant-plus:hover {
+    color: #00D0EA;
 }

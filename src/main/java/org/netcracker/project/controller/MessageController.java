@@ -98,6 +98,18 @@ public class MessageController {
         roomService.removeGroupMemberWithAuthCheck(chatId, recipientId, adminId);
     }
 
+    @PutMapping(value = "/messenger/{userId}/chat/group/{chatId}/participant")
+    @ResponseBody
+    public void addUsersToGroupChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable("userId") String userId,
+            @PathVariable("chatId") String chatId,
+            @RequestBody Set<String> newUserIds
+    ) {
+        if (!String.valueOf(user.getId()).equals(userId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        roomService.addGroupMembers(chatId, newUserIds);
+    }
+
     @PostMapping(value = "/messenger/{userId}/chat/personal/{recipientId}")
     @ResponseBody
     public void createChat(

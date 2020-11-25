@@ -10,12 +10,16 @@ const username = $("#mmm").attr("value");
 const regexp = /(.+?)messenger(.*)/;
 const url = document.URL.match(regexp)[1] + "messenger/";
 const userList = $(".user-modal");
+const addUserList = $(".user-modal-add-new-user");
 const userListInput = $("#user-list-input");
+const addUserListInput = $("#user-list-input-add-new-user");
 const chatList = $("#chat-list");
 
 chatSearch.keyup(() => filter(chatSearch.val(), chats));
 
 userListInput.keyup(() => filter(userListInput.val(), userList));
+
+addUserListInput.keyup(() => filter(addUserListInput.val(), addUserList));
 
 function filter(filter, items) {
     for (let item of items) {
@@ -25,6 +29,16 @@ function filter(filter, items) {
             $(item).css("display", "none");
         }
     }
+}
+
+function processCheckboxes(checkboxes) {
+    let userIds = [];
+    for (let checkbox of checkboxes) {
+        if ($(checkbox).is(':checked')) {
+            userIds.push($(checkbox).attr("data-user-id"));
+        }
+    }
+    return userIds;
 }
 
 const messageReceive = (msg) => {
@@ -41,12 +55,7 @@ const messageReceive = (msg) => {
 function createGroupChat() {
     let chatName = $("#group-chat-name");
     let checkboxes = $(".user-modal-checkbox-input");
-    let userIds = [];
-    for (let checkbox of checkboxes) {
-        if ($(checkbox).is(':checked')) {
-            userIds.push($(checkbox).attr("data-user-id"));
-        }
-    }
+    let userIds = processCheckboxes(checkboxes);
     $.ajax({
         type: 'POST',
         url: url + userId + "/chat/group?chatName=" + JSON.stringify(chatName.val()),
@@ -55,17 +64,39 @@ function createGroupChat() {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(userIds),
         cache: false,
-        async: false,
-        success: () => {
-            chatName.empty();
-            userListInput.val('');
-            filter(userListInput.val(), userList);
-            userList.each((user) => $(user).css("display", "block"));
-            for (let checkbox of checkboxes) {
-                $(checkbox).prop('checked', false);
-            }
-        }
+        async: false
     });
+
+    chatName.empty();
+    userListInput.val('');
+    filter(userListInput.val(), userList);
+    userList.each((user) => $(user).css("display", "block"));
+    for (let checkbox of checkboxes) {
+        $(checkbox).prop('checked', false);
+    }
+}
+
+function addUsersToGroupChat() {
+    let checkboxes = $(".user-modal-checkbox-input-add-new-user");
+    let userIds = processCheckboxes(checkboxes);
+    $.ajax({
+        type: 'PUT',
+        url: url + userId + "/chat/group/" + currentChatId + "/participant",
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(userIds),
+        cache: false,
+        async: false
+    });
+
+    addUserListInput.val('');
+    filter(addUserListInput.val(), userList);
+    addUserList.each((user) => $(user).css("display", "block"));
+    for (let checkbox of checkboxes) {
+        $(checkbox).prop('checked', false);
+    }
+    showChat(currentChatId, 'true');
 }
 
 const updateChat = (chat) => {
@@ -221,7 +252,16 @@ function showChat(chatId, isGroup) {
     let participantsMenuBlock = $("<div class='w-100' style='display: none; height: 0' id='messenger-participants-parent'></div>");
     let participantsMenu = $("<div class='p-2' id='messenger-participants'></div>");
 
-    participantsMenu.append($("<h6 class='text-center mb-3'>Participants</h6>"));
+    let chatSubHeader = $("<h5 class='text-center mb-3'></h5>");
+    let chatSubHeaderSpan = $("<span>Participants</span>");
+    if (isGroup == 'true') {
+        let chatSubHeaderAddUserPlus = $("<i class='fa fa-plus float-right add-participant-plus' data-toggle='modal' data-target='#add-new-user-modal'></i>");
+        chatSubHeaderSpan.append(chatSubHeaderAddUserPlus);
+        chatSubHeaderSpan.css("margin-right", "-1.4em");
+    }
+    chatSubHeader.append(chatSubHeaderSpan);
+
+    participantsMenu.append(chatSubHeader);
 
     let participantsBlock = $("<div class='container'></div>");
 
