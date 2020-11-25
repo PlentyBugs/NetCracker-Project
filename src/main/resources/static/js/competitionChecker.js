@@ -1,7 +1,7 @@
-let nnn = $("#nnn").attr("value");
-let mmm = $("#mmm").attr("value");
+let organizerId = $("#nnn").attr("value");
+let usrId = $("#mmm").attr("value");
 let team = $("#team");
-let teams = $.get("/user/team/" + mmm, (data) => teams = data);
+let teams = $.get("/user/team/" + usrId, (data) => teams = data);
 
 function check() {
     let id = team.val();
@@ -9,7 +9,7 @@ function check() {
     for (let t of Object.entries(teams)) {
         if (t.id == id && typeof (t.teammatesId) != "undefined") {
             for (let i of t.teammatesId) {
-                if (i == nnn) {
+                if (i == organizerId) {
                     flag = true;
                     break;
                 }

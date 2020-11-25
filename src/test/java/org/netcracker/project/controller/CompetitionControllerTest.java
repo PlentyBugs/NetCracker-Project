@@ -69,7 +69,7 @@ public class CompetitionControllerTest {
     public void specificCompetitionTest() throws Exception {
         mockMvc.perform(get("/competition/4"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='main']/div/div/img").exists())
+                .andExpect(xpath("//img[@class='card-img-top']").exists())
                 .andExpect(xpath("//h1[@id='compNameHeader']").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")))
                 .andExpect(xpath("//h6[@id='organizedByHeader']").string(containsString("Organized by Zhora")))
                 .andExpect(xpath("//p[@id='descriptionHeader']").string(containsString("Participate and be a part of history, let megacorporations spot you and reserve a spot for you")))
@@ -91,7 +91,7 @@ public class CompetitionControllerTest {
     public void joinCompetitionTest() throws Exception {
         mockMvc.perform(get("/competition/3"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='main']/div/div/img").exists())
+                .andExpect(xpath("//img[@class='card-img-top']").exists())
                 .andExpect(xpath("//h1[@id='compNameHeader']").string(containsString("Hackathon 3")))
                 .andExpect(xpath("//h6[@id='organizedByHeader']").string(containsString("Organized by Zhora")))
                 .andExpect(xpath("//p[@id='descriptionHeader']").string(containsString("Hackathon 3")))

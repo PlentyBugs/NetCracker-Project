@@ -1,7 +1,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
     <div class="container mb-3 text-center">
-        <h1 th:text="${team.teamName}"></h1>
+        <h1 th:text="${team.teamName}" id="team-name-header"></h1>
         <div>
             <img th:src="@{/img/} + ${team.logoFilename}" alt="logo" style="max-height: 200px; width: auto" id="team-logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
         </div>

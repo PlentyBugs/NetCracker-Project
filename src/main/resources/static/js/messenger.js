@@ -359,4 +359,5 @@ $(() => {
     addGroupClassButton.css('line-height', chatSearchHeight + 'px');
 
     $("#messenger-navbar").removeClass("messenger-notification");
+    localStorage.setItem("notification", "false");
 });

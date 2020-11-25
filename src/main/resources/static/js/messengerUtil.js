@@ -1,4 +1,3 @@
-let userId = $("#zzz").attr("value");
 let name = $("#mmm").attr("value");
 let writeButtons = $(".write-button");
 
