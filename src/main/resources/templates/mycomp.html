@@ -1,0 +1,26 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+
+    <!-- страничка для орга - мои соревнования. Содержит текущие
+    соревнования и те, что в архиве. -->
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card-body">
+                <h5 class="text-center">Archive</h5>
+                <div id="archive"></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card-body">
+                <h5 class="text-center">Running</h5>
+                <div id="running"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <script th:src="@{/js/mycomp.js}"></script>
+
+</div>
+</html>
+
