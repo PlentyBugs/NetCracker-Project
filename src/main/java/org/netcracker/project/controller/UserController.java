@@ -1,10 +1,10 @@
 package org.netcracker.project.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleTeam;
 import org.netcracker.project.model.enums.Result;
+import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -75,6 +74,17 @@ public class UserController {
         }
         userService.updateUser(authUser, user, password2);
         return "redirect:/user/{id}";
+    }
+
+    @PutMapping("/{id}/roles")
+    @ResponseBody
+    public void updateUserRoles(
+            @AuthenticationPrincipal User authUser,
+            @PathVariable("id") User user,
+            @RequestBody Set<TeamRole> roles
+    ) {
+        if (!authUser.getId().equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        userService.updateUserRoles(user, roles);
     }
 
     @DeleteMapping("/{id}")

@@ -456,12 +456,12 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     transform: rotate(45deg);
 }
 
-.add-participant-plus {
+.add-plus {
     line-height: 2rem;
     font-size: 1.4em;
 }
 
-.add-participant-plus:hover {
+.add-plus:hover {
     color: #00D0EA;
 }
 
@@ -473,4 +473,18 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     height: 0.75rem;
     border-radius: 1rem;
     margin-left: 2px;
+}
+
+#modal-roles-container {
+    height: 20vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.role-in-row {
+    font-size: 1em;
+}
+
+.role-in-row:hover {
+    font-size: 1.2em;
 }
