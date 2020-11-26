@@ -1,11 +1,30 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
-    <!--Блок для написания кода-->
-    <!-- Для странички нужно:
-        пользователь, с его личной информацией,
-        табличка команд, чтобы можно было показывать команды в которых есть пользователь,
-        соревнования, чтобы можно было показать статистику, а также
-        ... мб еще что
-    -->
+
+    <div class="modal fade" id="add-team-role" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" id="modal-add-team-role" role="document">
+            <div class="modal-content bg-dark">
+                <div class="modal-header text-center d-block">
+                    <h5 class="modal-title">Team Roles</h5>
+                </div>
+                <div class="modal-body" id="modal-body-id">
+                    <input type="text" id="role-input" class="form-control mb-2" placeholder="Team Role" autocomplete="off" autocapitalize="off" />
+
+                    <div class="container" id="modal-roles-container">
+                        <th:block th:each="role : ${T(org.netcracker.project.model.enums.TeamRole).values()}">
+                            <div class="row role-in-row" th:id="'id-' + ${role.name()}" th:data-role="${role.toString()}" th:data-role-id="${role.name()}" th:text="${#strings.capitalize(role.toString())}"></div>
+                        </th:block>
+                    </div>
+                    <h6 class="text-center">Your roles</h6>
+                    <div id="current-team-roles">
+
+                    </div>
+
+                    <button type="button" class="btn btn-warning btn-block mt-3" onclick="saveUserRoles();" id="update-roles-button">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row mb-3">
             <div class="col-sm-2">
@@ -18,9 +37,9 @@
                         <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'" id="user-full-name"></h3>
                     </div>
                     <div class="col-sm-8" id="user-team-roles">
-                        Team roles:
+                        <i class="fa fa-plus add-plus" data-toggle='modal' data-target='#add-team-role'></i><span class="ml-2 mr-2" id="team-roles-header">Team roles:</span>
                         <th:block th:each="role : ${user.teamRoles}">
-                            <i class="list-group-item" th:text="${#strings.capitalize(role.name())}"></i>
+                            <i class="current-team-role mr-1" th:data-role="${role.toString()}" th:data-role-id="${role.name()}" th:text="${#strings.capitalize(role.toString())}"></i>
                         </th:block>
                     </div>
                 </div>
@@ -104,5 +123,6 @@
     <script th:src="@{/js/messengerUtil.js}"></script>
     <script th:src="@{/js/user.js}"></script>
     <script th:src="@{/js/statDiagram.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
     <!---->
 </div></html>

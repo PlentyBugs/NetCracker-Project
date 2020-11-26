@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.enums.Role;
+import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.repository.UserRepository;
 import org.netcracker.project.util.ImageUtils;
 import org.netcracker.project.util.SecurityUtils;
@@ -148,5 +149,11 @@ public class UserService implements UserDetailsService {
 
     public List<User> findAll() {
         return repository.findAll();
+    }
+
+    public void updateUserRoles(User user, Set<TeamRole> roles) {
+        user.setTeamRoles(roles);
+        repository.save(user);
+        securityUtils.updateContext(user);
     }
 }

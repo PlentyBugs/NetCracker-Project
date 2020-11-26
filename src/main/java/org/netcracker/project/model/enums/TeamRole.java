@@ -18,5 +18,12 @@ public enum  TeamRole {
     SOUND_DESIGNER,
     MUSICIAN,
     SAFETY_ENGINEER,
-    TESTER
+    TESTER;
+
+
+    @Override
+    public String toString() {
+        String readable = name().replaceAll("_", " ");
+        return name().length() > 3 ? readable.toLowerCase(): readable;
+    }
 }

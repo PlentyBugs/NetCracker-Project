@@ -21,16 +21,6 @@ userListInput.keyup(() => filter(userListInput.val(), userList));
 
 addUserListInput.keyup(() => filter(addUserListInput.val(), addUserList));
 
-function filter(filter, items) {
-    for (let item of items) {
-        if ($(item).text().toLowerCase().includes(filter.toLowerCase())) {
-            $(item).css("display", "block");
-        } else {
-            $(item).css("display", "none");
-        }
-    }
-}
-
 function processCheckboxes(checkboxes) {
     let userIds = [];
     for (let checkbox of checkboxes) {
@@ -255,7 +245,7 @@ function showChat(chatId, isGroup) {
     let chatSubHeader = $("<h5 class='text-center mb-3'></h5>");
     let chatSubHeaderSpan = $("<span>Participants</span>");
     if (isGroup == 'true') {
-        let chatSubHeaderAddUserPlus = $("<i class='fa fa-plus float-right add-participant-plus' data-toggle='modal' data-target='#add-new-user-modal'></i>");
+        let chatSubHeaderAddUserPlus = $("<i class='fa fa-plus float-right add-plus' data-toggle='modal' data-target='#add-new-user-modal'></i>");
         chatSubHeaderSpan.append(chatSubHeaderAddUserPlus);
         chatSubHeaderSpan.css("margin-right", "-1.4em");
     }
