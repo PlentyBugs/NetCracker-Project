@@ -7,7 +7,6 @@ import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.TeamService;
-import org.netcracker.project.util.SecurityUtils;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

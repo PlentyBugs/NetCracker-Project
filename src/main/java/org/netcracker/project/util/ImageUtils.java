@@ -14,6 +14,12 @@ public class ImageUtils {
     @Value("${upload.path}")
     private String uploadPath;
 
+    /**
+     * Метод для сохранения файлов
+     * @param file - Файл
+     * @return - Имя файла
+     * @throws IOException - Возможное исключение при неудачном взаимодействии с файловой системой
+     */
     public String saveFile(MultipartFile file) throws IOException {
         if (file != null && file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
