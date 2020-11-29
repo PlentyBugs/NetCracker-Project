@@ -55,7 +55,13 @@ function saveUserRoles() {
 }
 
 $(() => {
-    $("#write-button-user").outerWidth($("#user-avatar").outerWidth());
+    let userAvatar = $("#user-avatar");
+    let writeButtonUser = $("#write-button-user");
+    let imageOverlay = $("#image-uploadable-overlay-avatar");
+    writeButtonUser.outerWidth(userAvatar.outerWidth());
+    imageOverlay.outerWidth(userAvatar.outerWidth());
+    imageOverlay.outerHeight(userAvatar.outerHeight());
+    $("#image-uploadable-container-id").outerWidth(userAvatar.outerWidth());
     for (let role of rolesInRow) {
         $(role).click(() => {
             addRole($(role).data("role"), $(role).data("role-id"));

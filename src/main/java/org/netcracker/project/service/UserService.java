@@ -143,7 +143,7 @@ public class UserService implements UserDetailsService {
      * @param file - Файл с картинкой
      * @throws IOException - Исключение в случае ошибки сохранения аватара
      */
-    private void saveAvatar(@Valid User user, @RequestParam("avatar") MultipartFile file) throws IOException {
+    public void saveAvatar(@Valid User user, @RequestParam("avatar") MultipartFile file) throws IOException {
         String resultFilename = imageUtils.saveFile(file);
         if (!"".equals(resultFilename)) {
             user.setAvatarFilename(resultFilename);

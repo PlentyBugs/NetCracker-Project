@@ -14,9 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -85,6 +87,21 @@ public class UserController {
     ) {
         if (!authUser.getId().equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         userService.updateUserRoles(user, roles);
+    }
+
+    @PutMapping("/{id}/image")
+    @ResponseBody
+    public void updateAvatar(
+            @AuthenticationPrincipal User authUser,
+            @PathVariable("id") User user,
+            @RequestParam(value = "x", required = false) Long x,
+            @RequestParam(value = "y", required = false) Long y,
+            @RequestParam(value = "width", required = false) Long width,
+            @RequestParam(value = "height", required = false) Long height,
+            @RequestParam("avatar") MultipartFile avatar
+    ) throws IOException {
+        if (!authUser.getId().equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        userService.saveAvatar(user, avatar);
     }
 
     @DeleteMapping("/{id}")

@@ -25,11 +25,18 @@
         </div>
     </div>
 
+    <div id="upload-image-modal-container"></div>
+
     <div class="container">
         <div class="row mb-3">
             <div class="col-sm-2">
-                <img th:src="@{/img/} + ${user.avatarFilename}" id="user-avatar" style="max-width: 100px; height: auto; max-height: 200px;" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
-                <button type="button" class="btn btn-primary write-button" id="write-button-user" th:data-recipientId="${user.id}">Write</button>
+                <div class="image-uploadable-container unselectable" id="image-uploadable-container-id">
+                    <img th:src="@{/img/} + ${user.avatarFilename}" class="image-uploadable" id="user-avatar" style="max-width: 100px; height: auto; max-height: 200px;" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
+                    <div class="image-uploadable-overlay" id="image-uploadable-overlay-avatar" data-toggle='modal' data-target='#upload-image-modal'>
+                        <div class="image-uploadable-overlay-text">Upload</div>
+                    </div>
+                    <button type="button" class="btn btn-primary write-button rounded-0" id="write-button-user" th:data-recipientId="${user.id}">Write</button>
+                </div>
             </div>
             <div class="col-sm-10">
                 <div class="row">
@@ -120,9 +127,12 @@
 
        </div>
     </div>
+    <link th:href="@{/js/libs/croppr.min.css/}" rel="stylesheet" />
+    <script th:src="@{/js/libs/croppr.min.js/}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
-    <script th:src="@{/js/user.js}"></script>
     <script th:src="@{/js/statDiagram.js}"></script>
+    <script th:src="@{/js/imageUtils.js}"></script>
     <script th:src="@{/js/utils.js}"></script>
+    <script th:src="@{/js/user.js}"></script>
     <!---->
 </div></html>

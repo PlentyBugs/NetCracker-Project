@@ -1,11 +1,19 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
     <!--Блок для написания кода-->
+
+    <div id="upload-image-modal-container"></div>
+
     <div class="container mb-3 text-center">
         <h1 th:text="${team.teamName}" id="team-name-header"></h1>
         <div>
-            <img th:src="@{/img/} + ${team.logoFilename}" alt="logo" style="max-height: 200px; width: auto" id="team-logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
+            <div class="image-uploadable-container unselectable" id="image-uploadable-container-id">
+                <img th:src="@{/img/} + ${team.logoFilename}" class="image-uploadable" alt="logo" style="max-height: 200px; width: auto" id="team-logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
+                <div class="image-uploadable-overlay" id="image-uploadable-overlay-logo" data-toggle='modal' data-target='#upload-image-modal'>
+                    <div class="image-uploadable-overlay-text">Upload</div>
+                </div>
+            </div>
+            <a th:href="'/messenger/' + ${team.groupChatId}" type="button" class="btn btn-primary rounded-0" id="join-group-chat" th:if="${team.teammates.contains(#authentication.principal)}">Group chat</a>
         </div>
-        <a th:href="'/messenger/' + ${team.groupChatId}" type="button" class="btn btn-primary rounded-0" id="join-group-chat" th:if="${team.teammates.contains(#authentication.principal)}">Group chat</a>
     </div>
     <a type="button" th:href="@{/calendar/team/} + ${team.id}" class="btn btn-warning btn-lg btn-block mb-1" id="quit-button">Calendar</a>
     <form th:if="${#authentication.principal.getTeams().contains(team)}" method="post" th:action="@{/team/} + ${team.id} + '/quit'">
@@ -29,7 +37,10 @@
             </div>
         </th:block>
     </div>
+    <link th:href="@{/js/libs/croppr.min.css/}" rel="stylesheet" />
+    <script th:src="@{/js/libs/croppr.min.js/}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
+    <script th:src="@{/js/imageUtils.js}"></script>
     <script th:src="@{/js/team.js}"></script>
     <!---->
 </div></html>
