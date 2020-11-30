@@ -74,7 +74,7 @@ public class TeamControllerTest {
         mockMvc.perform(get("/team/2"))
                 .andExpect(authenticated())
                 .andExpect(xpath("//img[@id='team-logo']").exists())
-                .andExpect(xpath("//h1[@id='team-name-header']").string(containsString("Train B")))
+                .andExpect(xpath("//h2[@id='team-name-header']").string(containsString("Train B")))
                 .andExpect(xpath("//button[@class='btn btn-success btn-lg btn-block']").exists());
         mockMvc.perform(post("/team/2/join").with(csrf()))
                 .andExpect(authenticated())

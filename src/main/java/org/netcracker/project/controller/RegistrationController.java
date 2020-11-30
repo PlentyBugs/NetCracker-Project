@@ -60,7 +60,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        return "redirect:/login";
+        return "redirect:/login?activate=true";
     }
 
     @GetMapping("/registration/activate/{code}")
