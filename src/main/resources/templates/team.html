@@ -8,7 +8,7 @@
             <div class="col-sm-3">
                 <h2 th:text="${team.teamName}" id="team-name-header"></h2>
                 <div class="image-uploadable-container unselectable" id="image-uploadable-container-id">
-                <img th:src="@{/img/} + ${team.logoFilename}" class="image-uploadable" alt="logo" style="max-height: 200px; width: auto" id="team-logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
+                <img th:src="@{/img/} + ${team.logoFilename}" class="image-uploadable" alt="logo" style="max-height: 200px; width: auto; max-width: 100%" id="team-logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/>
                 <div class="image-uploadable-overlay" id="image-uploadable-overlay-logo" data-toggle='modal' data-target='#upload-image-modal'>
                     <div class="image-uploadable-overlay-text">Upload</div>
                 </div>

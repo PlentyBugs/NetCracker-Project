@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -47,10 +46,17 @@ public class ImageUtils {
      * @return - Имя файла
      * @throws IOException - Возможное исключение при неудачном взаимодействии с файловой системой
      */
-    public String cropAndSaveImage(MultipartFile file, Integer x, Integer y, Integer width, Integer height) throws IOException {
+    public String cropAndSaveImage(MultipartFile file, int x, int y, int width, int height) throws IOException {
         if (file != null && file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()) {
             BufferedImage image = ImageIO.read(file.getInputStream());
-            BufferedImage newImage = image.getSubimage(x, y, width, height);
+            int maxWidth = image.getWidth();
+            int maxHeight = image.getHeight();
+            BufferedImage newImage = image.getSubimage(
+                    x < 0 ? 0 : Math.min(x, maxWidth),
+                    y < 0 ? 0 : Math.min(y, maxHeight),
+                    width < 0 ? 0 : Math.min(width, maxWidth) - 1,
+                    height < 0 ? 0 : Math.min(height, maxHeight) - 1
+            );
 
             String resultFilename = createFile() + "." + file.getOriginalFilename();
 

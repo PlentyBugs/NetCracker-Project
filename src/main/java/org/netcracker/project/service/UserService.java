@@ -170,6 +170,7 @@ public class UserService implements UserDetailsService {
         if(!"".equals(resultFilename)){
             user.setAvatarFilename(resultFilename);
             repository.save(user);
+            securityUtils.updateContext(user);
         }
     }
 

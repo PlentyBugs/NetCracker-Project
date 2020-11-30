@@ -40,7 +40,6 @@ $(() => {
             if (e.total > 20971520) {
                 imageAlert.removeClass("d-none");
             } else if(e.target.result) {
-                let x, y, width, height;
                 let uploadImageButton = $("<button type='button' class='btn btn-warning btn-block' id='upload-image-button'>Upload</button>");
 
                 uploadImageButton.click(() => {
@@ -68,7 +67,7 @@ $(() => {
                 let cropper  = new Croppr("#uploaded-image-cropper", {
                     returnMode: "real",
                     maxSize: [100, 100, '%'],
-                    minSize: [10, 10, '%'],
+                    minSize: [100, 100, 'px'],
                     onCropEnd: (image) => {
                         uploadImageButton.unbind("click");
                         uploadImageButton.click(() => {

@@ -31,7 +31,7 @@
         <div class="row mb-3">
             <div class="col-sm-2">
                 <div class="image-uploadable-container unselectable" id="image-uploadable-container-id">
-                    <img th:src="@{/img/} + ${user.avatarFilename}" class="image-uploadable" id="user-avatar" style="max-width: 100px; height: auto; max-height: 200px;" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
+                    <img th:src="@{/img/} + ${user.avatarFilename}" class="image-uploadable" id="user-avatar" style="max-width: 100%; height: auto; max-height: 200px;" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
                     <div class="image-uploadable-overlay" id="image-uploadable-overlay-avatar" data-toggle='modal' data-target='#upload-image-modal'>
                         <div class="image-uploadable-overlay-text">Upload</div>
                     </div>
