@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
+import org.netcracker.project.model.interfaces.Statistical;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,7 +20,7 @@ import java.util.*;
 @Table(name="usr")
 @Data
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User implements UserDetails, Statistical {
     private static final long serialVersionUID = 3856464070955127754L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -7,6 +7,7 @@ import org.netcracker.project.model.User;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.TeamService;
+import org.netcracker.project.util.StatisticsUtil;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ import java.util.Set;
 @RequestMapping("/team")
 @RequiredArgsConstructor
 public class TeamController {
+
+    private final StatisticsUtil statisticsUtil;
     private final TeamService service;
 
     @GetMapping
@@ -48,12 +51,13 @@ public class TeamController {
     }
 
     @PostMapping
-    public String addTeam(@AuthenticationPrincipal User user,
-                          @RequestParam ("logo") MultipartFile logo,
-                          Model model,
-                          @Valid Team team,
-                          BindingResult bindingResult
-                          )
+    public String addTeam(
+            @AuthenticationPrincipal User user,
+            @RequestParam ("logo") MultipartFile logo,
+            Model model,
+            @Valid Team team,
+            BindingResult bindingResult
+    )
         throws IOException{
             if(bindingResult.hasErrors()){
                 Map<String,String> errors = ValidationUtils.getErrors(bindingResult);
@@ -66,32 +70,12 @@ public class TeamController {
     }
 
     @GetMapping("/{id}")
-    public String getTeam(@PathVariable("id") Team team,
-                           Model model)
+    public String getTeam(
+            @PathVariable("id") Team team,
+            Model model)
     {
-        int winCount=0;
-        int secondCount=0;
-        int thirdCount=0;
-        int participate=0;
-        int spottedBySponsors=0;
-        for(Result result:team.getStatistics().keySet() )
-        {
-            switch(result){
-                case WIN:winCount++;break;
-                case SECOND:secondCount++;break;
-                case THIRD:thirdCount++;break;
-                case PARTICIPATE:participate++;break;
-                case SPOTTED:spottedBySponsors++;break;
-            }
-        }
-            model.addAttribute("winCount",winCount);
-            model.addAttribute("secondCount",secondCount);
-            model.addAttribute("thirdCount",thirdCount);
-            model.addAttribute("participate",participate);
-            model.addAttribute("spotted",spottedBySponsors);
-
-            model.addAttribute(team);
-            return "team";
+        statisticsUtil.putStatisticsInModel(team, model);
+        return "team";
     }
 
     @PutMapping("/{id}/image")

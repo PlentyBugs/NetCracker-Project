@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.TeamRole;
+import org.netcracker.project.model.interfaces.Statistical;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import java.util.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class Team implements Serializable {
+public class Team implements Serializable, Statistical {
     private static final long serialVersionUID = 7609590770964470381L;
 
     @Id

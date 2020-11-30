@@ -1,30 +1,31 @@
-var colors = ["#F7464A", "#46BFBD", "#FDB45C", "#9b59cb"];
+let colors = ["#F7464A", "#46BFBD", "#FDB45C", "#9b59cb"];
 
-let winCount=$("#winCount");
-let secondCount=$("#secondCount");
-let thirdCount=$("#thirdCount");
-let spotted=$("#spotted");
+let winCount = $("#winCount");
+let secondCount = $("#secondCount");
+let thirdCount = $("#thirdCount");
+let spotted = $("#spotted");
 
-var donutOptions = {
+let donutOptions = {
     cutoutPercentage: 55,
     legend: {position:'bottom',
         labels:{pointStyle:'circle',
             usePointStyle:true}
     }
 };
-var chDonutData1 = {
+let chDonutData1 = {
     labels: ['Wins', '2nd', '3rd','Spotted'],
     datasets: [
         {
-            backgroundColor: [colors[0],colors[1],colors[2],colors[3]],
+            backgroundColor: [colors[0], colors[1], colors[2], colors[3]],
             borderWidth: 0,
-            data: [winCount, secondCount, thirdCount,spotted]
+            data: [winCount.data("wincount"), secondCount.data("secondcount"), thirdCount.data("thirdcount"), spotted.data("spotted")]
         }
     ]
 };
-var chDonut1 = $("#chDonut");
+let chDonut1 = $("#chDonut");
 
 if (chDonut1) {
+    console.log(chDonutData1);
     new Chart(chDonut1, {
         type: 'pie',
         data: chDonutData1,
