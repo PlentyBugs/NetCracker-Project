@@ -1,9 +1,11 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleUser;
+import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.repository.UserRepository;
@@ -157,10 +159,10 @@ public class UserService implements UserDetailsService {
      * Метод, который обрезает аватар и сохраняет его
      * @param user - Пользователь, чей аватар мы сохраняем
      * @param file - Файл с изображением логотипа
-     * @param x - X координата начала обрезки в зависимости от размеров изображения от 0 до 1
-     * @param y - Y координата начала обрезки в зависимости от размеров изображения от 0 до 1
-     * @param width - Ширина обрезанного изображения в зависимости от размеров изображения от 0 до 1
-     * @param height - Высота обрезанного изображения в зависимости от размеров изображения от 0 до 1
+     * @param x - X координата начала обрезки
+     * @param y - Y координата начала обрезки
+     * @param width - Ширина обрезанного изображения
+     * @param height - Высота обрезанного изображения
      * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
      */
     public void cropAndSaveAvatar(User user, MultipartFile file, Integer x, Integer y, Integer width, Integer height) throws IOException{
@@ -245,5 +247,10 @@ public class UserService implements UserDetailsService {
         user.setTeamRoles(roles);
         repository.save(user);
         securityUtils.updateContext(user);
+    }
+
+    public void gradeUser(User user, Result result, Competition competition) {
+        user.getStatistics().put(result, competition);
+        repository.save(user);
     }
 }

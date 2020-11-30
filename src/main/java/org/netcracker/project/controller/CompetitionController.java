@@ -111,6 +111,19 @@ public class CompetitionController {
     }
 
     @Async
+    @PutMapping(value = "/{id}/grade", produces = "application/json")
+    public @ResponseBody void grade(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Competition competition,
+            @RequestParam("winner") RegisteredTeam winner,
+            @RequestParam(value = "second", required = false) RegisteredTeam second,
+            @RequestParam(value = "third", required = false) RegisteredTeam third,
+            @RequestParam(value = "spotted", required = false) Set<RegisteredTeam> spotted
+    ) {
+        service.gradeCompetition(competition, winner, second, third, spotted);
+    }
+
+    @Async
     @DeleteMapping(value = "/{id}/team/{teamID}", produces = "application/json")
     public @ResponseBody void removeTeam(
             @AuthenticationPrincipal User user,
@@ -180,17 +193,15 @@ public class CompetitionController {
     @ResponseBody
     public List<Competition> getArchive(
             @AuthenticationPrincipal User user
-){
-        return service.getAllEndedCompetitions(user);
-}
+    ) {
+            return service.getAllEndedCompetitions(user);
+    }
 
-@GetMapping(value = "/mycomp/running", produces = "application/json")
-@ResponseBody
+    @GetMapping(value = "/mycomp/running", produces = "application/json")
+    @ResponseBody
     public List<Competition> getRunningComp(
-        @AuthenticationPrincipal User user
-){
-    return service.getAllActingCompetitions(user);
-}
-
-
+            @AuthenticationPrincipal User user
+    ) {
+        return service.getAllActingCompetitions(user);
+    }
 }

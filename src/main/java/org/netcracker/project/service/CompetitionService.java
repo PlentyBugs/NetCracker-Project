@@ -32,6 +32,8 @@ public class CompetitionService {
 
     private final RegisteredTeamRepository registeredTeamRepository;
     private final CompetitionRepository repository;
+    private final TeamService teamService;
+    private final UserService userService;
     private final RoomService roomService;
     private final ImageUtils imageUtils;
     private final DateUtil dateUtil;
@@ -246,9 +248,9 @@ public class CompetitionService {
      * @param competition - Соревнование, в котором принимала участие команда
      */
     private void gradeOneTeam(RegisteredTeam team, Result result, Competition competition) {
-        // Установить для команды
-        for (User u : team.getTeammates()) {
-            // Установить для каждого пользователя
+        teamService.gradeTeam(team, result, competition);
+        for (User user : team.getTeammates()) {
+            userService.gradeUser(user, result, competition);
         }
     }
 

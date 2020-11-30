@@ -2,19 +2,25 @@ package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.TeamFilter;
+import org.netcracker.project.model.Competition;
+import org.netcracker.project.model.RegisteredTeam;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.repository.TeamRepository;
 import org.netcracker.project.util.ImageUtils;
 import org.netcracker.project.util.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -108,10 +114,10 @@ public class TeamService {
      * Метод, который обрезает логотип и сохраняет его
      * @param team - Команда, чей логотип мы сохраняем
      * @param file - Файл с изображением логотипа
-     * @param x - X координата начала обрезки в зависимости от размеров изображения от 0 до 1
-     * @param y - Y координата начала обрезки в зависимости от размеров изображения от 0 до 1
-     * @param width - Ширина обрезанного изображения в зависимости от размеров изображения от 0 до 1
-     * @param height - Высота обрезанного изображения в зависимости от размеров изображения от 0 до 1
+     * @param x - X координата начала обрезки
+     * @param y - Y координата начала обрезки
+     * @param width - Ширина обрезанного изображения
+     * @param height - Высота обрезанного изображения
      * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
      */
     public void cropAndSaveLogo(Team team, MultipartFile file, Integer x, Integer y, Integer width, Integer height) throws IOException{
@@ -159,5 +165,11 @@ public class TeamService {
         roomService.removeGroupMember(team.getGroupChatId(), userId);
         update(team);
         securityUtils.updateContext(user);
+    }
+
+    public void gradeTeam(RegisteredTeam registeredTeam, Result result, Competition competition) {
+        Team team = repository.findById(registeredTeam.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        team.getStatistics().put(result, competition);
+        repository.save(team);
     }
 }

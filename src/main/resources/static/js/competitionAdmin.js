@@ -24,9 +24,12 @@ function grade() {
     const regexp = /(.+)\/competition\/\d+/;
     let grades = {};
     let url = document.URL.match(regexp)[0] + "/grade?";
-    url += "winner=" + encodeURIComponent($("#winner").val()) + "&";
-    url += "second=" + encodeURIComponent($("#second").val()) + "&";
-    url += "third=" + encodeURIComponent($("#third").val());
+    let winner = $("#winner").val();
+    let second = $("#second").val();
+    let third = $("#third").val();
+    if (winner !== "") url += "winner=" + encodeURIComponent(winner) + "&";
+    if (second !== "") url += "second=" + encodeURIComponent(second) + "&";
+    if (third !== "") url += "third=" + encodeURIComponent(third);
     let spotted = $(".spotted");
     for (let s of spotted) {
         url += "&spotted=" + encodeURIComponent($(s).val());
