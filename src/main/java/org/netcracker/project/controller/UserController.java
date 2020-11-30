@@ -94,14 +94,18 @@ public class UserController {
     public void updateAvatar(
             @AuthenticationPrincipal User authUser,
             @PathVariable("id") User user,
-            @RequestParam(value = "x", required = false) Long x,
-            @RequestParam(value = "y", required = false) Long y,
-            @RequestParam(value = "width", required = false) Long width,
-            @RequestParam(value = "height", required = false) Long height,
+            @RequestParam(value = "x", required = false) Integer x,
+            @RequestParam(value = "y", required = false) Integer y,
+            @RequestParam(value = "width", required = false) Integer width,
+            @RequestParam(value = "height", required = false) Integer height,
             @RequestParam("avatar") MultipartFile avatar
     ) throws IOException {
         if (!authUser.getId().equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        userService.saveAvatar(user, avatar);
+        if (x == null) {
+            userService.saveAvatar(user, avatar);
+        } else {
+            userService.cropAndSaveAvatar(user, avatar, x, y, width, height);
+        }
     }
 
     @DeleteMapping("/{id}")

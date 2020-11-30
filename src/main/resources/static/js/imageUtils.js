@@ -42,6 +42,7 @@ $(() => {
             } else if(e.target.result) {
                 let x, y, width, height;
                 let uploadImageButton = $("<button type='button' class='btn btn-warning btn-block' id='upload-image-button'>Upload</button>");
+
                 uploadImageButton.click(() => {
                     let data = new FormData();
                     data.append("avatar", imageInput.prop("files")[0]);
@@ -55,7 +56,8 @@ $(() => {
                         async: false,
                         processData: false,
                         contentType: false,
-                    })
+                    });
+                    window.location = window.location.href;
                 });
                 imagePreview.after(uploadImageButton);
                 let img = $("<img class='mw-100' id='uploaded-image-cropper' src='" + e.target.result + "' style='max-width: 100%'>");
@@ -75,7 +77,7 @@ $(() => {
                             data.append("x", image.x);
                             data.append("y", image.y);
                             data.append("width", image.width);
-                            data.append("height", image.width);
+                            data.append("height", image.height);
                             $.ajax({
                                 type: 'PUT',
                                 url: url + "/image",
@@ -86,7 +88,8 @@ $(() => {
                                 async: false,
                                 processData: false,
                                 contentType: false,
-                            })
+                            });
+                            window.location = window.location.href;
                         });
                     }
                 });

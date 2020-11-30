@@ -96,10 +96,29 @@ public class TeamService {
      * @param file - Файл с изображением логотипа
      * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
      */
-    private void saveLogo(@Valid Team team, @RequestParam("avatar") MultipartFile file) throws IOException{
-        String resultFilename=imageUtils.saveFile(file);
+    public void saveLogo(Team team, MultipartFile file) throws IOException{
+        String resultFilename = imageUtils.saveFile(file);
         if(!"".equals(resultFilename)){
             team.setLogoFilename(resultFilename);
+            repository.save(team);
+        }
+    }
+
+    /**
+     * Метод, который обрезает логотип и сохраняет его
+     * @param team - Команда, чей логотип мы сохраняем
+     * @param file - Файл с изображением логотипа
+     * @param x - X координата начала обрезки в зависимости от размеров изображения от 0 до 1
+     * @param y - Y координата начала обрезки в зависимости от размеров изображения от 0 до 1
+     * @param width - Ширина обрезанного изображения в зависимости от размеров изображения от 0 до 1
+     * @param height - Высота обрезанного изображения в зависимости от размеров изображения от 0 до 1
+     * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
+     */
+    public void cropAndSaveLogo(Team team, MultipartFile file, Integer x, Integer y, Integer width, Integer height) throws IOException{
+        String resultFilename = imageUtils.cropAndSaveImage(file, x, y, width, height);
+        if(!"".equals(resultFilename)){
+            team.setLogoFilename(resultFilename);
+            repository.save(team);
         }
     }
 

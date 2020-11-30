@@ -1,6 +1,7 @@
 package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.enums.Role;
@@ -147,6 +148,26 @@ public class UserService implements UserDetailsService {
         String resultFilename = imageUtils.saveFile(file);
         if (!"".equals(resultFilename)) {
             user.setAvatarFilename(resultFilename);
+            repository.save(user);
+            securityUtils.updateContext(user);
+        }
+    }
+
+    /**
+     * Метод, который обрезает аватар и сохраняет его
+     * @param user - Пользователь, чей аватар мы сохраняем
+     * @param file - Файл с изображением логотипа
+     * @param x - X координата начала обрезки в зависимости от размеров изображения от 0 до 1
+     * @param y - Y координата начала обрезки в зависимости от размеров изображения от 0 до 1
+     * @param width - Ширина обрезанного изображения в зависимости от размеров изображения от 0 до 1
+     * @param height - Высота обрезанного изображения в зависимости от размеров изображения от 0 до 1
+     * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
+     */
+    public void cropAndSaveAvatar(User user, MultipartFile file, Integer x, Integer y, Integer width, Integer height) throws IOException{
+        String resultFilename = imageUtils.cropAndSaveImage(file, x, y, width, height);
+        if(!"".equals(resultFilename)){
+            user.setAvatarFilename(resultFilename);
+            repository.save(user);
         }
     }
 
