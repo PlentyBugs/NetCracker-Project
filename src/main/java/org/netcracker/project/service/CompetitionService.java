@@ -225,17 +225,19 @@ public class CompetitionService {
     public void gradeCompetition(Competition competition, RegisteredTeam winner, RegisteredTeam second, RegisteredTeam third, Set<RegisteredTeam> spotted) {
         Set<RegisteredTeam> teams = competition.getTeams();
         for (RegisteredTeam team : teams) {
-            Result result = Result.PARTICIPATE;
+            gradeOneTeam(team, Result.PARTICIPATE, competition);
             if (team.equals(winner)) {
-                result = Result.WIN;
-            } else if (team.equals(second)) {
-                result = Result.SECOND;
-            } else if (team.equals(third)) {
-                result = Result.THIRD;
-            } else if (spotted.contains(team)) {
-                result = Result.SPOTTED;
+                gradeOneTeam(team, Result.WIN, competition);
             }
-            gradeOneTeam(team, result, competition);
+            if (team.equals(second)) {
+                gradeOneTeam(team, Result.SECOND, competition);
+            }
+            if (team.equals(third)) {
+                gradeOneTeam(team, Result.THIRD, competition);
+            }
+            if (spotted != null && spotted.contains(team)) {
+                gradeOneTeam(team, Result.SPOTTED, competition);
+            }
         }
     }
 

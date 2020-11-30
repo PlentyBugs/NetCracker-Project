@@ -1,12 +1,11 @@
 package org.netcracker.project.util;
 
-import org.netcracker.project.model.Competition;
-import org.netcracker.project.model.enums.Result;
+import org.netcracker.project.model.embeddable.Statistics;
 import org.netcracker.project.model.interfaces.Statistical;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
-import java.util.Map;
+import java.util.Set;
 
 @Component
 public class StatisticsUtil {
@@ -17,14 +16,14 @@ public class StatisticsUtil {
         int thirdCount = 0;
         int participate = 0;
         int spottedBySponsors = 0;
-        Map<Result, Competition> statistics = statistical.getStatistics();
-        for(Result result : statistics.keySet()){
-            switch(result){
-                case WIN: winCount++;break;
-                case SECOND: secondCount++;break;
-                case THIRD: thirdCount++;break;
-                case PARTICIPATE: participate++;break;
-                case SPOTTED: spottedBySponsors++;break;
+        Set<Statistics> statistics = statistical.getStatistics();
+        for(Statistics s : statistics){
+            switch(s.getResult()){
+                case WIN: winCount++; break;
+                case SECOND: secondCount++; break;
+                case THIRD: thirdCount++; break;
+                case PARTICIPATE: participate++; break;
+                case SPOTTED: spottedBySponsors++; break;
             }
         }
         model.addAttribute("winCount", winCount);

@@ -1,10 +1,9 @@
 package org.netcracker.project.model.interfaces;
 
-import org.netcracker.project.model.Competition;
-import org.netcracker.project.model.enums.Result;
+import org.netcracker.project.model.embeddable.Statistics;
 
-import java.util.Map;
+import java.util.Set;
 
 public interface Statistical {
-    Map<Result, Competition> getStatistics();
+    Set<Statistics> getStatistics();
 }

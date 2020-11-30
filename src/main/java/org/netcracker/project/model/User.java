@@ -2,6 +2,7 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.embeddable.Statistics;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
@@ -75,8 +76,12 @@ public class User implements UserDetails, Statistical {
     @Enumerated(EnumType.STRING)
     private Set<Result> result = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Map<Result, Competition> statistics = new HashMap<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "user_statistics",
+            joinColumns = @JoinColumn(name = "statfk")
+    )
+    private Set<Statistics> statistics = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

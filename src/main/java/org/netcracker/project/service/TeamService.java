@@ -6,6 +6,7 @@ import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.RegisteredTeam;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.embeddable.Statistics;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.repository.TeamRepository;
 import org.netcracker.project.util.ImageUtils;
@@ -169,7 +170,7 @@ public class TeamService {
 
     public void gradeTeam(RegisteredTeam registeredTeam, Result result, Competition competition) {
         Team team = repository.findById(registeredTeam.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        team.getStatistics().put(result, competition);
+        team.getStatistics().add(new Statistics(result, competition.getId()));
         repository.save(team);
     }
 }

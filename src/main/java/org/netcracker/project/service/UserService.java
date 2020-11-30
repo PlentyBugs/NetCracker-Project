@@ -5,6 +5,7 @@ import org.netcracker.project.model.Competition;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleUser;
+import org.netcracker.project.model.embeddable.Statistics;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
@@ -251,7 +252,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void gradeUser(User user, Result result, Competition competition) {
-        user.getStatistics().put(result, competition);
+        user.getStatistics().add(new Statistics(result, competition.getId()));
         repository.save(user);
     }
 }

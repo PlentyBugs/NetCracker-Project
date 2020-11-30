@@ -3,6 +3,7 @@ package org.netcracker.project.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.embeddable.Statistics;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.model.interfaces.Statistical;
@@ -56,13 +57,12 @@ public class Team implements Serializable, Statistical {
     @JsonIgnore
     private Set<Competition> competitionHistory = new HashSet<>();
 
-    // Надо решить проблему с ленивой подгрузкой
-    @ManyToMany(fetch = FetchType.EAGER)
-    @CollectionTable(name = "team_statistics", joinColumns = @JoinColumn(name = "team_id"))
-    @MapKeyColumn(name = "result")
-    @MapKeyEnumerated(EnumType.STRING)
-    private Map<Result, Competition> statistics = new HashMap<>();
-    //private Set<Competition> statistics = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "team_statistics",
+            joinColumns = @JoinColumn(name = "statfk")
+    )
+    private Set<Statistics> statistics = new HashSet<>();
 
     // Сюда роли добавляются при изменении (добавлении, обновлении) команды через post/put запросы, т.е. это никак не связано с usr_team_role таблицей
     // Так как пользователь, возможно не хочет вступать в команду со всеми его ролями
