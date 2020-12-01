@@ -15,15 +15,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,12 +75,16 @@ public class TeamService {
      * @param team - сохраняемая команда
      * @param logo - Файл с логотипом команды
      * @param user - Пользователь, который создал команду
+     * @param users - Приглашенные пользователи
      * @return - Булево значение, true - если команда удачно сохранена
      * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
      */
-    public boolean save(Team team, MultipartFile logo, User user) throws IOException {
-        saveLogo(team,logo);
+    public boolean save(Team team, MultipartFile logo, User user, Set<User> users) throws IOException {
+        saveLogo(team, logo);
         team.setOrganizer(user);
+        if (users != null) {
+            team.getTeammates().addAll(users);
+        }
         createGroupChat(team);
         repository.save(team);
         return true;
@@ -137,7 +140,9 @@ public class TeamService {
         String groupChatId = UUID.randomUUID().toString();
         team.setGroupChatId(groupChatId);
         String adminId = team.getOrganizer().getId().toString();
-        roomService.createGroupRoomWithGivenChatId(adminId, Set.of(adminId), team.getTeamName(), groupChatId);
+        Set<String> participants = team.getTeammates().stream().map(User::getId).map(Object::toString).collect(Collectors.toSet());
+        participants.add(adminId);
+        roomService.createGroupRoomWithGivenChatId(adminId, participants, team.getTeamName(), groupChatId);
     }
 
     /**

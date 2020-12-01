@@ -6,10 +6,10 @@
         <nav aria-label="...">
             <ul class="pagination col justify-content-center">
                 <li th:if="${pageNumber > 0}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
-                    <a class="page-link" th:href="${url} + '?page=' + ${pageNumber - 1} + '&filter=' + ${filter}"><span class="sr-only"><-</span></a>
+                    <a class="page-link" th:href="${url} + '?page=' + ${pageNumber - 1} + '&filter=' + ${filter}"><i class="fa fa-arrow-left"></i></a>
                 </li>
                 <li th:if="${pageNumber < totalPages - 1}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
-                    <a class="page-link" th:href="${url} + '?page=' + ${pageNumber + 1} + '&filter=' + ${filter}"><span class="sr-only">-></span></a>
+                    <a class="page-link" th:href="${url} + '?page=' + ${pageNumber + 1} + '&filter=' + ${filter}"><i class="fa fa-arrow-right"></i></a>
                 </li>
             </ul>
         </nav>

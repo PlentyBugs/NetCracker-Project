@@ -43,8 +43,8 @@ public class TeamController {
     ){
         teamFilter.validate();
         Page<Team> teams = service.getPage(pageable, teamFilter, user);
-        model.addAttribute("page",teams);
-        model.addAttribute("add","/team");
+        model.addAttribute("page", teams);
+        model.addAttribute("url","/team");
         model.addAttribute("filter", teamFilter);
         return "team-list";
     }
@@ -64,16 +64,18 @@ public class TeamController {
             model.addAttribute(team);
             return "/add-team";
         }
-        if (users != null) team.getTeammates().addAll(users);
-        service.save(team, logo, user);
+        service.save(team, logo, user, users);
         return "redirect:/team";
     }
 
     @GetMapping("/{id}")
     public String getTeam(
+            @AuthenticationPrincipal User user,
             @PathVariable("id") Team team,
-            Model model)
-    {
+            Model model
+    ) {
+        Long userId = user.getId();
+        model.addAttribute("in", team.getTeammates().stream().map(User::getId).anyMatch(e -> e.equals(userId)));
         statisticsUtil.putStatisticsInModel(team, model);
         return "team";
     }

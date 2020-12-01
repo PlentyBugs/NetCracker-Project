@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
+import java.util.Set;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +56,7 @@ public class TeamServiceTest {
         User user = new User();
         user.setId(3L);
 
-        assertTrue(teamService.save(team,logo,user));
+        assertTrue(teamService.save(team, logo, user, Set.of()));
         verify(teamRepository,times(1)).save(team);
     }
     @Test
