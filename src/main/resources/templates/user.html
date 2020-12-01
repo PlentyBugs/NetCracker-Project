@@ -16,9 +16,7 @@
                     </div>
                     <h6 class="text-center">Your roles</h6>
                     <div id="current-team-roles">
-
                     </div>
-
                     <button type="button" class="btn btn-warning btn-block mt-3" onclick="saveUserRoles();" id="update-roles-button">Save changes</button>
                 </div>
             </div>
@@ -28,6 +26,7 @@
     <div id="upload-image-modal-container"></div>
 
     <div class="container">
+        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'" id="user-full-name" class="text-center"></h3>
         <div class="row mb-3">
             <div class="col-sm-2">
                 <div class="image-uploadable-container unselectable" id="image-uploadable-container-id">
@@ -38,11 +37,9 @@
                     <button type="button" class="btn btn-primary write-button rounded-0" id="write-button-user" th:data-recipientId="${user.id}">Write</button>
                 </div>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-4">
+                <div class="row py-2"></div>
                 <div class="row">
-                    <div class="col-sm-8">
-                        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'" id="user-full-name"></h3>
-                    </div>
                     <div class="col-sm-8" id="user-team-roles">
                         <i class="fa fa-plus add-plus" data-toggle='modal' data-target='#add-team-role'></i><span class="ml-2 mr-2" id="team-roles-header">Team roles:</span>
                         <th:block th:each="role : ${user.teamRoles}">
@@ -86,6 +83,17 @@
                     </div>
                 </div>
             </div>
+                <div class="col d-flex justify-content-center">
+                <div class="d-none" id="winCount" th:data-winCount="${winCount}"></div>
+                <div class="d-none" id="secondCount" th:data-secondCount="${secondCount}"></div>
+                <div class="d-none" id="thirdCount" th:data-thirdCount="${thirdCount}"></div>
+                <div class="d-none" id="spotted" th:data-spotted="${spotted}"></div>
+                        <div class="card bg-dark">
+                            <div class="card-body">
+                                <canvas id="chDonut"></canvas>
+                        </div>
+                    </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm">
@@ -110,21 +118,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="d-none" id="winCount" th:data-winCount="${winCount}"></div>
-        <div class="d-none" id="secondCount" th:data-secondCount="${secondCount}"></div>
-        <div class="d-none" id="thirdCount" th:data-thirdCount="${thirdCount}"></div>
-        <div class="d-none" id="spotted" th:data-spotted="${spotted}"></div>
-        <div class="row d-flex justify-content-center py-2">
-        <div class="col-md-6 py-1">
-            <div class="card bg-dark">
-                <div class="card-body">
-                 <canvas id="chDonut"></canvas>
-                </div>
-            </div>
-        </div>
-
-       </div>
     </div>
     <link th:href="@{/js/libs/croppr.min.css/}" rel="stylesheet" />
     <script th:src="@{/js/libs/croppr.min.js/}"></script>
