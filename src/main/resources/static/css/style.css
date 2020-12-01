@@ -531,3 +531,9 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 .mw-100 {
     max-width: 100% !important;
 }
+
+.user-list-container {
+    max-height: 30vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

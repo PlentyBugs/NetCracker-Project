@@ -11,7 +11,7 @@
                 <form enctype="multipart/form-data" th:action="@{/team}" method="post" th:object="${team}">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input th:value="${team != null} ? *{teamName}: ''" type="text" class="form-control"  name="teamName" id="teamName" placeholder="Team name" th:classappend="${team != null and #fields.hasErrors('teamName')} ? 'is-invalid': ''"//>
+                            <input th:value="${team != null} ? *{teamName}: ''" type="text" class="form-control"  name="teamName" id="teamName" placeholder="Team name" th:classappend="${team != null and #fields.hasErrors('teamName')} ? 'is-invalid': ''" />
                             <span class="invalid-feedback" th:if="${team != null and #fields.hasErrors('teamName')}" th:errors="*{teamName}"></span>
                         </div>
                     </div>
@@ -19,6 +19,14 @@
                         <input type="file" class="custom-file-input" id="customFile" name="logo" accept="image/png, image/jpeg"/>
                         <label class="custom-file-label file-label" for="customFile">Choose logo</label>
                     </div>
+
+                    <input type="text" class="form-control mt-3 mb-3" placeholder="User" id="user-list-input" autocomplete="off" autocapitalize="off" />
+                    <div class="container user-list-container" id="team-invite-users" data-input-class="invited-user" data-input-id-suffix="invited">
+
+                    </div>
+
+                    <div id="invited-users-container"></div>
+
                     <div class="form-group row mt-3">
                         <button type="submit" class="btn btn-dark btn-lg btn-block button-form">Add new Team</button>
                     </div>
@@ -26,5 +34,9 @@
             </div>
         </div>
     </div>
+
+    <script th:src="@{/js/userSearch.js}"></script>
+    <script th:src="@{/js/addTeam.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
     <!---->
 </div></html>

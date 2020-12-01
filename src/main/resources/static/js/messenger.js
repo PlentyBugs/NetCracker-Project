@@ -25,7 +25,8 @@ function processCheckboxes(checkboxes) {
     let userIds = [];
     for (let checkbox of checkboxes) {
         if ($(checkbox).is(':checked')) {
-            userIds.push($(checkbox).attr("data-user-id"));
+            console.log(checkbox);
+            userIds.push($(checkbox).data("user-id"));
         }
     }
     return userIds;
@@ -339,8 +340,10 @@ $(() => {
     if (startChatId !== "") {
         showChat(startChatId, startIsGroup);
     }
-
-    $("#chats").outerHeight($("#chat-block").outerHeight());
+    let $chats = $("#chats");
+    let $chat = $("#chat-block");
+    $chats.outerHeight($chat.outerHeight())
+    $(window).resize(() => $chats.outerHeight($chat.outerHeight()));
 
     let addGroupClassButton = $("#add-group-class-button");
     let chatSearchHeight = chatSearch.outerHeight();

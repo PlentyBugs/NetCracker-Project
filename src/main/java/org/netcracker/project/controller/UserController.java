@@ -3,12 +3,14 @@ package org.netcracker.project.controller;
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleTeam;
+import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.service.UserService;
 import org.netcracker.project.util.StatisticsUtil;
 import org.netcracker.project.util.ValidationUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
@@ -117,5 +119,11 @@ public class UserController {
     @ResponseBody
     public Set<SimpleTeam> getTeams(@PathVariable("id") User user) {
         return user.getTeams().stream().map(SimpleTeam::of).collect(Collectors.toSet());
+    }
+
+    @GetMapping(value = "/simple", produces = "application/json")
+    @ResponseBody
+    public Set<SimpleUser> getAllSimpleUsers() {
+        return userService.findAllSimpleUsers();
     }
 }

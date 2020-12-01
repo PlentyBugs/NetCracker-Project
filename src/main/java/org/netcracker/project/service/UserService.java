@@ -2,7 +2,6 @@ package org.netcracker.project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.netcracker.project.model.Competition;
-import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.dto.SimpleUser;
 import org.netcracker.project.model.embeddable.Statistics;
@@ -31,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -254,5 +254,9 @@ public class UserService implements UserDetailsService {
     public void gradeUser(User user, Result result, Competition competition) {
         user.getStatistics().add(new Statistics(result, competition.getId()));
         repository.save(user);
+    }
+
+    public Set<SimpleUser> findAllSimpleUsers() {
+        return repository.findAll().stream().map(SimpleUser::of).collect(Collectors.toSet());
     }
 }

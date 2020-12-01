@@ -181,7 +181,6 @@ public class RoomService {
         model.addAttribute("groupChats", findAllGroupRoomsByUser(user));
         model.addAttribute("recipientUsernames", findAllUsernamesMapBySender(user));
         model.addAttribute("senderUsernames", findAllUsernamesMapByRecipient(user));
-        model.addAttribute("userList", userService.findAll());
     }
 
     /**

@@ -10,17 +10,10 @@
                     <input type="text" class="form-control mb-1" placeholder="Group chat name" id="group-chat-name" autocomplete="off" autocapitalize="off" />
                     <input type="text" class="form-control mb-3" placeholder="User" id="user-list-input" autocomplete="off" autocapitalize="off" />
 
-                    <div class="container" id="messenger-modal-body-users">
-                        <th:block th:each="user : ${userList}">
-                            <div class="row m-2 user-modal" style="display: flow-root">
-                                <label th:for="${user.id} + 'chosen'" th:data-id="${user.id}" class="user-modal-checkbox">
-                                    <span th:text="${user.getFullNameWithUsername()}"></span>
-                                    <input type="checkbox" th:id="${user.id} + 'chosen'" th:data-user-id="${user.id}" class="user-modal-checkbox user-modal-checkbox-input">
-                                    <span class="user-modal-checkbox-mark"></span>
-                                </label>
-                            </div>
-                        </th:block>
+                    <div class="container user-list-container" id="messenger-modal-body-users" data-input-class="user-modal-checkbox-input" data-input-id-suffix="chosen">
+
                     </div>
+
                     <button type="button" class="btn btn-block btn-warning" onclick="createGroupChat();">Create</button>
                 </div>
             </div>
@@ -35,17 +28,10 @@
                 <div class="modal-body" id="add-new-user-modal-body">
                     <input type="text" class="form-control mb-3" placeholder="User" id="user-list-input-add-new-user" autocomplete="off" autocapitalize="off" />
 
-                    <div class="container" id="messenger-modal-body-users-add-new-user">
-                        <th:block th:each="user : ${userList}">
-                            <div class="row m-2 user-modal-add-new-user" style="display: flow-root">
-                                <label th:for="${user.id} + '-added-and-chosen'" th:data-id="${user.id}" class="user-modal-checkbox">
-                                    <span th:text="${user.getFullNameWithUsername()}"></span>
-                                    <input type="checkbox" th:id="${user.id} + '-added-and-chosen'" th:data-user-id="${user.id}" class="user-modal-checkbox user-modal-checkbox-input-add-new-user">
-                                    <span class="user-modal-checkbox-mark"></span>
-                                </label>
-                            </div>
-                        </th:block>
+                    <div class="container user-list-container" id="messenger-modal-body-users-add-new-user" data-input-class="user-modal-checkbox-input-add-new-user" data-input-id-suffix="-added-and-chosen">
+
                     </div>
+
                     <button type="button" class="btn btn-block btn-warning" onclick="addUsersToGroupChat();">Add</button>
                 </div>
             </div>
@@ -76,6 +62,7 @@
     </div>
 
     <script th:src="@{/js/websocketUtil.js}"></script>
+    <script th:src="@{/js/userSearch.js}"></script>
     <script th:src="@{/js/messenger.js}"></script>
     <script th:src="@{/js/utils.js}"></script>
 

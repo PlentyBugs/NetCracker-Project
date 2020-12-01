@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.TeamFilter;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
-import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.service.TeamService;
 import org.netcracker.project.util.StatisticsUtil;
@@ -54,18 +53,19 @@ public class TeamController {
     public String addTeam(
             @AuthenticationPrincipal User user,
             @RequestParam ("logo") MultipartFile logo,
+            @RequestParam(value = "invited-user", required = false) Set<User> users,
             Model model,
             @Valid Team team,
             BindingResult bindingResult
-    )
-        throws IOException{
-            if(bindingResult.hasErrors()){
-                Map<String,String> errors = ValidationUtils.getErrors(bindingResult);
-                model.mergeAttributes(errors);
-                model.addAttribute(team);
-                return "/add-team";
-            }
-            service.save(team, logo, user);
+    ) throws IOException{
+        if(bindingResult.hasErrors()){
+            Map<String,String> errors = ValidationUtils.getErrors(bindingResult);
+            model.mergeAttributes(errors);
+            model.addAttribute(team);
+            return "/add-team";
+        }
+        if (users != null) team.getTeammates().addAll(users);
+        service.save(team, logo, user);
         return "redirect:/team";
     }
 

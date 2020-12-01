@@ -18,7 +18,3 @@ Array.prototype.remove = function() {
     }
     return this;
 };
-
-function uploadImage() {
-
-}

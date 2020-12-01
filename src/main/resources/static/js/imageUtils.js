@@ -1,24 +1,24 @@
 $(() => {
     $("#upload-image-modal-container").append(
         "<div class='modal fade' id='upload-image-modal' tabindex='-1' role='dialog' aria-hidden='true'>" +
-        "        <div class='modal-dialog' role='document'>" +
-        "            <div class='modal-content bg-dark'>" +
-        "                <div class='modal-header text-center d-block'>" +
-        "                    <h5 class='modal-title'>Upload Image</h5>" +
+        "    <div class='modal-dialog' role='document'>" +
+        "        <div class='modal-content bg-dark'>" +
+        "            <div class='modal-header text-center d-block'>" +
+        "                <h5 class='modal-title'>Upload Image</h5>" +
+        "            </div>" +
+        "            <div class='modal-body' id='upload-image-body'>" +
+        "                <div class='custom-file'>" +
+        "                    <input type='file' class='custom-file-input' id='upload-image-input' name='title' accept='image/png, image/jpeg'/>" +
+        "                    <label class='custom-file-label file-label' for='customFile'>Upload image</label>" +
         "                </div>" +
-        "                <div class='modal-body' id='upload-image-body'>" +
-        "                    <div class='custom-file'>" +
-        "                        <input type='file' class='custom-file-input' id='upload-image-input' name='title' accept='image/png, image/jpeg'/>" +
-        "                        <label class='custom-file-label file-label' for='customFile'>Upload image</label>" +
-        "                    </div>" +
-        "                    <div class='alert-danger d-none' id='upload-image-alert'>Image is too big</div>" +
-        "                    <div class='w-100' id='upload-image-preview'>" +
-        "                       <div class='mw-100' id='upload-image-result'></div>" +
-        "                    </div>" +
+        "                <div class='alert-danger d-none' id='upload-image-alert'>Image is too big</div>" +
+        "                <div class='w-100' id='upload-image-preview'>" +
+        "                   <div class='mw-100' id='upload-image-result'></div>" +
         "                </div>" +
         "            </div>" +
         "        </div>" +
-        "    </div>"
+        "    </div>" +
+        "</div>"
     );
 
     let imageInput = $("#upload-image-input"),
