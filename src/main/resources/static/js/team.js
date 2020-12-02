@@ -1,5 +1,5 @@
 let teamId = $("#team-name-header").data("team-id");
-let url = document.URL.match(/(https?:\/\/.+?\/)\/?.*/)[1];
+let url = getUrl();
 let inviteButton = $("#invite-button-modal");
 
 function inviteUsers() {

@@ -39,7 +39,7 @@ public class TeamControllerTest {
     public void getAllTeamsTest() throws Exception {
         mockMvc.perform(get("/team"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@class='card-body']").nodeCount(3));
+                .andExpect(xpath("//img[@class='user-image-sm']").nodeCount(3));
     }
     @Test
     public void addTeamTest() throws Exception {

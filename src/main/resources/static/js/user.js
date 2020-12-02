@@ -71,4 +71,11 @@ $(() => {
     for (let role of currentTeamRoles) {
         addRole($(role).data("role"), $(role).data("role-id"));
     }
+
+    let inviteButton = $("#invite-user-button");
+    inviteButton.outerWidth(userAvatar.outerWidth());
+    let userId = inviteButton.data("user-id");
+    let teams = loadTeamsByUserId($("#zzz").attr("value"));
+    let teamBlock = $(buildInviteButton(teams, userId, inviteButton));
+    inviteButton.after(teamBlock);
 });
