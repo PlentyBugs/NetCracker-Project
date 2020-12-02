@@ -25,7 +25,6 @@ function processCheckboxes(checkboxes) {
     let userIds = [];
     for (let checkbox of checkboxes) {
         if ($(checkbox).is(':checked')) {
-            console.log(checkbox);
             userIds.push($(checkbox).data("user-id"));
         }
     }

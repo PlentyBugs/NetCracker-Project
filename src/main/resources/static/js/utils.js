@@ -8,6 +8,18 @@ function filter(filter, items) {
     }
 }
 
+function inviteUser(userId, teamId, url) {
+    let token = $('#_csrf').attr('content');
+    let header = $('#_csrf_header').attr('content');
+    $.ajax({
+        type: 'PUT',
+        url: url + "team/" + teamId + "/invite/" + userId,
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        async: true,
+        cache: false
+    });
+}
+
 Array.prototype.remove = function() {
     let what, a = arguments, L = a.length, ax;
     while (L && this.length) {

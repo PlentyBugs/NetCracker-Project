@@ -1,15 +1,3 @@
-function inviteUser(userId, teamId, url) {
-    let token = $('#_csrf').attr('content');
-    let header = $('#_csrf_header').attr('content');
-    $.ajax({
-        type: 'PUT',
-        url: url + "team/" + teamId + "/invite/" + userId,
-        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
-        async: true,
-        cache: false
-    });
-}
-
 $(() => {
     let userListContainer = $("#userList");
     let url = document.URL.match(/(https?:\/\/.+?\/)\/?.*/)[1];
