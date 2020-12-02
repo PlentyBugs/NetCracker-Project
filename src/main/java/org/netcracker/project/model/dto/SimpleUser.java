@@ -11,6 +11,7 @@ public class SimpleUser {
     String name;
     String surname;
     String username;
+    String avatarFilename;
 
     public static SimpleUser of(User user) {
         return SimpleUser.builder()
@@ -18,6 +19,7 @@ public class SimpleUser {
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
+                .avatarFilename(user.getAvatarFilename())
                 .build();
     }
 }

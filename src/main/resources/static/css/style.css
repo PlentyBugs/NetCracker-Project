@@ -537,3 +537,38 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.user-image-sm {
+    width: 15rem !important;
+    height: 15rem !important;
+}
+
+.btn-card-group {
+    border-radius: 0 !important;
+}
+
+.card-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.brick {
+    width: 15rem;
+    height: auto;
+    min-height: 15rem;
+    max-height: 25rem;
+    margin: 0.2rem;
+}
+
+.brick-image-bottom {
+    width: 100%;
+    height: auto;
+    margin-bottom: auto;
+}
+
+.teams-dropdown {
+    max-height: 30vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

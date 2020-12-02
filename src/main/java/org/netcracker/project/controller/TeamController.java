@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -126,6 +127,17 @@ public class TeamController {
             }
         }
         return "redirect:/team/{id}";
+    }
+
+    @Async
+    @PutMapping(value = "/{id}/invite/{userId}")
+    @ResponseBody
+    public void inviteUser(
+            @PathVariable("id") Team team,
+            @PathVariable("userId") User user
+    ) {
+        // Тут возможно расширение и изменение, если вдруг будет добавлена система именно приглашений, а не просто добавления в команду
+        service.joinTeam(team, user);
     }
 
     @GetMapping("/name/{id}")

@@ -8,6 +8,9 @@
                 <li th:if="${pageNumber > 0}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
                     <a class="page-link" th:href="${url} + '?page=' + ${pageNumber - 1} + '&filter=' + ${filter}"><i class="fa fa-arrow-left"></i></a>
                 </li>
+                <li class="page-item active">
+                    <span class="page-link" style="line-height: 1em" th:text="${pageNumber + 1}"></span>
+                </li>
                 <li th:if="${pageNumber < totalPages - 1}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
                     <a class="page-link" th:href="${url} + '?page=' + ${pageNumber + 1} + '&filter=' + ${filter}"><i class="fa fa-arrow-right"></i></a>
                 </li>
