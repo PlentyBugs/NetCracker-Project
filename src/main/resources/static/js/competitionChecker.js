@@ -1,5 +1,5 @@
 let organizerId = $("#nnn").attr("value");
-let usrId = $("#mmm").attr("value");
+let usrId = $("#zzz").attr("value");
 let team = $("#team");
 let teams = $.get("/user/team/" + usrId, (data) => teams = data);
 

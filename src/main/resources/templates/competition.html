@@ -140,7 +140,6 @@
             </th:block>
         </div>
     </div>
-    <script th:src="@{/js/websocketUtil.js}"></script>
     <script th:if="${competition.organizer.id != #authentication.principal.id}" th:src="@{/js/competitionChecker.js}"></script>
     <script th:if="${competition.organizer.id == #authentication.principal.id}" th:src="@{/js/competitionAdmin.js}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
