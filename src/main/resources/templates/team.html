@@ -128,7 +128,7 @@
                     </div>
                 </a>
                 <div th:if="${userIdTeamRole.containsKey(user.id)}" class="main-color mb-2">
-                    <h6>Team Roles <i class='fa fa-plus ml-2 add-plus' data-toggle='modal' data-target='#add-team-role-modal'></i></h6>
+                    <h6>Team Roles <i th:if="${user.id == #authentication.principal.id}" class='fa fa-plus ml-2 add-plus' data-toggle='modal' data-target='#add-team-role-modal'></i></h6>
                     <th:block th:each="role : ${userIdTeamRole.get(user.id)}">
                         #<i th:text="${role.toString()} + ' '" class="overflow-hidden"></i>
                     </th:block>

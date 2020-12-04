@@ -3,7 +3,7 @@
         <th:block layout:fragment="pagerContent">
 
         </th:block>
-        <nav aria-label="...">
+        <nav aria-label="..." class="mt-5">
             <ul class="pagination col justify-content-center">
                 <li th:if="${pageNumber > 0}" class="page-item" th:classappend="${p == pageNumber} ? 'disabled': 'active'">
                     <a class="page-link" th:href="${url} + '?page=' + ${pageNumber - 1} + '&filter=' + ${filter}"><i class="fa fa-arrow-left"></i></a>
