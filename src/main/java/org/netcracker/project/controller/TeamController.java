@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.netcracker.project.filter.TeamFilter;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
+import org.netcracker.project.model.embeddable.UserTeamRole;
 import org.netcracker.project.model.enums.Role;
+import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.service.TeamService;
 import org.netcracker.project.util.StatisticsUtil;
 import org.netcracker.project.util.ValidationUtils;
@@ -24,6 +26,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -77,6 +81,19 @@ public class TeamController {
     ) {
         Long userId = user.getId();
         model.addAttribute("in", team.getTeammates().stream().map(User::getId).anyMatch(e -> e.equals(userId)));
+
+        Set<UserTeamRole> userTeamRoles = team.getUserTeamRoles();
+        Map<Long, Set<TeamRole>> userIdTeamRole = new HashMap<>();
+        for (UserTeamRole utr : userTeamRoles) {
+            Long id = utr.getUserId();
+            Set<TeamRole> teamRoleSet = userIdTeamRole.getOrDefault(id, new HashSet<>());
+            teamRoleSet.add(utr.getTeamRole());
+            userIdTeamRole.put(id, teamRoleSet);
+        }
+        model.addAttribute("userIdTeamRole", userIdTeamRole);
+        model.addAttribute("userHasTeamRoles", userIdTeamRole.containsKey(userId));
+        model.addAttribute("userTeamRolesInTeam", userIdTeamRole.get(userId));
+
         statisticsUtil.putStatisticsInModel(team, model);
         return "team";
     }
@@ -138,6 +155,19 @@ public class TeamController {
     ) {
         // Тут возможно расширение и изменение, если вдруг будет добавлена система именно приглашений, а не просто добавления в команду
         service.joinTeam(team, user);
+    }
+
+    @Async
+    @PutMapping(value = "/{id}/role/{userId}", consumes = "application/json")
+    @ResponseBody
+    public void saveTeamRoles(
+            @AuthenticationPrincipal User authUser,
+            @PathVariable("id") Team team,
+            @PathVariable("userId") User user,
+            @RequestBody Set<TeamRole> teamRoles
+    ) {
+        if (!user.getId().equals(authUser.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        service.saveTeamRolesByUser(team, user, teamRoles);
     }
 
     @GetMapping("/name/{id}")

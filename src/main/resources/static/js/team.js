@@ -7,16 +7,36 @@ function inviteUsers() {
     for (let checkbox of checkboxes) {
         if ($(checkbox).is(":checked")) {
             inviteUser($(checkbox).data('user-id'), teamId, url);
-            inviteButton.text("Invited");
-            inviteButton.removeClass("btn-warning");
-            inviteButton.addClass("btn-success");
-            setTimeout(() => {
-                inviteButton.text("Invite");
-                inviteButton.removeClass("btn-success");
-                inviteButton.addClass("btn-warning");
-            }, 1500);
+            playSuccessButtonAnimation(inviteButton, "Invite", "Invited");
         }
     }
+}
+
+function addTeamRoles() {
+    let token = $('#_csrf').attr('content');
+    let header = $('#_csrf_header').attr('content');
+    let checkboxes = $(".team-role-checkbox");
+    let button = $("#add-team-role-button");
+    let teamId = button.data("team-id");
+    let userId = button.data("user-id");
+    let teamRoles = []
+    for (let checkbox of checkboxes) {
+        if ($(checkbox).is(":checked")) {
+            teamRoles.push($(checkbox).data("team-role"));
+        }
+    }
+    playSuccessButtonAnimation(button, "Add team roles");
+
+    $.ajax({
+        type: 'PUT',
+        beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+        url: url + "team/" + teamId + "/role/" + userId,
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(teamRoles),
+        async: true,
+        cache: false
+    });
 }
 
 $(() => {

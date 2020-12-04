@@ -22,6 +22,30 @@
         </div>
     </div>
 
+    <div th:if="${in}" class="modal fade" id="add-team-role-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-dark">
+                <div class="modal-header text-center d-block">
+                    <h5 class="modal-title" id="add-team-role-modal-header">Add Team Roles</h5>
+                </div>
+                <div class="modal-body" id="add-team-role-modal-body">
+                    <h5>Your team roles</h5>
+                    <input type="text" class="form-control" placeholder="Team Role" id="add-team-role-input" autocomplete="off" autocapitalize="off" />
+                    <div th:each="role : ${#authentication.principal.teamRoles}">
+                        <div class="row m-2" style="display: flow-root">
+                            <label th:for="${role} + 'id'" class="user-modal-checkbox">
+                                <span th:text="${#strings.capitalize(role.toString())}"></span>
+                                <input type="checkbox" th:id="${role} + 'id'" th:data-team-role="${role.name()}" class="user-modal-checkbox team-role-checkbox" th:checked="${userTeamRolesInTeam.contains(role)}"/>
+                                <span class="user-modal-checkbox-mark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-block btn-warning" id="add-team-role-button" th:data-team-id="${team.id}" th:data-user-id="${#authentication.principal.id}" onclick="addTeamRoles();">Add team roles</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container mb-3 text-center">
         <div class="row">
             <div class="col-sm-3">
@@ -101,9 +125,17 @@
                     <div class="card-header" th:text="${user.surname} + ' ' + ${user.name} + ' (' + ${user.username} + ')'">Full name</div>
                     <div class="card-body">
                         <img th:src="@{/img/} + ${user.avatarFilename}" style="width: 100px; height: auto;" class="card-img-top" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
-                        <!--                    <h5 class="card-title">Тут можно написать главную командную роль этого человека</h5>-->
                     </div>
                 </a>
+                <div th:if="${userIdTeamRole.containsKey(user.id)}" class="main-color mb-2">
+                    <h6>Team Roles <i class='fa fa-plus ml-2 add-plus' data-toggle='modal' data-target='#add-team-role-modal'></i></h6>
+                    <th:block th:each="role : ${userIdTeamRole.get(user.id)}">
+                        #<i th:text="${role.toString()} + ' '" class="overflow-hidden"></i>
+                    </th:block>
+                </div>
+                <div th:if="${user.id == #authentication.principal.id}" th:unless="${userHasTeamRoles}">
+                    <button type="button" class="btn btn-warning btn-block" data-toggle='modal' data-target='#add-team-role-modal'>Add Team Roles</button>
+                </div>
                 <button type="button" class="btn btn-primary btn-block write-button" th:data-recipientId="${user.id}">Write</button>
             </div>
         </th:block>

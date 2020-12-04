@@ -24,6 +24,18 @@ function inviteUser(userId, teamId, url) {
     });
 }
 
+function playSuccessButtonAnimation(button, commonText, successText = "Success", timeout = 1500, commonClass = "btn-warning", successClass = "btn-success") {
+    button = $(button);
+    button.text(successText);
+    button.removeClass(commonClass);
+    button.addClass(successClass);
+    setTimeout(() => {
+        button.text(commonText);
+        button.removeClass(successClass);
+        button.addClass(commonClass);
+    }, timeout);
+}
+
 function buildInviteButton(teams, userId, inviteButton) {
     let url = getUrl();
     let teamBlock = $("<div class='teams-dropdown d-none btn-group-vertical'></div>");
@@ -32,14 +44,7 @@ function buildInviteButton(teams, userId, inviteButton) {
         let t = $("<button type='button' class='btn btn-warning btn-block team-in-dropdown-" + userId + "'>" + team.teamName + "</button>");
         t.click(() => {
             inviteUser(userId, team.id, url);
-            t.text("Invited");
-            t.removeClass("btn-warning");
-            t.addClass("btn-success");
-            setTimeout(() => {
-                t.text(team.teamName);
-                t.removeClass("btn-success");
-                t.addClass("btn-warning");
-            }, 1500);
+            playSuccessButtonAnimation(t, team.teamName, "Invited");
         });
         teamBlock.append(t);
     }

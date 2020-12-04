@@ -56,6 +56,10 @@ body {
     flex-shrink: 0;
 }
 
+.main-color {
+    color: #ffc107;
+}
+
 .flex_checkbox {
     margin-top: auto;
     margin-bottom: auto;

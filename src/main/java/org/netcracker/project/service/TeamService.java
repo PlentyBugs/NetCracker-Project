@@ -7,7 +7,9 @@ import org.netcracker.project.model.RegisteredTeam;
 import org.netcracker.project.model.Team;
 import org.netcracker.project.model.User;
 import org.netcracker.project.model.embeddable.Statistics;
+import org.netcracker.project.model.embeddable.UserTeamRole;
 import org.netcracker.project.model.enums.Result;
+import org.netcracker.project.model.enums.TeamRole;
 import org.netcracker.project.repository.TeamRepository;
 import org.netcracker.project.util.ImageUtils;
 import org.netcracker.project.util.SecurityUtils;
@@ -176,6 +178,17 @@ public class TeamService {
     public void gradeTeam(RegisteredTeam registeredTeam, Result result, Competition competition) {
         Team team = repository.findById(registeredTeam.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         team.getStatistics().add(new Statistics(result, competition.getId()));
+        repository.save(team);
+    }
+
+    public void saveTeamRolesByUser(Team team, User user, Set<TeamRole> teamRoles) {
+        Set<UserTeamRole> userTeamRoles = new HashSet<>(team.getUserTeamRoles());
+        Long userId = user.getId();
+        userTeamRoles.removeIf(utr -> utr.getUserId().equals(userId));
+        for (TeamRole teamRole : teamRoles) {
+            userTeamRoles.add(new UserTeamRole(userId, teamRole));
+        }
+        team.setUserTeamRoles(userTeamRoles);
         repository.save(team);
     }
 }
