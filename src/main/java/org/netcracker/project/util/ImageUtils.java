@@ -70,6 +70,11 @@ public class ImageUtils {
         return "";
     }
 
+    /**
+     * Метод, который используется для создания загрузочной директории
+     * И для генерации уникальных UUID для файлов
+     * @return - сгенерированный UUID
+     */
     private String createFile() {
         File uploadDir = new File(uploadPath);
 

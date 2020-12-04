@@ -245,17 +245,32 @@ public class UserService implements UserDetailsService {
         return repository.findAll();
     }
 
+    /**
+     * Метод, который используется для изменения командных ролей пользователя
+     * @param user - Пользователь, чьи командные роли меняют
+     * @param roles - Множество командных ролей, на которые будет заменено текущее множество командных ролей пользователя
+     */
     public void updateUserRoles(User user, Set<TeamRole> roles) {
         user.setTeamRoles(roles);
         repository.save(user);
         securityUtils.updateContext(user);
     }
 
+    /**
+     * Метод, который используется для оценки участия пользователя в соревновании
+     * @param user - Оцениваемый пользователь
+     * @param result - Результат, который будет присужден по итогам соревнования
+     * @param competition - Соревнование, за которое оценивается пользователь
+     */
     public void gradeUser(User user, Result result, Competition competition) {
         user.getStatistics().add(new Statistics(result, competition.getId()));
         repository.save(user);
     }
 
+    /**
+     * Иетод, который используется для получения списка всех пользователей в упрощенном формате SimpleUser
+     * @return - Множество всех пользователей в формате SimpleUser
+     */
     public Set<SimpleUser> findAllSimpleUsers() {
         return repository.findAll().stream().map(SimpleUser::of).collect(Collectors.toSet());
     }

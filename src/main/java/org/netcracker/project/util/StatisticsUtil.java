@@ -10,6 +10,12 @@ import java.util.Set;
 @Component
 public class StatisticsUtil {
 
+    /**
+     * Метод, который используется для подсчета статистики объекта, который
+     * реализует интерфейс Statistical и кладет в Model результаты подсчета
+     * @param statistical - Объект, реализующий интерфейс Statistical, чья статистика будет подсчитываться
+     * @param model - Объект Model, в который будут положены переменные, необходимые для генерации страницы
+     */
     public void putStatisticsInModel(Statistical statistical, Model model) {
         int winCount = 0;
         int secondCount = 0;
