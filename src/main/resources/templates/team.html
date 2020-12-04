@@ -35,7 +35,7 @@
                         <div class="row m-2" style="display: flow-root">
                             <label th:for="${role} + 'id'" class="user-modal-checkbox">
                                 <span th:text="${#strings.capitalize(role.toString())}"></span>
-                                <input type="checkbox" th:id="${role} + 'id'" th:data-team-role="${role.name()}" class="user-modal-checkbox team-role-checkbox" th:checked="${userTeamRolesInTeam.contains(role)}"/>
+                                <input type="checkbox" th:id="${role} + 'id'" th:data-team-role="${role.name()}" class="user-modal-checkbox team-role-checkbox" th:checked="${userTeamRolesInTeam != null and userTeamRolesInTeam.contains(role)}"/>
                                 <span class="user-modal-checkbox-mark"></span>
                             </label>
                         </div>
