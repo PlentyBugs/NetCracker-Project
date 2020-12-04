@@ -21,11 +21,29 @@ public class RegistrationController {
 
     private final UserService userService;
 
+    /**
+     * Принимает GET запросы на url: URL/registration
+     * Используется для генерации страницы с регистрацией
+     * @return - Страница с регистрацией
+     */
     @GetMapping("/registration")
     public String registration() {
         return "registration";
     }
 
+    /**
+     * Принимает POST запросы на url: URL/registration
+     * Используется для регистрации пользователя
+     * @param password2 - Пароль, который используется для подтверждения на случай случайной ошибки ввода пароля
+     * @param roles - Множество ролей Role, с которыми пользователь регистрируется на сайте
+     * @param user - Новый пользователь с проверкой полей на валидность
+     * @param bindingResult - Объект BindingResult, содержащий информацию об ошибках в полях user
+     * @param model - Объект Model, в который будут помещены переменные для генерации страницы.
+     *             Пример: ошибки и сообщения с ошибками в случае ошибок при заполнении формы пользователя
+     * @return - При удачно регистрации перенаправляет на страницу /login с сообщением об активационном коде, который был отправлен на email
+     * В случае ошибки при регистрации (ошибка при вводе какого-то из полей или указанный логин уже существует)
+     * возвращает на страницу регистрации с сообщениями о неверных полях
+     */
     @PostMapping("/registration")
     public String addUser(
             @RequestParam("password2") String password2,
@@ -63,6 +81,15 @@ public class RegistrationController {
         return "redirect:/login?activate=true";
     }
 
+    /**
+     * Принимает GET запросы на url: URL/registration/activate/{code}
+     * Метод, который используется для активации пользователя
+     * @param model - Объект Model, в который будут помещены переменные для генерации страницы.
+     * @param code - Код активации пользователя, который был отправлен ему на email
+     * @return - Страницы /login с сообщением:
+     * User successfully activated - если пользователь был успешно активирован
+     * Activation code is not found - если такой код активации не был найден или произошла какая-то ошибка при активации
+     */
     @GetMapping("/registration/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
         String message = userService.activate(code) ? "User successfully activated" : "Activation code is not found";
