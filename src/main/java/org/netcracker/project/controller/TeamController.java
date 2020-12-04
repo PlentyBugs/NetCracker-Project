@@ -39,6 +39,15 @@ public class TeamController {
     private final StatisticsUtil statisticsUtil;
     private final TeamService service;
 
+    /**
+     * Принимает GET запросы на url: URL/team/
+     * Используется для получения страницы со всеми командами
+     * @param user - Пользователь, который совершил запрос
+     * @param model - Объект Model, в который будут переданы переменные, необходимые для генерации страницы
+     * @param teamFilter - Объект TeamFilter, содержащий набор ограничений на команды, которые могут быть отображены на странице
+     * @param pageable - Объект Pageable, содержащий набор настроек и использующийся для пагинации
+     * @return - Страница со списком команд
+     */
     @GetMapping
     public String getAllTeams(
             @AuthenticationPrincipal User user,
@@ -54,6 +63,18 @@ public class TeamController {
         return "team-list";
     }
 
+    /**
+     * Принимает POST запросы на url: URL/team/
+     * Используется для создания и добавления новой команды
+     * @param user - Пользователь, совершивший запрос
+     * @param logo - Объект MultipartFile, содержащий файл-изображения с логотипом команды
+     * @param users - Список приглашенных пользователей, которые будут состоять в команде на момент ее создания, может быть не представлен
+     * @param model - Объект Model, в который будут помещены переменные, необходимые для генерации страницы
+     * @param team - Добавляемая команда с проверкой ее полей на валидность
+     * @param bindingResult - Объект содержащий данные об ошибках в полях объекта team
+     * @return - Перенаправление на страницу со списком команд в случае удачного добавления или возвращение на страницу добавления команды в ином случае
+     * @throws IOException - Исключение, которое может быть выброшено при сохранении логотипа команды
+     */
     @PostMapping
     public String addTeam(
             @AuthenticationPrincipal User user,
@@ -73,6 +94,14 @@ public class TeamController {
         return "redirect:/team";
     }
 
+    /**
+     * Принимает GET запросы на url: URL/team/{id}
+     * Используется для генерации страницы профиля команды
+     * @param user - Пользователь, совершивший запрос
+     * @param team - Команда, чей id был в url, и чей профиль будет отображен
+     * @param model - Объект Model, в который будут помещены переменные, необходмые для генерации страницы
+     * @return - Страница профиля команды
+     */
     @GetMapping("/{id}")
     public String getTeam(
             @AuthenticationPrincipal User user,
@@ -98,6 +127,18 @@ public class TeamController {
         return "team";
     }
 
+    /**
+     * Принимает PUT запросы на url: URL/team/{id}/image
+     * Используется для обновления логотипа команды
+     * @param authUser - Пользователь, совершивший запрос
+     * @param team - Команда, чей id было в url, и чье лого будет обновлено
+     * @param x - X координата начала обрезки, может быть не представлена, отсчет идет от левой грани
+     * @param y - Y - координата начала обрезки, может быть не представлена, отсчет идет от верхней грани
+     * @param width - Конечная ширина изображения, может быть не представлена
+     * @param height - Конечная высота изображения, может быть не представлена
+     * @param logo - Объект MultipartFile хранящий изображение с логотипом, до обрезки
+     * @throws IOException - Исключение, которое может быть вызвано, в случае возникновения проблем во время сохранения изображения
+     */
     @PutMapping("/{id}/image")
     @ResponseBody
     public void updateAvatar(
@@ -117,16 +158,31 @@ public class TeamController {
         }
     }
 
+    /**
+     * Принимает POST запросы на url: URL/team/{id}/join
+     * Используется для вступления в команду
+     * @param user - Пользователь, совершивший запрос
+     * @param team - Команда, чей id был url, и в которую вступает пользователь
+     * @return - Перенаправление на страницу профиля команды
+     */
     @PostMapping("/{id}/join")
-    public String join(@AuthenticationPrincipal User user,
-                       @PathVariable("id") Team team
-    ){
+    public String join(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Team team
+    ) {
         if(user.getRoles().contains(Role.PARTICIPANT)){
             service.joinTeam(team, user);
         }
         return "redirect:/team/{id}";
     }
 
+    /**
+     * Принимает POST запросы на url: URL/team/{id}/quit
+     * Используется для выхода из команды
+     * @param user - Пользователь, совершивший запрос
+     * @param team - Команда, чей id был url, и которую покидает пользователь
+     * @return - Перенаправление на страницу профиля команды
+     */
     @PostMapping("/{id}/quit")
     public String quit(@AuthenticationPrincipal User user,
                        @PathVariable("id") Team team
@@ -146,6 +202,16 @@ public class TeamController {
         return "redirect:/team/{id}";
     }
 
+    /**
+     * Принимает PUT запросы на url: URL/team/{id}/invite/{userId}
+     * Используется для приглашения пользователя в команду
+     * В url:
+     * id - id команды, в которую приглашается пользователь
+     * userId - id приглашенного пользователя
+     * Запрос происходит асинхронно
+     * @param team - Команда, чей id был в url, и в которую приглашают пользователя
+     * @param user - Пользователь, чей id (userId) был в url, и который вступает в команду
+     */
     @Async
     @PutMapping(value = "/{id}/invite/{userId}")
     @ResponseBody
@@ -157,6 +223,18 @@ public class TeamController {
         service.joinTeam(team, user);
     }
 
+    /**
+     * Принимает PUT запросы на url: URL/team/{id}/role/{userId}
+     * Используется для сохранения списка командных ролей пользователя для этой команды
+     * В url:
+     * id - id команды, для которой пользователь выбрал определенный список командных ролей
+     * userId - id пользователя, который изменяет список командных ролей, с которыми он выступает от этой команды
+     * Запрос происходит асинхронно
+     * @param authUser - Пользователь, совершивший запрос
+     * @param team - Команда, чей id был в url, и для которой пользователь изменяет список своих командных ролей
+     * @param user - Пользователь, чей id (userId) был в url, и который изменяет список своих командных ролей
+     * @param teamRoles - Множество командных ролей TeamRole
+     */
     @Async
     @PutMapping(value = "/{id}/role/{userId}", consumes = "application/json")
     @ResponseBody
@@ -170,6 +248,12 @@ public class TeamController {
         service.saveTeamRolesByUser(team, user, teamRoles);
     }
 
+    /**
+     * Принимает GET запросы на url: URL/team/name/{id}/
+     * Используется для получения названия команды
+     * @param team - Команда, чей id был в url, и чье название запрашивается
+     * @return - Строка, содержащая название запрашиваемой команды
+     */
     @GetMapping("/name/{id}")
     @ResponseBody
     public String getName(@PathVariable("id") Team team) {

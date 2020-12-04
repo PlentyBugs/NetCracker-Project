@@ -175,12 +175,25 @@ public class TeamService {
         securityUtils.updateContext(user);
     }
 
+    /**
+     * Метод, который используется для награждения определенной команды
+     * Метод создает новый объект статистики содержащий результат участия и само соревнование
+     * @param registeredTeam - Объект RegisteredTeam - аналог записанной на соревнование команды
+     * @param result - Результат участия, который будет присужден команде-оригиналу Team
+     * @param competition - Соревнование, результат участия в котором присуждается команде-оригиналу Team
+     */
     public void gradeTeam(RegisteredTeam registeredTeam, Result result, Competition competition) {
         Team team = repository.findById(registeredTeam.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         team.getStatistics().add(new Statistics(result, competition.getId()));
         repository.save(team);
     }
 
+    /**
+     * Метод, который используется для сохранения нового списка командных ролей для пользователя для этой конкретной команды
+     * @param team - Команда, для которой пользователь изменяет список командных ролей
+     * @param user - Пользователь, который изменяет множество командных ролей, с которыми он представляет данную команду
+     * @param teamRoles - Множество командных ролей TeamRole
+     */
     public void saveTeamRolesByUser(Team team, User user, Set<TeamRole> teamRoles) {
         Set<UserTeamRole> userTeamRoles = new HashSet<>(team.getUserTeamRoles());
         Long userId = user.getId();
