@@ -50,7 +50,7 @@ public class CompetitionControllerTest {
     public void competitionListCheck() throws Exception {
         mockMvc.perform(get("/competition"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='competition-list']/div/div/a").nodeCount(4));
+                .andExpect(xpath("//div[@id='competition-list']/div/div/a").nodeCount(5));
     }
 
     @Test
@@ -58,11 +58,11 @@ public class CompetitionControllerTest {
         mockMvc.perform(get("/competition"))
                 .andExpect(authenticated())
                 .andExpect(xpath("//div[@id='competition-list']/div[1]/div/a/img").exists())
-                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/h5").string(containsString("Big Data Analysis MegaHackathon Moscow 2021")))
-                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[1]").string(containsString("Participate and be a part of history, let megacorporations spot you and reserve a spot for you")))
+                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/h5").string(containsString("Hackathon 5")))
+                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[1]").string(containsString("that is description")))
                 .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/a").string(containsString("Go to competition")))
-                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[3]/small[1]").string(containsString("2021-01-12 17:55")))
-                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[3]/small[2]").string(containsString("2021-09-12 18:15")));
+                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[3]/small[1]").string(containsString("2020-06-06 13:00")))
+                .andExpect(xpath("//div[@id='competition-list']/div[1]/div/div/p[3]/small[2]").string(containsString("2020-06-07 12:45")));
     }
 
     @Test
@@ -95,8 +95,8 @@ public class CompetitionControllerTest {
                 .andExpect(xpath("//h1[@id='compNameHeader']").string(containsString("Hackathon 3")))
                 .andExpect(xpath("//h6[@id='organizedByHeader']").string(containsString("Organized by Zhora")))
                 .andExpect(xpath("//p[@id='descriptionHeader']").string(containsString("Hackathon 3")))
-                .andExpect(xpath("//p[@id='startDateHeader']").string(containsString("2024-01-12 12:45")))
-                .andExpect(xpath("//p[@id='endDateHeader']").string(containsString("2024-08-12 12:45")))
+                .andExpect(xpath("//p[@id='startDateHeader']").string(containsString("2020-01-12 12:45")))
+                .andExpect(xpath("//p[@id='endDateHeader']").string(containsString("2020-08-12 12:45")))
                 .andExpect(xpath("//button[@id='join-button']").exists());
 
         mockMvc.perform(post("/competition/3/join").with(csrf()))
@@ -104,6 +104,14 @@ public class CompetitionControllerTest {
                 .andExpect(redirectedUrl("/competition/3"));
     }
 
+    @Test
+    public void getmyCompTest() throws Exception{
+        mockMvc.perform(get("/competition/mycomp"))
+                .andExpect(authenticated())
+                .andExpect(xpath("//div[@id='archive']").nodeCount(2))
+                .andExpect(xpath("//div[@id='running']").nodeCount(1));
+        //надо доделать, xpath не совсем верный
+    }
     @Test
     public void competitionModerationTest() throws Exception {
         mockMvc.perform(get("/competition/1"))
@@ -120,13 +128,13 @@ public class CompetitionControllerTest {
                 .param("description", "Description Hack")
                 .with(csrf());
 
-        assertEquals(competitionRepository.findAll().size(), 4);
+        assertEquals(competitionRepository.findAll().size(), 5);
 
         mockMvc.perform(multipart)
                 .andExpect(authenticated())
                 .andExpect(redirectedUrl("/competition"));
 
-        assertEquals(competitionRepository.findAll().size(), 5);
+        assertEquals(competitionRepository.findAll().size(), 6);
 
         Competition competition = competitionRepository.findById(10L).orElse(new Competition());
 
@@ -174,5 +182,27 @@ public class CompetitionControllerTest {
 
         mockMvc.perform(multipart)
                 .andExpect(authenticated());
+    }
+
+    @Test
+    public void addCompetitionFailStartDateTest() throws Exception{
+        MockHttpServletRequestBuilder multipart = multipart("/competition")
+                .file("title","123".getBytes())
+                .param("endDate","2023-06-12T17:59")
+                .param("compName","Hackathon 4")
+                .param("description","Description Hack")
+                .with(csrf());
+        mockMvc.perform(multipart).andExpect(authenticated());
+    }
+
+    @Test
+    public void addCompetitionFailEndDateTest() throws Exception{
+        MockHttpServletRequestBuilder multipart = multipart("/competition")
+                .file("title","123".getBytes())
+                .param("startDate","2023-01-12T05:43")
+                .param("compName","Hackathon 4")
+                .param("description","Description Hack")
+                .with(csrf());
+        mockMvc.perform(multipart).andExpect(authenticated());
     }
 }

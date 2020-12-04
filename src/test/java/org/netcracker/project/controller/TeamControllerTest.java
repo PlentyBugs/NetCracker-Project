@@ -31,8 +31,6 @@ public class TeamControllerTest {
     @Autowired
     private TeamRepository teamRepository;
     @Autowired
-    private TeamController teamController;
-    @Autowired
     private MockMvc mockMvc;
 
     @Test
