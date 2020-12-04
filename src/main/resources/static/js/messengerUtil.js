@@ -1,4 +1,3 @@
-let userId = $("#zzz").attr("value");
 let name = $("#mmm").attr("value");
 let writeButtons = $(".write-button");
 
@@ -15,7 +14,7 @@ function write(recipientId) {
     let url = document.URL.match(regexp)[1] + "messenger/";
     $.ajax({
         type: 'POST',
-        url: url + userId + "/chat/" + recipientId,
+        url: url + userId + "/chat/personal/" + recipientId,
         beforeSend: (xhr) => xhr.setRequestHeader(header, token),
         cache: false,
         async: false
@@ -32,6 +31,28 @@ function writeToEveryone() {
             sendMessage(message, userId, id, name, username);
         }
     }
+    clear();
+}
+
+function writeToGroup(chatId) {
+    let message = $("#message-text").val();
+    if (message !== "") {
+        sendMessageWithChatId(message, userId, chatId, name, chatId);
+    }
+    clear();
+}
+
+function writeToEachTeam(teamChatIds) {
+    let message = $("#message-text").val();
+    if (message !== "") {
+        for (let team of teamChatIds) {
+            sendMessageWithChatId(message, userId, team, name, team);
+        }
+    }
+    clear();
+}
+
+function clear() {
     let modal = $("#modal-body-id");
     modal.empty();
     modal.text("Message sent successfully");

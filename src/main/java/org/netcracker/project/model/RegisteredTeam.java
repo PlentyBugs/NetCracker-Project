@@ -18,10 +18,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class RegisteredTeam implements Serializable {
+    private static final long serialVersionUID = 443608249297923233L;
+
     @Id
     private Long id;
     @Column(unique = true)
     private String teamName;
+    private String groupChatId;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usr_registered_team",
@@ -57,6 +60,7 @@ public class RegisteredTeam implements Serializable {
                 .id(team.getId())
                 .teamName(team.getTeamName())
                 .teammates(team.getTeammates())
+                .groupChatId(team.getGroupChatId())
                 .build();
     }
 }

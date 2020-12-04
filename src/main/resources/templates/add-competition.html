@@ -47,6 +47,19 @@
                         <div class="input-group d-inline-flex col-sm-12">
                             <div class="input-group-prepend">
                                 <div class="input-group-text group-prepend">
+                                    Prize fund:
+                                </div>
+                            </div>
+                            <input name="prizeFund" class="form-control" type="number" min="0" id="prizeFund" placeholder="0"/>
+                            <div class="input-group-append">
+                                <i class="fa fa-dollar prize-fund-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group d-inline-flex col-sm-12">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text group-prepend">
                                     Tags:
                                 </div>
                             </div>
@@ -55,7 +68,7 @@
                                     <option th:id="'id-' + ${theme.name()}" th:data-theme="${theme.toString()}" th:data-theme-id="${theme.name()}" th:text="${#strings.capitalize(theme.toString())}"></option>
                                 </th:block>
                             </template>
-                            <input type="text" class="form-control" placeholder="Enter Tag" list="themesDatalist" id="themeSet" name="themeSet" autocomplete="off" autocapitalize="off">
+                            <input type="text" class="form-control" placeholder="Enter Tag" list="themesDatalist" id="themeSet" name="themeSet" autocomplete="off" autocapitalize="off" />
                             <datalist id="themesDatalist"></datalist>
                         </div>
                     </div>
@@ -75,6 +88,8 @@
             </div>
         </div>
         <script th:src="@{/js/addCompetition.js}"></script>
+        <script th:src="@{/js/dataChoice.js}"></script>
+        <script th:src="@{/js/utils.js}"></script>
     </div>
     <!---->
 </div></html>

@@ -19,6 +19,7 @@ public class MVCConfig implements WebMvcConfigurer {
         registry.addViewController("/add-competition").setViewName("add-competition");
         registry.addViewController("/add-team").setViewName("add-team");
         registry.addViewController("/calendar/**").setViewName("calendar");
+        registry.addViewController("/user").setViewName("user-list");
     }
 
     @Override

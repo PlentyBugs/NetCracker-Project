@@ -15,11 +15,20 @@ public class MessageService {
     private final RoomService chatRoomService;
     private final MongoOperations mongoOperations;
 
-
+    /**
+     * Метод, который сохраняет сообщение
+     * @param message - Сохраняемое сообщение
+     * @return - Сообщение, которое мы сохранили
+     */
     public Message save(Message message) {
         return repository.save(message);
     }
 
+    /**
+     * Метод, который возвращает все сообщение в указанном чате
+     * @param chatId - Id чата
+     * @return - Список сообщений данного чата
+     */
     public List<Message> findByChatId(String chatId) {
         return repository.findByChatId(chatId);
     }

@@ -7,6 +7,9 @@ function connect() {
         stompClient.subscribe("/user/" + userId + "/queue/messages", function (message) {
             messageReceive(message);
         });
+        stompClient.subscribe("/user/" + userId + "/queue/chats", function (chat) {
+            updateChat(chat);
+        });
     });
 }
 
@@ -17,18 +20,24 @@ function disconnect() {
     console.log("disconnected")
 }
 
-const sendMessage = (msg, senderId, recipientId, senderName, recipientName) => {
+const sendMessage = (msg, senderId, recipientId, senderName) => {
+    sendMessageWithChatId(msg, senderId, recipientId, senderName, "");
+};
+
+const sendMessageWithChatId = (msg, senderId, recipientId, senderName, chatId) => {
+    if (chatId !== "") {
+        chatId = "/" + chatId;
+    }
     if (msg.trim() !== "") {
         const message = {
             senderId: senderId,
             recipientId: recipientId,
             senderName: senderName,
-            recipientName: recipientName,
             content: msg,
             time: new Date()
         };
 
-        stompClient.send("/app/chat", {}, JSON.stringify(message));
+        stompClient.send("/app/chat" + chatId, {}, JSON.stringify(message));
     }
 };
 

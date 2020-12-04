@@ -1,0 +1,18 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/head :: head"></head>
+    <body>
+        <div id="loading-bg"></div>
+        <div id="loading-image" class="spinner-border text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div th:replace="fragments/header :: header"></div>
+
+        <div id="main" class="container mt-5">
+            <div layout:fragment="generalContent">
+
+            </div>
+        </div>
+        <div th:replace="fragments/footer :: footer"></div>
+    </body>
+    <th:block th:replace="fragments/scripts :: scripts"></th:block>
+</html>

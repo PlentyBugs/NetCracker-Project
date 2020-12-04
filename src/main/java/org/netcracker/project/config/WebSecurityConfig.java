@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .ignoringAntMatchers("/ws/**")
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/", "/registration", "/css/**", "/js/**", "/registration/activate/*", "/webjars/**", "/img/**").permitAll()
+                    .antMatchers("/", "/registration", "/css/**", "/js/**", "/registration/activate/*", "/webjars/**", "/img/**", "/login*").permitAll()
                     .antMatchers("/add-competition")
                         .hasAuthority(Role.ORGANIZER.getAuthority())
                     .antMatchers("/somepage")

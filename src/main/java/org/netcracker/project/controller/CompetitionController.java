@@ -29,9 +29,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/competition")
@@ -90,6 +92,7 @@ public class CompetitionController {
         }
         competition.setEndDate(endDateCallback.getLocalDateTime());
         competition.setStartDate(startDateCallback.getLocalDateTime());
+        competition.setGroupChatId(UUID.randomUUID().toString());
         service.save(competition, title, user);
 
         return "redirect:/competition";
@@ -103,7 +106,21 @@ public class CompetitionController {
     ) {
         model.addAttribute(competition);
         model.addAttribute("participate", user.getTeams().stream().map(RegisteredTeam::of).map(e -> competition.getTeams().contains(e)).reduce(false, (x, y) -> x || y));
+        model.addAttribute("expired", competition.getEndDate().compareTo(LocalDateTime.now()) < 0);
         return "competition";
+    }
+
+    @Async
+    @PutMapping(value = "/{id}/grade", produces = "application/json")
+    public @ResponseBody void grade(
+            @AuthenticationPrincipal User user,
+            @PathVariable("id") Competition competition,
+            @RequestParam("winner") RegisteredTeam winner,
+            @RequestParam(value = "second", required = false) RegisteredTeam second,
+            @RequestParam(value = "third", required = false) RegisteredTeam third,
+            @RequestParam(value = "spotted", required = false) Set<RegisteredTeam> spotted
+    ) {
+        service.gradeCompetition(competition, winner, second, third, spotted);
     }
 
     @Async
@@ -176,17 +193,15 @@ public class CompetitionController {
     @ResponseBody
     public List<Competition> getArchive(
             @AuthenticationPrincipal User user
-){
-        return service.getAllEndedCompetitions(user);
-}
+    ) {
+            return service.getAllEndedCompetitions(user);
+    }
 
-@GetMapping(value = "/mycomp/running", produces = "application/json")
-@ResponseBody
+    @GetMapping(value = "/mycomp/running", produces = "application/json")
+    @ResponseBody
     public List<Competition> getRunningComp(
-        @AuthenticationPrincipal User user
-){
-    return service.getAllActingCompetitions(user);
-}
-
-
+            @AuthenticationPrincipal User user
+    ) {
+        return service.getAllActingCompetitions(user);
+    }
 }

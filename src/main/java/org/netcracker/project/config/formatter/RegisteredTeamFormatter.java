@@ -20,12 +20,15 @@ public class RegisteredTeamFormatter implements Formatter<RegisteredTeam> {
     @Override
     public RegisteredTeam parse(String s, Locale locale) throws ResponseStatusException {
         if (s.length() > 2048) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        if (s.matches("\\d+")) {
-            Optional<RegisteredTeam> optionalTeam = repository.findById(Long.parseLong(s));
-            return optionalTeam.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        }
         RegisteredTeam byName = repository.findByTeamName(s);
-        if (byName == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (byName == null) {
+            if (s.matches("\\d+")) {
+                Optional<RegisteredTeam> optionalTeam = repository.findById(Long.parseLong(s));
+                return optionalTeam.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        }
         return byName;
     }
 

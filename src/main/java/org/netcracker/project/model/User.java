@@ -2,9 +2,11 @@ package org.netcracker.project.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.embeddable.Statistics;
 import org.netcracker.project.model.enums.Result;
 import org.netcracker.project.model.enums.Role;
 import org.netcracker.project.model.enums.TeamRole;
+import org.netcracker.project.model.interfaces.Statistical;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,7 +21,7 @@ import java.util.*;
 @Table(name="usr")
 @Data
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User implements UserDetails, Statistical {
     private static final long serialVersionUID = 3856464070955127754L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -74,8 +76,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Result> result = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Map<Result, Competition> statistics = new HashMap<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "user_statistics",
+            joinColumns = @JoinColumn(name = "statfk")
+    )
+    private Set<Statistics> statistics = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,5 +106,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return active;
+    }
+
+    public String getFullNameWithUsername() {
+        return surname + " " + name + " (" + username + ")";
     }
 }

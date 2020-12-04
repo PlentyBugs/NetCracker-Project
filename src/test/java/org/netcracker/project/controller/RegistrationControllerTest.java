@@ -75,7 +75,7 @@ public class RegistrationControllerTest {
         String password2 = "123456789";
         String username = "Big mock";
         ResultMatcher status = status().is3xxRedirection();
-        ResultMatcher redirectUrl = redirectedUrl("/login");
+        ResultMatcher redirectUrl = redirectedUrl("/login?activate=true");
         int repositoryInteractionTimes = 1;
         registrationTest(name, surname, secName, email, password, password2, username, status, redirectUrl, true, repositoryInteractionTimes);
     }

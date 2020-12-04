@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityUtils {
 
+    /**
+     * Метод необходим для обновления контекста пользователя после его изменения
+     * @param user - пользователь с данными, которые мы хотим видеть в контексте
+     */
     public void updateContext(User user) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

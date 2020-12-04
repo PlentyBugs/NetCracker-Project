@@ -17,6 +17,7 @@ import java.util.Set;
 @Entity
 @Data
 public class Competition implements Serializable {
+    private static final long serialVersionUID = 6629368617117796856L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -34,6 +35,7 @@ public class Competition implements Serializable {
     @JoinColumn(name = "usr_id")
     @JsonIgnore
     private User organizer;
+    private String groupChatId;
 
     // Надо решить проблему с ленивой подгрузкой
     @ManyToMany(fetch = FetchType.EAGER)

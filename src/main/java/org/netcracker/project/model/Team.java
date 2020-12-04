@@ -3,18 +3,22 @@ package org.netcracker.project.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.netcracker.project.model.embeddable.Statistics;
+import org.netcracker.project.model.embeddable.UserTeamRole;
 import org.netcracker.project.model.enums.Result;
-import org.netcracker.project.model.enums.TeamRole;
+import org.netcracker.project.model.interfaces.Statistical;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Team implements Serializable {
+public class Team implements Serializable, Statistical {
     private static final long serialVersionUID = 7609590770964470381L;
 
     @Id
@@ -24,6 +28,13 @@ public class Team implements Serializable {
     @NotBlank
     @Column(unique = true)
     private String teamName;
+
+    @ManyToOne
+    @JoinColumn(name = "usr_id")
+    @JsonIgnore
+    private User organizer;
+
+    private String groupChatId;
 
     // Надо решить проблему с ленивой подгрузкой
     @ManyToMany(fetch = FetchType.EAGER)
@@ -48,20 +59,19 @@ public class Team implements Serializable {
     @JsonIgnore
     private Set<Competition> competitionHistory = new HashSet<>();
 
-    // Надо решить проблему с ленивой подгрузкой
-    @ManyToMany(fetch = FetchType.EAGER)
-    @CollectionTable(name = "team_statistics", joinColumns = @JoinColumn(name = "team_id"))
-    @MapKeyColumn(name = "result")
-    @MapKeyEnumerated(EnumType.STRING)
-    private Map<Result, Competition> statistics = new HashMap<>();
-    //private Set<Competition> statistics = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "team_statistics",
+            joinColumns = @JoinColumn(name = "statfk")
+    )
+    private Set<Statistics> statistics = new HashSet<>();
 
-    // Сюда роли добавляются при изменении (добавлении, обновлении) команды через post/put запросы, т.е. это никак не связано с usr_team_role таблицей
-    // Так как пользователь, возможно не хочет вступать в команду со всеми его ролями
-    @ElementCollection(targetClass = TeamRole.class, fetch=FetchType.EAGER)
-    @CollectionTable(name = "team_profession", joinColumns = @JoinColumn(name = "team_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<TeamRole> professions;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "team_user_team_role",
+            joinColumns = @JoinColumn(name = "userteamrolefk")
+    )
+    private Set<UserTeamRole> userTeamRoles = new HashSet<>();
 
     @Column(name="logo_filename", nullable = false)
     private String logoFilename = "teamLogo.png";

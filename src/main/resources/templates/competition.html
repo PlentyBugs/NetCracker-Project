@@ -4,15 +4,17 @@
     <div class="modal fade" id="writeToEveryone" tabindex="-1" role="dialog" aria-labelledby="writeToEveryoneLabel" aria-hidden="true">
         <div class="modal-dialog" id="modal-write" role="document">
             <div class="modal-content bg-dark">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Write to Everyone</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"></span>
-                    </button>
+                <div class="modal-header text-center d-block">
+                    <h5 class="modal-title">Write to Everyone</h5>
                 </div>
                 <div class="modal-body" id="modal-body-id">
-                    <textarea class="p-2 w-100" name="message" id="message-text" placeholder="Message..." style="min-width: 100%"></textarea>
-                    <button type="button" class="btn btn-warning btn-block mt-2" onclick="writeToEveryone();">Write</button>
+                    <div class="btn-group w-100" role="group">
+                        <button type="button" id="send-everyone" class="btn btn-warning modal-button-choice">For everyone personally</button>
+                        <button type="button" id="send-to-group" class="btn btn-warning modal-button-choice">To Group Chat</button>
+                        <button type="button" id="send-to-each-team" class="btn btn-warning modal-button-choice">To each team</button>
+                    </div>
+                    <textarea class="p-2 w-100" name="message" id="message-text" th:data-chatId="${competition.groupChatId}" placeholder="Message..." style="min-width: 100%"></textarea>
+                    <button type="button" class="btn btn-warning btn-block mt-2" onclick="writeToCompetition();">Write</button>
                 </div>
             </div>
         </div>
@@ -23,6 +25,7 @@
         <div class="card-body">
             <h1 class="card-title" th:text="${competition.compName}" id="compNameHeader"></h1>
             <h6 class="card-title" th:text="'Organized by ' + ${competition.organizer.name}" id="organizedByHeader"></h6>
+            <h6 th:if="${competition.prizeFund != null}">Prize fund: <span th:text="${competition.prizeFund}"></span>$</h6>
             <p class="card-text" th:text="${competition.description}" id="descriptionHeader"></p>
             <p class="card-text">
                 <th:block th:each="theme : ${competition.themes}">
@@ -122,6 +125,7 @@
                         <button type="button" class="btn btn-primary">Write</button>
                         <button type="button" class="btn btn-danger" th:onclick="'removeTeam(' + ${team.id} + ');'">Remove</button>
                     </div>
+                    <div class="d-none team-gci" th:data-gci="${team.groupChatId}"></div>
                 </div>
                 <div class="list-group-item bg-dark" th:id="'teammates-team-id-' + ${team.id}" style="display: none;">
                     <ul>
@@ -136,9 +140,9 @@
             </th:block>
         </div>
     </div>
-    <script th:src="@{/js/websocketUtil.js}"></script>
     <script th:if="${competition.organizer.id != #authentication.principal.id}" th:src="@{/js/competitionChecker.js}"></script>
     <script th:if="${competition.organizer.id == #authentication.principal.id}" th:src="@{/js/competitionAdmin.js}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
+    <script th:src="@{/js/competition.js}"></script>
     <!---->
 </div></html>

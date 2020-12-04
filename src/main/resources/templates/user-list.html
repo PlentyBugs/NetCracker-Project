@@ -1,0 +1,11 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+
+    <input type="text" class="form-control mt-3 mb-3" placeholder="User" id="user-filter" autocomplete="off" autocapitalize="off" />
+
+    <div class="card-container" id="userList"></div>
+
+    <script th:src="@{/js/messengerUtil.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
+    <script th:src="@{/js/userList.js}"></script>
+
+</div></html>

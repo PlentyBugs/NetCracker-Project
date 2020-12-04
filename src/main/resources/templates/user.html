@@ -1,69 +1,104 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
-    <!--Блок для написания кода-->
-    <!-- Для странички нужно:
-        пользователь, с его личной информацией,
-        табличка команд, чтобы можно было показывать команды в которых есть пользователь,
-        соревнования, чтобы можно было показать статистику, а также
-        ... мб еще что
-    -->
+
+    <div class="modal fade" id="add-team-role" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" id="modal-add-team-role" role="document">
+            <div class="modal-content bg-dark">
+                <div class="modal-header text-center d-block">
+                    <h5 class="modal-title">Team Roles</h5>
+                </div>
+                <div class="modal-body" id="modal-body-id">
+                    <input type="text" id="role-input" class="form-control mb-2" placeholder="Team Role" autocomplete="off" autocapitalize="off" />
+
+                    <div class="container" id="modal-roles-container">
+                        <th:block th:each="role : ${T(org.netcracker.project.model.enums.TeamRole).values()}">
+                            <div class="row role-in-row" th:id="'id-' + ${role.name()}" th:data-role="${role.toString()}" th:data-role-id="${role.name()}" th:text="${#strings.capitalize(role.toString())}"></div>
+                        </th:block>
+                    </div>
+                    <h6 class="text-center">Your roles</h6>
+                    <div id="current-team-roles">
+                    </div>
+                    <button type="button" class="btn btn-warning btn-block mt-3" onclick="saveUserRoles();" id="update-roles-button">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="upload-image-modal-container"></div>
+
     <div class="container">
+        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'" id="user-full-name" class="text-center"></h3>
         <div class="row mb-3">
             <div class="col-sm-2">
-                <img th:src="@{/img/} + ${user.avatarFilename}" id="user-avatar" style="max-width: 100px; height: auto; max-height: 200px;" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
-                <button type="button" class="btn btn-primary write-button" id="write-button-user" th:data-recipientId="${user.id}">Write</button>
-            </div>
-            <div class="col-sm-10">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h3 th:text="${user.surname} + ' ' + ${user.name} + ' ' + ${user.secName} + ' (' + ${user.username} + ')'" id="user-full-name"></h3>
+                <div class="image-uploadable-container unselectable" id="image-uploadable-container-id">
+                    <img th:src="@{/img/} + ${user.avatarFilename}" class="image-uploadable" id="user-avatar" style="max-width: 100%; height: auto; max-height: 200px;" th:onerror="'this.onerror=null; this.src=`' + @{/img/default.png} + '`;'"/>
+                    <div class="image-uploadable-overlay" id="image-uploadable-overlay-avatar" data-toggle='modal' data-target='#upload-image-modal'>
+                        <div class="image-uploadable-overlay-text">Upload</div>
                     </div>
+                    <button type="button" class="btn btn-warning rounded-0" id="invite-user-button" th:data-user-id="${user.id}">Invite</button>
+                    <button type="button" class="btn btn-primary write-button rounded-0" id="write-button-user" th:data-recipientId="${user.id}">Write</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row py-2"></div>
+                <div class="row">
                     <div class="col-sm-8" id="user-team-roles">
-                        Командные роли:
+                        <i class="fa fa-plus add-plus" data-toggle='modal' data-target='#add-team-role'></i><span class="ml-2 mr-2" id="team-roles-header">Team roles:</span>
                         <th:block th:each="role : ${user.teamRoles}">
-                            <i class="list-group-item" th:text="${#strings.capitalize(role.name())}"></i>
+                            <i class="current-team-role mr-1" th:data-role="${role.toString()}" th:data-role-id="${role.name()}" th:text="${#strings.capitalize(role.toString())}"></i>
                         </th:block>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        Всего хакатонов:
+                        Total:
                         <th:block th:text="${participate}">
                         </th:block>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        Победы:
+                        Wins:
                         <th:block th:text="${winCount}">
                         </th:block>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        2 место:
+                        2nd:
                         <th:block th:text="${secondCount}">
                         </th:block>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        3 место:
+                        3rd:
                         <th:block th:text="${thirdCount}">
                         </th:block>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        Заметили спонсоры:
+                        Spotted by sponsors:
                         <th:block th:text="${spotted}">
                         </th:block>
                     </div>
                 </div>
             </div>
+                <div class="col d-flex justify-content-center">
+                <div class="d-none" id="winCount" th:data-winCount="${winCount}"></div>
+                <div class="d-none" id="secondCount" th:data-secondCount="${secondCount}"></div>
+                <div class="d-none" id="thirdCount" th:data-thirdCount="${thirdCount}"></div>
+                <div class="d-none" id="spotted" th:data-spotted="${spotted}"></div>
+                        <div class="card bg-dark">
+                            <div class="card-body">
+                                <canvas id="chDonut"></canvas>
+                        </div>
+                    </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm">
-                <h5 class="text-center">Команды</h5>
+                <h5 class="text-center">Teams</h5>
                 <ul class="list-group text-center">
                     <th:block th:each="team : ${user.teams}">
                         <li class="list-group-item team bg-dark"><a th:href="@{/team/} + ${team.id}" th:text="${team.teamName}"></a></li>
@@ -71,7 +106,7 @@
                 </ul>
             </div>
             <div class="col-sm">
-                <h5 class="text-center">Соревнования</h5>
+                <h5 class="text-center">Competitions</h5>
                 <div class="col-sm">
                     <ul class="list-group text-center">
                         <a th:href="@{/calendar/user/} + ${user.id}" class="hidden-link"><li class="list-group-item competition bg-info">Calendar</li></a>
@@ -84,25 +119,13 @@
                 </div>
             </div>
         </div>
-
-        <!--Проблема: диаграмма не отображается по центру. -->
-        <div class="d-none" id="winCount" th:data-winCount="${winCount}"></div>
-        <div class="d-none" id="secondCount" th:data-secondCount="${secondCount}"></div>
-        <div class="d-none" id="thirdCount" th:data-thirdCount="${thirdCount}"></div>
-        <div class="d-none" id="spotted" th:data-spotted="${spotted}"></div>
-        <div class="row py-2">
-        <div class="col-md-6 py-1">
-            <div class="card">
-                <div class="card-body">
-                 <canvas id="chDonut"></canvas>
-                </div>
-            </div>
-        </div>
-
-       </div>
     </div>
+    <link th:href="@{/js/libs/croppr.min.css/}" rel="stylesheet" />
+    <script th:src="@{/js/libs/croppr.min.js/}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
-    <script th:src="@{/js/user.js}"></script>
     <script th:src="@{/js/statDiagram.js}"></script>
+    <script th:src="@{/js/imageUtils.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
+    <script th:src="@{/js/user.js}"></script>
     <!---->
 </div></html>

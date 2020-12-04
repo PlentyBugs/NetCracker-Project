@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
+import java.util.Set;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,9 +52,11 @@ public class TeamServiceTest {
     @Test
     public void saveTest() throws Exception{
         MultipartFile logo=new MockMultipartFile("logo.png","111".getBytes());
-        Team team=new Team();
-        User user=new User();
-        assertTrue(teamService.save(team,logo,user));
+        Team team = new Team();
+        User user = new User();
+        user.setId(3L);
+
+        assertTrue(teamService.save(team, logo, user, Set.of()));
         verify(teamRepository,times(1)).save(team);
     }
     @Test
