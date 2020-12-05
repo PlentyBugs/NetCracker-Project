@@ -23,11 +23,11 @@ function getCompetitions() {
     let archive = $("#archive");
     let running = $("#running");
     let compArchive = $(
-        "<div><ul class='list-group'>" + archList + "</ul></div>" +
+        "<div><ul class='list-group' id='archList'>" + archList + "</ul></div>" +
         "</div>" +
         "        </div>");
     let compRun = $(
-        "<div><ul class='list-group'>" + runningList + "</ul></div>" +
+        "<div><ul class='list-group' id='runningList'>" + runningList + "</ul></div>" +
         "</div>" +
         "        </div>");
     archive.append(compArchive);
