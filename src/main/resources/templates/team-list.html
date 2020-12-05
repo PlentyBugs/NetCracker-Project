@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/layout}"><div layout:fragment="content">
     <!--Блок для написания кода-->
     <div class="container">
         <a type="button" class="btn btn-warning btn-lg col-sm-6" th:href="@{/add-team}">Add new Team</a>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div layout:replace="fragments/pager :: pager (url = ${url}, page = ${page}, filter = ${filter})">
+    <div layout:replace="~{fragments/pager :: pager (url = ${url}, page = ${page}, filter = ${filter})}">
         <div layout:fragment="pagerContent">
             <div class="card-container" id="team-list">
                 <th:block th:if="${not #lists.isEmpty(page.content)}">
