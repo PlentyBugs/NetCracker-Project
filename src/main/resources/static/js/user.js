@@ -55,13 +55,6 @@ function saveUserRoles() {
 }
 
 $(() => {
-    let userAvatar = $("#user-avatar");
-    let writeButtonUser = $("#write-button-user");
-    let imageOverlay = $("#image-uploadable-overlay-avatar");
-    writeButtonUser.outerWidth(userAvatar.outerWidth());
-    imageOverlay.outerWidth(userAvatar.outerWidth());
-    imageOverlay.outerHeight(userAvatar.outerHeight());
-    $("#image-uploadable-container-id").outerWidth(userAvatar.outerWidth());
     for (let role of rolesInRow) {
         $(role).click(() => {
             addRole($(role).data("role"), $(role).data("role-id"));
@@ -72,10 +65,19 @@ $(() => {
         addRole($(role).data("role"), $(role).data("role-id"));
     }
 
-    let inviteButton = $("#invite-user-button");
-    inviteButton.outerWidth(userAvatar.outerWidth());
-    let userId = inviteButton.data("user-id");
-    let teams = loadTeamsByUserId($("#zzz").attr("value"));
-    let teamBlock = $(buildInviteButton(teams, userId, inviteButton));
-    inviteButton.after(teamBlock);
+    let userAvatar = $("#user-avatar");
+    userAvatar.ready(() => {
+        let writeButtonUser = $("#write-button-user");
+        let imageOverlay = $("#image-uploadable-overlay-avatar");
+        writeButtonUser.outerWidth(userAvatar.outerWidth());
+        imageOverlay.outerWidth(userAvatar.outerWidth());
+        imageOverlay.outerHeight(userAvatar.outerHeight());
+        $("#image-uploadable-container-id").outerWidth(userAvatar.outerWidth());
+        let inviteButton = $("#invite-user-button");
+        inviteButton.outerWidth(userAvatar.outerWidth());
+        let userId = inviteButton.data("user-id");
+        let teams = loadTeamsByUserId($("#zzz").attr("value"));
+        let teamBlock = $(buildInviteButton(teams, userId, inviteButton));
+        inviteButton.after(teamBlock);
+    });
 });
