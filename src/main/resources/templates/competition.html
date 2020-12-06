@@ -110,7 +110,7 @@
                 </th:block>
             </datalist>
 
-            <button onclick="grade();" class="btn-success btn btn-lg btn-block mt-3 mb-5">Grade</button>
+            <button onclick="grade();" class="btn-warning btn btn-lg btn-block mt-3 mb-5" id="btn-grade">Grade</button>
         </div>
 
         <div class="col-sm-16 mt-2">
@@ -144,5 +144,6 @@
     <script th:if="${competition.organizer.id == #authentication.principal.id}" th:src="@{/js/competitionAdmin.js}"></script>
     <script th:src="@{/js/messengerUtil.js}"></script>
     <script th:src="@{/js/competition.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
     <!---->
 </div></html>
