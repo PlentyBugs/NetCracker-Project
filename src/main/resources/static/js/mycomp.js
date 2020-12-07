@@ -38,20 +38,24 @@ function getList(array) {
     let name = [];
     let desc = [];
     let titleFile = [];
-    var result = [];
+    let result = [];
     for (let i = 0; i < array.length; i++) {
         $.each(array[i], function (key, value) {
             if (key == "compName") name[i] = value;
             if (key == "description") desc[i] = value;
             if (key == "titleFilename") titleFile[i] = value;
+            console.log(titleFile[i]);
         });
-        result += "<div class='container'>" +
-            "<div class='card-body bg-dark'>" +
-            "<h4 class='card-title'>" + name[i] + "</h4>" +
-            "<p class='card-text'>" + desc[i] + "</p>" +
-            "</div></div>";
+        result += "<li style='list-style-type: none'><div class='container w-75 h-75'>" +
+            "<img src='/img/" + titleFile[i] + "'class='card-img-top'/>" +
+            "<div class='card-body mb-3 bg-dark'>" +
+            "<h5 class='card-title' style='font-style: italic'>" + name[i] + "</h5>" +
+            "<p class='card-text'>" + desc[i] + "</p>"+
+            "</div></div></li>";
     }
     return result;
 }
 
 $(() => getCompetitions())
+
+
