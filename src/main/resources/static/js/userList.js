@@ -17,7 +17,7 @@ $(() => {
                     fileName = "default.png";
                 }
 
-                let card = $("<div class='brick bg-dark text-center d-flex align-items-end flex-column' style='max-width: 15rem;'></div>");
+                let card = $("<div class='brick bg-dark text-center d-flex flex-column' style='max-width: 15rem;'></div>");
                 let image = $("<a href='/user/" + user.id + "'><img src='/img/" + fileName + "' class='card-img-top user-image-sm' /></a>");
                 let bodyHeader = $("<h5 class='card-text m-3'>" + fullName + "</h5>");
 
