@@ -47,9 +47,9 @@ public class CompetitionController {
      * Принимает GET запросы на url:URL/competition
      * Используется для вывода списка соревнований
      * @param model - объект Model, в котором будут переменные для вывода соревнований.
-     * @param pageable - объект Pageable для пагинации
-     * @param competitionFilterUnprepared - ?
-     * @return - Страница со списком соревнований
+     * @param pageable - объект Pageable для пагинации.
+     * @param competitionFilterUnprepared - объект, который отвечает за конвертацию даты.
+     * @return - Страница со списком соревнований.
      */
     @GetMapping
     public String getAllCompetitions(
@@ -68,16 +68,17 @@ public class CompetitionController {
 
     /**
      * Принимает POST запросы на url: URL/competition
-     * @param user - пользователь, который сделал запрос
-     * @param title - объект MultipartFile, является логотипом соревнования
-     * @param startDate - дата начала соревнования
-     * @param endDate - дата окончания соревнования
-     * @param themes - метки, которые определяют вид соревнования
-     * @param competition - добавляемое соревнование с валидацией
-     * @param bindingResult - объект, который содержит данные об ошибках в competition
-     * @param model - объект Model,в который будут записаны переменные
-     * @return - в случае успеха перенаправляет по url: URL/competition
-     * @throws IOException - исключение, которое появляется, если не указаны начальная дата и конечная
+     * Используется для добавления соревнования
+     * @param user - пользователь, который сделал запрос.
+     * @param title - объект MultipartFile, является логотипом соревнования.
+     * @param startDate - дата начала соревнования.
+     * @param endDate - дата окончания соревнования.
+     * @param themes - метки, которые определяют вид соревнования.
+     * @param competition - добавляемое соревнование с валидацией.
+     * @param bindingResult - объект, который содержит данные об ошибках в competition.
+     * @param model - объект Model,в который будут записаны переменные.
+     * @return - в случае успеха перенаправляет по url: URL/competition.
+     * @throws IOException - исключение, которое появляется, если не указаны начальная дата и конечная.
      */
     @PostMapping
     public String addCompetition(
@@ -121,11 +122,11 @@ public class CompetitionController {
 
     /**
      * Принимает GET запросы на url: URL/competition/{id}
-     * Позволяет получить
+     * Позволяет получить страничку с соревнованием
      * @param user - пользователь, сделавший запрос
-     * @param competition
-     * @param model
-     * @return
+     * @param competition - соревнование, id которого в url, профиль которого user получает.
+     * @param model - объект Model, в который будут записаны переменные.
+     * @return - Страница с соревнованиями
      */
     @GetMapping("/{id}")
     public String getCompetition(
