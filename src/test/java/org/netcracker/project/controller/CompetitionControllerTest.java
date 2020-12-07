@@ -105,12 +105,10 @@ public class CompetitionControllerTest {
     }
 
     @Test
-    public void getmyCompTest() throws Exception{
+    public void getArchiveTest() throws Exception{
         mockMvc.perform(get("/competition/mycomp"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='archive']").nodeCount(2))
-                .andExpect(xpath("//div[@id='running']").nodeCount(1));
-        //надо доделать, xpath не совсем верный
+                .andExpect(xpath("//div[@id='archive']").nodeCount(1));
     }
     @Test
     public void competitionModerationTest() throws Exception {

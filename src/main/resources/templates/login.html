@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/generalLayout"><div layout:fragment="generalContent">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/generalLayout}"><div layout:fragment="generalContent">
     <!--Блок для написания кода-->
     <div th:if="${param.error}" class="alert alert-warning text-center" role="alert" style="opacity: 0.6;">Invalid username and password or account isn't activated.</div>
     <div th:if="${param.activate}" class="alert alert-success text-center" role="alert" style="opacity: 0.6;">Please check your email. An activation code message has been sent there.</div>

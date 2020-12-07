@@ -86,5 +86,33 @@ public class TeamControllerTest {
                 .andExpect(authenticated())
                 .andExpect(redirectedUrl("/team/3"));
     }
-}
 
+    @Test
+    public void getTeamTest() throws  Exception{
+        mockMvc.perform(get("/team/3"))
+                .andExpect(authenticated())
+                .andExpect(xpath("//h2[@id='team-name-header']").string(containsString("FunCo")))
+                .andExpect(xpath("//img[@id='team-logo']").exists());
+    }
+
+    @Test
+    public void updateAvatarTest() throws Exception{
+        MockHttpServletRequestBuilder multipart = multipart("/team/3/image")
+                .file("avatar","teamLogo".getBytes())
+                .with(csrf());
+        mockMvc.perform(multipart)
+                .andExpect(authenticated());
+        Team team=teamRepository.findById(3L).get();
+        assertEquals(team.getLogoFilename(),"teamLogo.png");
+    }
+    @Test
+    public void inviteUserTest() throws Exception{
+
+    }
+
+    @Test
+    public void getNameTest() throws Exception{
+
+    }
+
+}

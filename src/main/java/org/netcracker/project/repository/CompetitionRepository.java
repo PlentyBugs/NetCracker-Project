@@ -38,13 +38,10 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
     @Query("from Competition c where :team member of c.teams")
     List<Competition> findAllByTeam(Team team);
 
-    @Query("from Competition c where exists (select t.id from c.teams as t where :teamId = t.id) and c.startDate >= :startDate or c.startDate <= :endMonthDate")
+    @Query("from Competition c where exists (select t.id from c.teams as t where :teamId = t.id) and (c.startDate >= :startDate or c.startDate <= :endMonthDate)")
     List<Competition> findAllByTeamCalendar(Long teamId, LocalDateTime startDate, LocalDateTime endMonthDate);
 
-    @Query("from Competition c where exists (select t.id from Team as t where :user member of t.teammates)")
-    List<Competition> findAllByUser(User user);
-
-    @Query("from Competition c where exists (select t.id from Team as t where :user member of t.teammates) and c.startDate >= :startDate or c.startDate <= :endMonthDate")
+    @Query("from Competition c where exists (select t.id from c.teams as t where :user member of t.teammates) and (c.startDate >= :startDate or c.startDate <= :endMonthDate)")
     List<Competition> findAllByUserCalendar(User user, LocalDateTime startDate, LocalDateTime endMonthDate);
 
     @Query("from Competition c where c.startDate >= :startDate or c.startDate <= :endMonthDate")

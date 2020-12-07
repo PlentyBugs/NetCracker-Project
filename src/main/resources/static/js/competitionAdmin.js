@@ -41,5 +41,7 @@ function grade() {
         cache: false,
         async: true
     });
-    // window.location.href = document.URL.match(regexp)[0];
+
+    let btnGrade = $("#btn-grade");
+    playSuccessButtonAnimation(btnGrade, "Grade", "Successfully graded");
 }

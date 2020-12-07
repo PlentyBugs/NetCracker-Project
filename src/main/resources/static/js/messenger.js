@@ -240,7 +240,7 @@ function showChat(chatId, isGroup) {
     let chatMenuHeader = $("<i class='fa fa-bars float-right' id='messenger-menu-button'></i>");
     $("#messenger-participants-parent").remove();
     let participantsMenuBlock = $("<div class='w-100' style='display: none; height: 0' id='messenger-participants-parent'></div>");
-    let participantsMenu = $("<div class='p-2' id='messenger-participants'></div>");
+    let participantsMenu = $("<div class='p-2 d-flex flex-column' id='messenger-participants'></div>");
 
     let chatSubHeader = $("<h5 class='text-center mb-3'></h5>");
     let chatSubHeaderSpan = $("<span>Participants</span>");
@@ -293,6 +293,24 @@ function showChat(chatId, isGroup) {
     });
 
     participantsMenu.append(participantsBlock);
+
+    if (isGroup == "true") {
+        let leaveChatButton = $("<button class='btn btn-danger btn-block mt-auto'>Leave</button>");
+        leaveChatButton.click(() => $.ajax({
+            type: 'DELETE',
+            url: getUrl() + "messenger/" + chat.adminId + "/chat/group/" + chatId + "/participant/" + userId,
+            beforeSend: (xhr) => xhr.setRequestHeader(header, token),
+            success: () => {
+                $("#chat-header").empty();
+                $("#chat-window ").empty();
+                $("#input-message").empty();
+                $("#messenger-participants-parent").empty();
+            },
+            cache: false,
+            async: false
+        }));
+        participantsMenu.append(leaveChatButton);
+    }
 
     participantsMenuBlock.append(participantsMenu);
 

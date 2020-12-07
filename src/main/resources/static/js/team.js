@@ -41,10 +41,12 @@ function addTeamRoles() {
 
 $(() => {
     let teamLogo = $("#team-logo");
-    $("#join-group-chat").outerWidth(teamLogo.outerWidth());
-    $("#invite-button").outerWidth(teamLogo.outerWidth());
-    $("#image-uploadable-overlay-logo").outerWidth(teamLogo.outerWidth());
-    $("#image-uploadable-container-id").outerWidth(teamLogo.outerWidth());
+    teamLogo.ready(() => {
+        $("#join-group-chat").outerWidth(teamLogo.outerWidth());
+        $("#invite-button").outerWidth(teamLogo.outerWidth());
+        $("#image-uploadable-overlay-logo").outerWidth(teamLogo.outerWidth());
+        $("#image-uploadable-container-id").outerWidth(teamLogo.outerWidth());
+    });
     let userListInput = $("#user-list-input");
     userListInput.keyup(() => filter(userListInput.val(), $(".user-modal")));
 });

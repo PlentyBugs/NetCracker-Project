@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layouts/layout"><div layout:fragment="content">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/layout}"><div layout:fragment="content">
 
     <div class="modal fade" id="add-team-role" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" id="modal-add-team-role" role="document">
@@ -34,7 +34,7 @@
                     <div class="image-uploadable-overlay" id="image-uploadable-overlay-avatar" data-toggle='modal' data-target='#upload-image-modal'>
                         <div class="image-uploadable-overlay-text">Upload</div>
                     </div>
-                    <button type="button" class="btn btn-warning rounded-0" id="invite-user-button" th:data-user-id="${user.id}">Invite</button>
+                    <button th:if="${user.id != #authentication.principal.id}" type="button" class="btn btn-warning rounded-0" id="invite-user-button" th:data-user-id="${user.id}">Invite</button>
                     <button type="button" class="btn btn-primary write-button rounded-0" id="write-button-user" th:data-recipientId="${user.id}">Write</button>
                 </div>
             </div>

@@ -176,6 +176,26 @@ public class MessageController {
     }
 
     /**
+     * Принимает DELETE запросы на url: URL/messenger/{adminId}/chat/group/{chatId}/participant/{userId}
+     * Используется для того, чтобы пользователь мог покинуть групповой чат
+     * @param user - Пользователь, совершивший запрос
+     * @param adminId - Id пользователя, являющегося админом группового чата
+     * @param chatId - Id группового чата, который покидает пользователь
+     * @param leavingUserId - Id пользователя, который покидает групповой чат
+     */
+    @DeleteMapping(value = "/messenger/{adminId}/chat/group/{chatId}/participant/{userId}")
+    @ResponseBody
+    public void leaveGroupChat(
+            @AuthenticationPrincipal User user,
+            @PathVariable("adminId") String adminId,
+            @PathVariable("chatId") String chatId,
+            @PathVariable("userId") String leavingUserId
+    ) {
+        if (!String.valueOf(user.getId()).equals(leavingUserId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        roomService.removeGroupMemberWithAuthCheck(chatId, leavingUserId, adminId);
+    }
+
+    /**
      * Принимает POST запросы на url: URL/messenger/{userId}/chat/personal/{recipientId}
      * Используется для создания нового приватного чата
      * @param user - Пользователь, совершивший запрос

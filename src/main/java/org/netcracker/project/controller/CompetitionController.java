@@ -43,6 +43,14 @@ public class CompetitionController {
     private final CompetitionService service;
     private final DateUtil dateUtil;
 
+    /**
+     * Принимает GET запросы на url:URL/competition
+     * Используется для вывода списка соревнований
+     * @param model - объект Model, в котором будут переменные для вывода соревнований.
+     * @param pageable - объект Pageable для пагинации
+     * @param competitionFilterUnprepared - ?
+     * @return - Страница со списком соревнований
+     */
     @GetMapping
     public String getAllCompetitions(
             Model model,
@@ -58,6 +66,19 @@ public class CompetitionController {
         return "competition-list";
     }
 
+    /**
+     * Принимает POST запросы на url: URL/competition
+     * @param user - пользователь, который сделал запрос
+     * @param title - объект MultipartFile, является логотипом соревнования
+     * @param startDate - дата начала соревнования
+     * @param endDate - дата окончания соревнования
+     * @param themes - метки, которые определяют вид соревнования
+     * @param competition - добавляемое соревнование с валидацией
+     * @param bindingResult - объект, который содержит данные об ошибках в competition
+     * @param model - объект Model,в который будут записаны переменные
+     * @return - в случае успеха перенаправляет по url: URL/competition
+     * @throws IOException - исключение, которое появляется, если не указаны начальная дата и конечная
+     */
     @PostMapping
     public String addCompetition(
             @AuthenticationPrincipal User user,
@@ -98,6 +119,14 @@ public class CompetitionController {
         return "redirect:/competition";
     }
 
+    /**
+     * Принимает GET запросы на url: URL/competition/{id}
+     * Позволяет получить
+     * @param user - пользователь, сделавший запрос
+     * @param competition
+     * @param model
+     * @return
+     */
     @GetMapping("/{id}")
     public String getCompetition(
             @AuthenticationPrincipal User user,
@@ -110,6 +139,16 @@ public class CompetitionController {
         return "competition";
     }
 
+    /**
+     * Принимает PUT запросы на url: URL/competition/{id}/grade
+     * Используется для оценивания команд по окончании соревнования
+     * @param user - Пользователь, сделавший запрос
+     * @param competition - Соревнование,
+     * @param winner - команда, которая победила
+     * @param second - команда, занявшая второе место
+     * @param third - команда, занявшая третье место
+     * @param spotted - команда(ы), замеченная(ые) спонсорами
+     */
     @Async
     @PutMapping(value = "/{id}/grade", produces = "application/json")
     public @ResponseBody void grade(
@@ -123,6 +162,14 @@ public class CompetitionController {
         service.gradeCompetition(competition, winner, second, third, spotted);
     }
 
+    /**
+     * Принимает DELETE запросы на url: URL/competition/{id}/team/{teamID}
+     * Удаляет команду с соревнования
+     * Запрос происходит асинхронно
+     * @param user - Пользователь, сделавший запрос
+     * @param competition - Соревнование, id которого в url, из него удаляется команда
+     * @param team - Команда, id которой в url, удаляется из соревнования
+     */
     @Async
     @DeleteMapping(value = "/{id}/team/{teamID}", produces = "application/json")
     public @ResponseBody void removeTeam(
@@ -138,6 +185,14 @@ public class CompetitionController {
         }
     }
 
+    /**
+     * Принимает POST запросы на url: URL/competition/{id}/join
+     * Присоединяет пользователя к соревнованию.
+     * @param user - Пользователь, сделавший запрос
+     * @param team - Команда, от которой пользователь присоединяется
+     * @param competition - Соревенование, по id которого из url присоединяется user
+     * @return - Перенаправление на страницу соревнования
+     */
     @PostMapping("/{id}/join")
     public String join(
             @AuthenticationPrincipal User user,
@@ -150,6 +205,13 @@ public class CompetitionController {
         return "redirect:/competition/{id}";
     }
 
+    /**
+     * Принимает POST запросы на url: URL/competition/{id}/quit
+     * Позволяет пользователю выйти из соревнования
+     * @param user - Пользователь, сделавший запрос
+     * @param competition - Соревнование, id которого в url, его покидает пользователь
+     * @return - Перенаправление на страницу соревнования
+     */
     @PostMapping("/{id}/quit")
     public String quit(
             @AuthenticationPrincipal User user,
@@ -161,12 +223,25 @@ public class CompetitionController {
         return "redirect:/competition/{id}";
     }
 
+    /**
+     * Принимает GET запросы на url: URL/competition/calendar
+     * Ищет все соревнования по дате начала
+     * @param startDate - Дата начала соревнования
+     * @return - Список соревнований
+     */
     @GetMapping(value = "/calendar", produces = "application/json")
     @ResponseBody
     public List<Competition> getAllCompetitionCalendar(@RequestParam String startDate) {
         return service.getAllCalendar(startDate);
     }
 
+    /**
+     * Принимает GET запросы по url: URl/competition/calendar/user/{id}
+     * Получение списка соревнований для конкретного пользователя
+     * @param user - Пользователь, сделавший запрос
+     * @param startDate - Дата начала соревнования
+     * @return - Список всех соревнований user, начинающихся со startDate
+     */
     @GetMapping(value = "/calendar/user/{id}", produces = "application/json")
     @ResponseBody
     public List<Competition> getAllCompetitionsForUser(
@@ -176,6 +251,13 @@ public class CompetitionController {
         return service.getAllByUserCalendar(user, startDate);
     }
 
+    /**
+     * Принимает GET запросы по url: URL/competition/calendar/team/{id}
+     * Получение списка соревнований для конкретной команды
+     * @param team - Команда, для которой выводится список соревнований
+     * @param startDate - Дата начала соревнования
+     * @return - Список всех соревнований team, начинающихся со startDate
+     */
     @GetMapping(value = "/calendar/team/{id}", produces = "application/json")
     @ResponseBody
     public List<Competition> getAllCompetitionsForTeam(
@@ -185,10 +267,21 @@ public class CompetitionController {
         return service.getAllByTeamCalendar(team, startDate);
     }
 
-
+    /**
+     * Принимает GET запросы на url: URL/competition/mycomp
+     * Выводит страничку с прошедшими и текущими соревнованиями для пользователя
+     * @param user - пользователь, сделавший запрос
+     * @return - Страница с соревнованиями
+     */
     @GetMapping("/mycomp")
     String getmyComp(@AuthenticationPrincipal User user){ return "mycomp"; }
 
+    /**
+     * Принимает GET запросы на url: URL/competition/mycomp/archive
+     * Используется для получения списка прошедших соревнований организатора
+     * @param user - пользователь, сделавший запрос
+     * @return - Список соревнований, которые закончились
+     */
     @GetMapping(value = "/mycomp/archive", produces = "application/json")
     @ResponseBody
     public List<Competition> getArchive(
@@ -197,6 +290,12 @@ public class CompetitionController {
             return service.getAllEndedCompetitions(user);
     }
 
+    /**
+     * Принимает GET запросы на url: URL/competition/mycomp/running
+     * Используется для получения списка текущих соревнований организатора
+     * @param user - пользователь, сделавший запрос
+     * @return - Список соревнований, которые на данный момент проходят
+     */
     @GetMapping(value = "/mycomp/running", produces = "application/json")
     @ResponseBody
     public List<Competition> getRunningComp(
