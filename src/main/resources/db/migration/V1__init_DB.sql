@@ -3,7 +3,7 @@ create sequence hibernate_sequence start 1 increment 1;
 create table competition (id int8 not null,
 	comp_ended boolean not null,
 	comp_name varchar(255),
-	description varchar(255),
+	description varchar(2048),
 	end_date timestamp,
 	group_chat_id varchar(255),
 	prize_fund int8 check (prize_fund>=0),
