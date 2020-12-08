@@ -29,7 +29,8 @@ $(() => {
                 card.append(image);
                 card.append(bodyHeader);
                 if (user.id != id) {
-                    let inviteButton = $("<button type='button' class='btn btn-warning btn-block btn-card-group'>Invite</button>");
+                    writeButton.removeClass("mt-auto");
+                    let inviteButton = $("<button type='button' class='btn btn-warning btn-block btn-card-group mt-auto'>Invite</button>");
                     let teamBlock = $(buildInviteButton(teams, user.id, inviteButton));
                     card.append(inviteButton);
                     card.append(teamBlock);

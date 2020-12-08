@@ -55,7 +55,7 @@
                     <th:block th:each="team: ${page}" >
                         <div class="brick bg-dark text-center">
                             <h5 class="card-title mt-2" th:text="${team.teamName}"></h5>
-                            <a th:href="@{/team/} + ${team.id}"><img th:src="@{/img/} + ${team.logoFilename}" class="user-image-sm" alt="logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/compTitle.png} + '`;'"/></a>
+                            <a th:href="@{/team/} + ${team.id}"><img th:src="@{/img/} + ${team.logoFilename}" class="user-image-sm" alt="logo" th:onerror="'this.onerror=null; this.src=`' + @{/img/teamLogo.png} + '`;'"/></a>
                         </div>
                     </th:block>
                 </th:block>
