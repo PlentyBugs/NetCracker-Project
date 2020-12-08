@@ -106,9 +106,9 @@ public class CompetitionControllerTest {
 
     @Test
     public void getArchiveTest() throws Exception{
-        mockMvc.perform(get("/mycomp"))
+        mockMvc.perform(get("/competition/mycomp"))
                 .andExpect(authenticated())
-                .andExpect(xpath("//div[@id='archive']/ul[@class='list-group']/div").nodeCount(2));
+                .andExpect(xpath("//div[@id='archive']").nodeCount(1));
     }
     @Test
     public void competitionModerationTest() throws Exception {

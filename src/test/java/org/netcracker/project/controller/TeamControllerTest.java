@@ -107,7 +107,12 @@ public class TeamControllerTest {
     }
     @Test
     public void inviteUserTest() throws Exception{
-       // mockMvc.perform(put("/team/3/invite/2"))
-               //
+
     }
+
+    @Test
+    public void getNameTest() throws Exception{
+
+    }
+
 }
