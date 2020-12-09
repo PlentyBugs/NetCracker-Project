@@ -46,8 +46,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, принимающий ник пользователя и возвращающий юзера, если таковой найден, иначе бросает исключение
-     * @param username - Ник пользователя
-     * @return - Классы, наследующие UserDetails, в нашем случае User
+     * @param username Ник пользователя
+     * @return Классы, наследующие UserDetails, в нашем случае User
      * @throws UsernameNotFoundException - исключение, которое будет выброшено, в случае, если пользователь не будет найден
      */
     @Override
@@ -61,9 +61,9 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который создает пользователя с заданными колями
-     * @param user - Новый пользователь
-     * @param roles - Множество ролей
-     * @return - Булево значение, true - если пользователь создан и сохранен, false - если что-то пошло не так или пользователь уже существует
+     * @param user Новый пользователь
+     * @param roles Множество ролей
+     * @return Булево значение, true - если пользователь создан и сохранен, false - если что-то пошло не так или пользователь уже существует
      */
     public boolean create(User user, Set<Role> roles) {
         user.setRoles(roles);
@@ -72,8 +72,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который создает пользователя
-     * @param user - Новый пользователь
-     * @return - Булево значение, true - если пользователь создан и сохранен, false - если что-то пошло не так или пользователь уже существует
+     * @param user Новый пользователь
+     * @return Булево значение, true - если пользователь создан и сохранен, false - если что-то пошло не так или пользователь уже существует
      */
     public boolean create(User user) {
         User userFromDB = repository.findByUsername(user.getUsername());
@@ -98,8 +98,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который обновляет существующего пользователя
-     * @param user - Существующий пользователь
-     * @return - Булево значение, true - если успешно обновлен, false - если по какой-то причине не сохранился
+     * @param user Существующий пользователь
+     * @return Булево значение, true - если успешно обновлен, false - если по какой-то причине не сохранился
      */
     public boolean update(User user) {
         repository.save(user);
@@ -108,7 +108,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который для данного пользователя отправляет регистрационное сообщение на почту
-     * @param user - Пользователь, которому будет отправлено сообщение
+     * @param user Пользователь, которому будет отправлено сообщение
      */
     private void sendMessage(User user) {
         if (!StringUtils.isEmpty(user.getEmail())) {
@@ -123,8 +123,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который производит активацию пользователя по активационному коду
-     * @param code - Активационный код
-     * @return - Булево значение, true - если успешно активирован, false - если пользователя не существует
+     * @param code Активационный код
+     * @return Булево значение, true - если успешно активирован, false - если пользователя не существует
      */
     public boolean activate(String code) {
         User user = repository.findByActivationCode(code);
@@ -143,8 +143,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который сохраняет аватар пользователя
-     * @param user - Пользователь, аватар которого мы сохраняем
-     * @param file - Файл с картинкой
+     * @param user Пользователь, аватар которого мы сохраняем
+     * @param file Файл с картинкой
      * @throws IOException - Исключение в случае ошибки сохранения аватара
      */
     public void saveAvatar(@Valid User user, @RequestParam("avatar") MultipartFile file) throws IOException {
@@ -158,12 +158,12 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который обрезает аватар и сохраняет его
-     * @param user - Пользователь, чей аватар мы сохраняем
-     * @param file - Файл с изображением логотипа
-     * @param x - X координата начала обрезки
-     * @param y - Y координата начала обрезки
-     * @param width - Ширина обрезанного изображения
-     * @param height - Высота обрезанного изображения
+     * @param user Пользователь, чей аватар мы сохраняем
+     * @param file Файл с изображением логотипа
+     * @param x X координата начала обрезки
+     * @param y Y координата начала обрезки
+     * @param width Ширина обрезанного изображения
+     * @param height Высота обрезанного изображения
      * @throws IOException - Исключение, которое может быть выброшено в случае ошибки сохранения логотипа
      */
     public void cropAndSaveAvatar(User user, MultipartFile file, Integer x, Integer y, Integer width, Integer height) throws IOException{
@@ -177,10 +177,10 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод для обновления данных пользователя, требующий подтверждение пароля пользователя
-     * @param authUser - Пользователь из контекста, который делает запрос на обновление
-     * @param user - Пользователь с новыми данными
-     * @param password2 - Повторный пароль для подтверждения
-     * @return - Булево значение, true - если пользователь удачно обновлен
+     * @param authUser Пользователь из контекста, который делает запрос на обновление
+     * @param user Пользователь с новыми данными
+     * @param password2 Повторный пароль для подтверждения
+     * @return Булево значение, true - если пользователь удачно обновлен
      */
     public boolean updateUser(User authUser, User user, String password2) {
         String encodedNewPassword = passwordEncoder.encode(user.getPassword());
@@ -194,8 +194,8 @@ public class UserService implements UserDetailsService {
     /**
      * Метод для удаления пользователя, а точнее для его деактивации, чтобы все связанные с ним объекты могли на него ссылаться.
      * Однако, в аккаунт больше нельзя будет зайти и пользоваться им.
-     * @param user - Удаляемый пользователь
-     * @return - Булево значение, true- если удаление прошло успешно
+     * @param user Удаляемый пользователь
+     * @return Булево значение, true- если удаление прошло успешно
      */
     public boolean deleteUser(User user) {
         user.setActive(false);
@@ -205,8 +205,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который находит ник пользователя по его Id
-     * @param id - Id пользователя
-     * @return - Ник пользователя, если таковой найден и пустая строка в ином случае
+     * @param id Id пользователя
+     * @return Ник пользователя, если таковой найден и пустая строка в ином случае
      */
     public String findUsernameById(Long id) {
         return repository.findById(id).map(User::getUsername).orElse("");
@@ -214,8 +214,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Вспомогательный метод, который возвращает фамилию, имя и ник пользователя в формате Ф И (Н)
-     * @param id - Id пользователя
-     * @return - "Фамилия Имя (Ник)" пользователя, если таковой найден и "" в ином случае
+     * @param id Id пользователя
+     * @return "Фамилия Имя (Ник)" пользователя, если таковой найден и "" в ином случае
      */
     public String findFullNameAndUsernameById(Long id) {
         return repository.findById(id).map(u -> u.getSurname() + " " + u.getName() + " (" + u.getUsername() + ")").orElse("");
@@ -223,8 +223,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который возвращает DTO SimpleUser, содержащий Id, Имя, Фамилию и Ник
-     * @param userId - Id пользователя
-     * @return - DTO SimpleUser: id, name, surname, username
+     * @param userId Id пользователя
+     * @return DTO SimpleUser: id, name, surname, username
      */
     public SimpleUser findSimpleUserById(Long userId) {
         User user = repository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -239,7 +239,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который возвращает список всех пользователей
-     * @return - List содержащий всех пользователей
+     * @return List содержащий всех пользователей
      */
     public List<User> findAll() {
         return repository.findAll();
@@ -247,8 +247,8 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который используется для изменения командных ролей пользователя
-     * @param user - Пользователь, чьи командные роли меняют
-     * @param roles - Множество командных ролей, на которые будет заменено текущее множество командных ролей пользователя
+     * @param user Пользователь, чьи командные роли меняют
+     * @param roles Множество командных ролей, на которые будет заменено текущее множество командных ролей пользователя
      */
     public void updateUserRoles(User user, Set<TeamRole> roles) {
         user.setTeamRoles(roles);
@@ -258,9 +258,9 @@ public class UserService implements UserDetailsService {
 
     /**
      * Метод, который используется для оценки участия пользователя в соревновании
-     * @param user - Оцениваемый пользователь
-     * @param result - Результат, который будет присужден по итогам соревнования
-     * @param competition - Соревнование, за которое оценивается пользователь
+     * @param user Оцениваемый пользователь
+     * @param result Результат, который будет присужден по итогам соревнования
+     * @param competition Соревнование, за которое оценивается пользователь
      */
     public void gradeUser(User user, Result result, Competition competition) {
         user.getStatistics().add(new Statistics(result, competition.getId()));
@@ -269,7 +269,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * Иетод, который используется для получения списка всех пользователей в упрощенном формате SimpleUser
-     * @return - Множество всех пользователей в формате SimpleUser
+     * @return Множество всех пользователей в формате SimpleUser
      */
     public Set<SimpleUser> findAllSimpleUsers() {
         return repository.findAll().stream().map(SimpleUser::of).collect(Collectors.toSet());

@@ -30,10 +30,10 @@ public class RoomService {
 
     /**
      * Метод, возвращающий Optional со строкой, содержащей Id чата
-     * @param senderId - Id пользователя - отправителя
-     * @param recipientId - Id пользователя - получателя
-     * @param createIfNotExists - Булево значение. Если true - создать новый чат для указанных пользователей, false - ничего не делать
-     * @return - Optional, содержащий строку с Id чата, либо пустой, если чат не был найден и createIfNotExists = false
+     * @param senderId Id пользователя - отправителя
+     * @param recipientId Id пользователя - получателя
+     * @param createIfNotExists Булево значение. Если true - создать новый чат для указанных пользователей, false - ничего не делать
+     * @return Optional, содержащий строку с Id чата, либо пустой, если чат не был найден и createIfNotExists = false
      */
     public Optional<String> getRoomId(String senderId, String recipientId, boolean createIfNotExists) {
         return roomRepository
@@ -44,9 +44,9 @@ public class RoomService {
 
     /**
      * Метод, создающий приватный чат
-     * @param senderId - Id одного пользователя
-     * @param recipientId - Id - второго пользователя
-     * @return - Id чата
+     * @param senderId Id одного пользователя
+     * @param recipientId Id - второго пользователя
+     * @return Id чата
      */
     public String createRoom(String senderId, String recipientId) {
         Optional<Room> room = roomRepository.findBySenderIdAndRecipientId(senderId, recipientId).or(() -> roomRepository.findBySenderIdAndRecipientId(recipientId, senderId));
@@ -79,10 +79,10 @@ public class RoomService {
 
     /**
      * Метод, который создает комнату, и возвращает Supplier
-     * @param senderId - Id одного пользователя
-     * @param recipientId - Id второго пользователя
-     * @param createIfNotExists - Булево значение. Если true - создать новый чат для указанных пользователей, false - ничего не делать
-     * @return - Supplier который возвращает Optional, содержащий строку с Id чата, либо пустой, если чат не был найден и createIfNotExists = false
+     * @param senderId Id одного пользователя
+     * @param recipientId Id второго пользователя
+     * @param createIfNotExists Булево значение. Если true - создать новый чат для указанных пользователей, false - ничего не делать
+     * @return Supplier который возвращает Optional, содержащий строку с Id чата, либо пустой, если чат не был найден и createIfNotExists = false
      */
     public Supplier<Optional<String>> createRoom(String senderId, String recipientId, boolean createIfNotExists) {
         return () -> {
@@ -96,9 +96,9 @@ public class RoomService {
 
     /**
      * Метод, который создает Групповой Чат
-     * @param adminId - Id пользователя, который будет назначен админом этого чата
-     * @param participantIds - Множество строк с Id участников группового чата
-     * @param chatName - Название группового чата
+     * @param adminId Id пользователя, который будет назначен админом этого чата
+     * @param participantIds Множество строк с Id участников группового чата
+     * @param chatName Название группового чата
      */
     public void createGroupRoom(String adminId, Set<String> participantIds, String chatName) {
         String chatId = UUID.randomUUID().toString();
@@ -107,10 +107,10 @@ public class RoomService {
 
     /**
      * Метод, который создает групповой чат с указанным Id
-     * @param adminId - Id пользователя, который будет назначен админом этого чата
-     * @param participantIds - Множество строк с Id участников группового чата
-     * @param chatName - Название группового чата
-     * @param chatId - Id группового чата
+     * @param adminId Id пользователя, который будет назначен админом этого чата
+     * @param participantIds Множество строк с Id участников группового чата
+     * @param chatName Название группового чата
+     * @param chatId Id группового чата
      */
     public void createGroupRoomWithGivenChatId(String adminId, Set<String> participantIds, String chatName, String chatId) {
         GroupRoom groupRoom = GroupRoom
@@ -128,8 +128,8 @@ public class RoomService {
 
     /**
      * Метод, который возвращает все групповые чаты по пользователю
-     * @param user - Пользователь, по которому будет производиться поиск групповых чатов
-     * @return - Список найденных групповых чатов
+     * @param user Пользователь, по которому будет производиться поиск групповых чатов
+     * @return Список найденных групповых чатов
      */
     public List<GroupRoom> findAllGroupRoomsByUser(User user) {
         return groupRoomRepository.findAllByParticipantIdsContains(user.getId().toString());
@@ -137,8 +137,8 @@ public class RoomService {
 
     /**
      * Метод, который возвращает все приватные чаты по пользователю
-     * @param user - Пользователь, по которому будет производиться поиск чатов
-     * @return - Список найденных чатов
+     * @param user Пользователь, по которому будет производиться поиск чатов
+     * @return Список найденных чатов
      */
     public List<Room> findAllRoomsByUser(User user) {
         String id = user.getId().toString();
@@ -148,8 +148,8 @@ public class RoomService {
     /**
      * Метод который возвращает Map, где ключ - Id получателя, а значение - ник получателя
      * Поиск ведется по приватным чатам пользователя
-     * @param user - Пользователь, по списку приватных чатов которого производится поиск
-     * @return - Map, где ключ - Id получателя, а значение - ник получателя
+     * @param user Пользователь, по списку приватных чатов которого производится поиск
+     * @return Map, где ключ - Id получателя, а значение - ник получателя
      */
     public Map<String, String> findAllUsernamesMapBySender(User user) {
         String id = user.getId().toString();
@@ -161,8 +161,8 @@ public class RoomService {
     /**
      * Метод который возвращает Map, где ключ - Id отправителя, а значение - ник отправителя
      * Поиск ведется по приватным чатам пользователя
-     * @param user - Пользователь, по списку приватных чатов которого производится поиск
-     * @return - Map, где ключ - Id отправителя, а значение - ник отправителя
+     * @param user Пользователь, по списку приватных чатов которого производится поиск
+     * @return Map, где ключ - Id отправителя, а значение - ник отправителя
      */
     public Map<String, String> findAllUsernamesMapByRecipient(User user) {
         String id = user.getId().toString();
@@ -173,8 +173,8 @@ public class RoomService {
 
     /**
      * Метод, который заполняет Model для страницы мессенджера
-     * @param model - Model полученная из контроллера, в которую передаются объекты
-     * @param user - Авторизованный пользователь, чьи чаты будут показаны
+     * @param model Model полученная из контроллера, в которую передаются объекты
+     * @param user Авторизованный пользователь, чьи чаты будут показаны
      */
     public void getPage(Model model, User user) {
         model.addAttribute("chats", findAllRoomsByUser(user));
@@ -185,8 +185,8 @@ public class RoomService {
 
     /**
      * Метод, который возвращает групповой чат по его Id
-     * @param chatId - Id группового чата
-     * @return - Групповой чат с данным Id
+     * @param chatId Id группового чата
+     * @return Групповой чат с данным Id
      */
     public GroupRoom findGroupRoomByChatId(String chatId) {
         return groupRoomRepository.findByChatId(chatId);
@@ -194,8 +194,8 @@ public class RoomService {
 
     /**
      * Метод, который возвращает приватный чат по его Id
-     * @param chatId - Id приватного чата
-     * @return - Приватный чат с данным Id
+     * @param chatId Id приватного чата
+     * @return Приватный чат с данным Id
      */
     public Room findRoomByChatId(String chatId) {
         return roomRepository.findByChatId(chatId);
@@ -203,8 +203,8 @@ public class RoomService {
 
     /**
      * Метод, который добавляет пользователя в групповой чат
-     * @param groupChatId - Id группового чата
-     * @param userId - Id добавляемого пользователя
+     * @param groupChatId Id группового чата
+     * @param userId Id добавляемого пользователя
      */
     public void addGroupMember(String groupChatId, String userId) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
@@ -215,8 +215,8 @@ public class RoomService {
 
     /**
      * Метод, который удаляет пользователя из группового чата
-     * @param groupChatId - Id группового чата
-     * @param userId - Id добавляемого пользователя
+     * @param groupChatId Id группового чата
+     * @param userId Id добавляемого пользователя
      */
     public void removeGroupMember(String groupChatId, String userId) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
@@ -230,9 +230,9 @@ public class RoomService {
      * Метод, который удаляет пользователя из группового чата
      * Используется для того, чтобы исключать людей из группового чата
      * Используется администратором чата
-     * @param groupChatId - Id группового чата
-     * @param userId - Id добавляемого пользователя
-     * @param adminId - Id администратора чата
+     * @param groupChatId Id группового чата
+     * @param userId Id добавляемого пользователя
+     * @param adminId Id администратора чата
      */
     public void removeGroupMemberWithAuthCheck(String groupChatId, String userId, String adminId) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
@@ -246,8 +246,8 @@ public class RoomService {
 
     /**
      * Метод, который добавляет в групповой чат множество пользователей
-     * @param groupChatId - Id группового чата
-     * @param userIds - Множество строк содержащих Id добавляемых пользователей
+     * @param groupChatId Id группового чата
+     * @param userIds Множество строк содержащих Id добавляемых пользователей
      */
     public void addGroupMembers(String groupChatId, Set<String> userIds) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
@@ -258,8 +258,8 @@ public class RoomService {
 
     /**
      * Метод, который удаляет из группового чата множество пользователей
-     * @param groupChatId - Id группового чата
-     * @param userIds - Множество строк содержащих Id удаляемых пользователей
+     * @param groupChatId Id группового чата
+     * @param userIds Множество строк содержащих Id удаляемых пользователей
      */
     public void removeGroupMembers(String groupChatId, Set<String> userIds) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(groupChatId);
@@ -270,9 +270,9 @@ public class RoomService {
 
     /**
      * Метод, который возвращает участников группового чата
-     * @param chatId - Id группового чата
-     * @param user - Пользователь, который делает запрос
-     * @return - Множество DTO SimpleUser, состоящее из участников группового чата
+     * @param chatId Id группового чата
+     * @param user Пользователь, который делает запрос
+     * @return Множество DTO SimpleUser, состоящее из участников группового чата
      */
     public Set<SimpleUser> getSimpleParticipantsGroup(String chatId, User user) {
         GroupRoom groupRoom = groupRoomRepository.findByChatId(chatId);
@@ -282,9 +282,9 @@ public class RoomService {
 
     /**
      * Метод, который возвращает участников приватного чата
-     * @param chatId - Id приватного чата
-     * @param user - Пользователь, который делает запрос
-     * @return - Множество DTO SimpleUser, состоящее из участников приватного чата
+     * @param chatId Id приватного чата
+     * @param user Пользователь, который делает запрос
+     * @return Множество DTO SimpleUser, состоящее из участников приватного чата
      */
     public Set<SimpleUser> getSimpleParticipants(String chatId, User user) {
         Room room = roomRepository.findByChatId(chatId);
@@ -295,9 +295,9 @@ public class RoomService {
 
     /**
      * Метод, который отправляет уведомление пользователю из группового чата
-     * @param room - Групповой чат
-     * @param userId - Id пользователя, которому отправляется уведомление
-     * @param status - Статус сообщения: Add, Remove
+     * @param room Групповой чат
+     * @param userId Id пользователя, которому отправляется уведомление
+     * @param status Статус сообщения: Add, Remove
      */
     public void sendGroupNotification(GroupRoom room, String userId, ChatStatus status) {
         messagingTemplate.convertAndSendToUser(
@@ -314,10 +314,10 @@ public class RoomService {
 
     /**
      * Метод, который отправляет уведомление пользователю приватного чата
-     * @param room - Приватный чат
-     * @param recipientId - Id получателя
-     * @param recipientName - Имя получателя
-     * @param status - Статус сообщения: Add, Remove
+     * @param room Приватный чат
+     * @param recipientId Id получателя
+     * @param recipientName Имя получателя
+     * @param status Статус сообщения: Add, Remove
      */
     public void sendPersonalNotification(Room room, String recipientId, String recipientName, ChatStatus status) {
         messagingTemplate.convertAndSendToUser(

@@ -18,9 +18,9 @@ public class MailService {
 
     /**
      * Метод, который асинхронно посылает письмо с сообщением на указанный email
-     * @param emailTo - Email-получатель
-     * @param subject - Тема сообщения
-     * @param message - Контент сообщения
+     * @param emailTo Email-получатель
+     * @param subject Тема сообщения
+     * @param message Контент сообщения
      */
     @Async
     public void send(String emailTo, String subject, String message) {

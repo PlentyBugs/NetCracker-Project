@@ -17,8 +17,8 @@ public class MessageService {
 
     /**
      * Метод, который сохраняет сообщение
-     * @param message - Сохраняемое сообщение
-     * @return - Сообщение, которое мы сохранили
+     * @param message Сохраняемое сообщение
+     * @return Сообщение, которое мы сохранили
      */
     public Message save(Message message) {
         return repository.save(message);
@@ -26,8 +26,8 @@ public class MessageService {
 
     /**
      * Метод, который возвращает все сообщение в указанном чате
-     * @param chatId - Id чата
-     * @return - Список сообщений данного чата
+     * @param chatId Id чата
+     * @return Список сообщений данного чата
      */
     public List<Message> findByChatId(String chatId) {
         return repository.findByChatId(chatId);
