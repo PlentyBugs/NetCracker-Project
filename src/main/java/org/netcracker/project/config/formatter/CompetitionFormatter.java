@@ -19,6 +19,7 @@ public class CompetitionFormatter implements Formatter<Competition> {
 
     @Override
     public Competition parse(String s, Locale locale) throws ResponseStatusException {
+        if (s.length() > 2048) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         Optional<Competition> optionalCompetition = repository.findById(Long.parseLong(s));
         return optionalCompetition.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

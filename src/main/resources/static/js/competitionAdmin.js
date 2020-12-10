@@ -22,17 +22,26 @@ function grade() {
     let token = $('#_csrf').attr('content');
     let header = $('#_csrf_header').attr('content');
     const regexp = /(.+)\/competition\/\d+/;
-    let grades = {};
     let url = document.URL.match(regexp)[0] + "/grade?";
     let winner = $("#winner").val();
     let second = $("#second").val();
     let third = $("#third").val();
-    if (winner !== "") url += "winner=" + encodeURIComponent(winner) + "&";
-    if (second !== "") url += "second=" + encodeURIComponent(second) + "&";
-    if (third !== "") url += "third=" + encodeURIComponent(third);
+    if (winner !== "") {
+        winner = $("#team-name-" + winner).data("team-id");
+        url += "winner=" + encodeURIComponent(winner) + "&";
+    }
+    if (second !== "") {
+        second = $("#team-name-" + second).data("team-id");
+        url += "second=" + encodeURIComponent(second) + "&";
+    }
+    if (third !== "") {
+        third = $("#team-name-" + third).data("team-id");
+        url += "third=" + encodeURIComponent(third);
+    }
     let spotted = $(".spotted");
     for (let s of spotted) {
-        url += "&spotted=" + encodeURIComponent($(s).val());
+        let x = $("#team-name-" + $(s).val()).data("team-id");
+        url += "&spotted=" + encodeURIComponent(x);
     }
     $.ajax({
         type: "PUT",

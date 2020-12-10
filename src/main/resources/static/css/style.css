@@ -576,3 +576,9 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word
+}

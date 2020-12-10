@@ -19,6 +19,7 @@ public class UserFormatter implements Formatter<User> {
 
     @Override
     public User parse(String s, Locale locale) throws ResponseStatusException {
+        if (s.length() > 2048) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         Optional<User> optionalUser = repository.findById(Long.parseLong(s));
         return optionalUser.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
