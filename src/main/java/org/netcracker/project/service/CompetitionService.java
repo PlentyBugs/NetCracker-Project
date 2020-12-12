@@ -168,8 +168,8 @@ public class CompetitionService {
      * @param team Команда, которая записывается на соревнование
      */
     public void addTeam(Competition competition, Team team) {
-        team.getTeammates().remove(competition.getOrganizer());
         RegisteredTeam registeredTeam = RegisteredTeam.of(team);
+        registeredTeam.getTeammates().remove(competition.getOrganizer());
         roomService.addGroupMembers(competition.getGroupChatId(), registeredTeam.getTeammates().stream().map(User::getId).map(Object::toString).collect(Collectors.toSet()));
         registeredTeamRepository.save(registeredTeam);
         competition.getTeams().add(registeredTeam);

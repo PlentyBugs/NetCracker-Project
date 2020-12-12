@@ -59,7 +59,7 @@ public class RegisteredTeam implements Serializable {
          return builder
                 .id(team.getId())
                 .teamName(team.getTeamName())
-                .teammates(team.getTeammates())
+                .teammates(new HashSet<>(team.getTeammates()))
                 .groupChatId(team.getGroupChatId())
                 .build();
     }
