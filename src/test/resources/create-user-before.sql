@@ -4,7 +4,7 @@ delete from usr;
 
 insert into usr(id, activation_code, active, avatar_filename, email, name, password, sec_name, surname, username) values
 (1, null, true, 'default.png', 'wminecraft616@gmail.com', 'Goga', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Konstantinovich', 'Zhukov', 'mock'),
-(2, null, true, 'default.png', 'wminecraft616@gmail.com', 'Gosha', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Konstantinovich', 'Zhukov', 'gog'),
+(2, '6as1d6asd16as56q19q', false, 'default.png', 'wminecraft616@gmail.com', 'Gosha', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Konstantinovich', 'Zhukov', 'gog'),
 (3, null, true, 'default.png', 'wminecraft616@gmail.com', 'Zhora', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Konstantinovich', 'Zhukov', 'mockito'),
 (4, null, true, 'default.png', 'wminecraft616@gmail.com', 'Egor', '$2a$08$bgSzfgN9UVrXLMzNodznVOerzznIXTMWyD3qBAygUmg507KJ4F5aC', 'Konstantinovich', 'Zhukov', 'steam');
 insert into usr_role(usr_id, roles) values
