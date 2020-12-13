@@ -33,37 +33,37 @@ public class TeamServiceTest {
     @Autowired
     private ImageUtils imageUtils;
     @Test
-    public void getPageTest(){
+    public void getPageTest() {
 
-        Pageable pageable= PageRequest.of(0,10);
-        Team team=new Team();
+        Pageable pageable = PageRequest.of(0,10);
+        Team team = new Team();
 
-        Page<Team> teamPage=new PageImpl<>(Collections.singletonList(team));
+        Page<Team> teamPage = new PageImpl<>(Collections.singletonList(team));
         when(teamService.getPage(pageable)).thenReturn(teamPage);
 
-        Page<Team> teams=teamService.getPage(pageable);
+        Page<Team> teams = teamService.getPage(pageable);
 
         assertNotNull(teams);
         assertEquals(teams.getNumberOfElements(),1);
-        verify(teamRepository,times(1)).findAll(pageable);
+        verify(teamRepository, times(1)).findAll(pageable);
     }
 
 
     @Test
-    public void saveTest() throws Exception{
-        MultipartFile logo=new MockMultipartFile("logo.png","111".getBytes());
+    public void saveTest() throws Exception {
+        MultipartFile logo = new MockMultipartFile("logo.png","111".getBytes());
         Team team = new Team();
         User user = new User();
         user.setId(3L);
 
         assertTrue(teamService.save(team, logo, user, Set.of()));
-        verify(teamRepository,times(1)).save(team);
+        verify(teamRepository, times(1)).save(team);
     }
     @Test
-    public void updateTest(){
-        Team team=new Team();
+    public void updateTest() {
+        Team team = new Team();
         assertTrue(teamService.update(team));
-        verify(teamRepository,times(1)).save(team);
+        verify(teamRepository, times(1)).save(team);
     }
 
     //filter будет тут
