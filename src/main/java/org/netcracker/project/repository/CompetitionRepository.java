@@ -137,7 +137,7 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
      * @param endMonthDate Дата, до которой начинается соревнование
      * @return Список соревнований для заданной команды, которые укладываются в заданные сроки
      */
-    @Query("from Competition c where exists (select t.id from c.teams as t where :teamId = t.id) and (c.startDate >= :startDate or c.startDate <= :endMonthDate)")
+    @Query("from Competition c where exists (select t.id from c.teams as t where :teamId = t.id) and ((c.startDate >= :startDate and c.startDate <= :endMonthDate) or (c.endDate >= :startDate and c.endDate <= :endMonthDate) or (c.startDate <= :startDate and c.endDate >= :endMonthDate))")
     List<Competition> findAllByTeamCalendar(
             Long teamId,
             LocalDateTime startDate,
@@ -152,7 +152,7 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
      * @param endMonthDate Дата, до которой начинается соревнование
      * @return Список соревнований для заданного пользователя, которые укладываются в заданные сроки
      */
-    @Query("from Competition c where exists (select t.id from c.teams as t where :user member of t.teammates) and (c.startDate >= :startDate or c.startDate <= :endMonthDate)")
+    @Query("from Competition c where exists (select t.id from c.teams as t where :user member of t.teammates) and ((c.startDate >= :startDate and c.startDate <= :endMonthDate) or (c.endDate >= :startDate and c.endDate <= :endMonthDate) or (c.startDate <= :startDate and c.endDate >= :endMonthDate))")
     List<Competition> findAllByUserCalendar(
             User user,
             LocalDateTime startDate,
@@ -166,7 +166,7 @@ public interface CompetitionRepository extends JpaRepository<Competition,Long> {
      * @param endMonthDate Дата, до которой начинается соревнование
      * @return Список всех соревнований, которые укладываются в заданные сроки
      */
-    @Query("from Competition c where c.startDate >= :startDate or c.startDate <= :endMonthDate")
+    @Query("from Competition c where (c.startDate >= :startDate and c.startDate <= :endMonthDate) or (c.endDate >= :startDate and c.endDate <= :endMonthDate) or (c.startDate <= :startDate and c.endDate >= :endMonthDate)")
     List<Competition> findAllCalendar(LocalDateTime startDate, LocalDateTime endMonthDate);
 
     /**

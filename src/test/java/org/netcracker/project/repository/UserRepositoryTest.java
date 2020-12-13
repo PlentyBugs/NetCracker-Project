@@ -24,7 +24,7 @@ public class UserRepositoryTest {
     public void findByUsernameTest() {
         User user = userRepository.findByUsername("steam");
         assertNotNull(user);
-        assertEquals(user.getUsername(), "steam");
+        assertEquals("steam", user.getUsername());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class UserRepositoryTest {
     public void findByIdTest() {
         Optional<User> user = userRepository.findById(1L);
         assertTrue(user.isPresent());
-        assertEquals(user.get().getId(), 1L);
+        assertEquals(1L, user.get().getId());
     }
 
     @Test
@@ -50,8 +50,8 @@ public class UserRepositoryTest {
     public void findByActivationCodeTest() {
         User user = userRepository.findByActivationCode("6as1d6asd16as56q19q");
         assertNotNull(user);
-        assertEquals(user.getActivationCode(), "6as1d6asd16as56q19q");
-        assertEquals(user.getUsername(), "gog");
+        assertEquals("6as1d6asd16as56q19q", user.getActivationCode());
+        assertEquals("gog", user.getUsername());
         assertFalse(user.isActive());
     }
 

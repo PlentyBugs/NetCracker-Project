@@ -26,7 +26,7 @@ public class TeamRepositoryTest {
     public void findByTeamNameTest() {
         Team team = teamRepository.findByTeamName("Team A");
         assertNotNull(team);
-        assertEquals(team.getTeamName(), "Team A");
+        assertEquals("Team A", team.getTeamName());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class TeamRepositoryTest {
         Pageable pageable = PageRequest.of(0,10);
         Page<Team> teamPage = teamRepository.findAll(pageable);
         assertNotNull(teamPage);
-        assertEquals(teamPage.getTotalElements(), 3);
+        assertEquals(3, teamPage.getTotalElements());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class TeamRepositoryTest {
         Pageable pageable = PageRequest.of(0,10);
         Page<Team> teamPage = teamRepository.findAllWithFilter(pageable, 0, 1, "%");
         assertNotNull(teamPage);
-        assertEquals(teamPage.getTotalElements(), 1);
+        assertEquals(1, teamPage.getTotalElements());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TeamRepositoryTest {
         Pageable pageable = PageRequest.of(0,10);
         Page<Team> teamPage = teamRepository.findAllWithFilter(pageable, 2, 50, "%");
         assertNotNull(teamPage);
-        assertEquals(teamPage.getTotalElements(), 2);
+        assertEquals(2, teamPage.getTotalElements());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class TeamRepositoryTest {
         Pageable pageable = PageRequest.of(0,10);
         Page<Team> teamPage = teamRepository.findAllWithFilter(pageable, 0, 50, "%T%");
         assertNotNull(teamPage);
-        assertEquals(teamPage.getTotalElements(), 2);
+        assertEquals(2, teamPage.getTotalElements());
     }
 
     @Test
@@ -85,6 +85,6 @@ public class TeamRepositoryTest {
 
         Page<Team> teamPage = teamRepository.findAllWithFilterAndWithoutMe(pageable, 0, 50, "%", user);
         assertNotNull(teamPage);
-        assertEquals(teamPage.getTotalElements(), 1);
+        assertEquals(1, teamPage.getTotalElements());
     }
 }

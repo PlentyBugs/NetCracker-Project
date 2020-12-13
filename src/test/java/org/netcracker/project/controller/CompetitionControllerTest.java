@@ -126,20 +126,20 @@ public class CompetitionControllerTest {
                 .param("description", "Description Hack")
                 .with(csrf());
 
-        assertEquals(competitionRepository.findAll().size(), 5);
+        assertEquals(5, competitionRepository.findAll().size());
 
         mockMvc.perform(multipart)
                 .andExpect(authenticated())
                 .andExpect(redirectedUrl("/competition"));
 
-        assertEquals(competitionRepository.findAll().size(), 6);
+        assertEquals(6, competitionRepository.findAll().size());
 
         Competition competition = competitionRepository.findById(10L).orElse(new Competition());
 
-        assertEquals(competition.getCompName(), "Hackathon 4");
-        assertEquals(competition.getDescription(), "Description Hack");
-        assertEquals(competition.getStartDate(), LocalDateTime.parse("2023-01-12T05:43"));
-        assertEquals(competition.getEndDate(), LocalDateTime.parse("2023-06-12T17:59"));
+        assertEquals("Hackathon 4", competition.getCompName());
+        assertEquals("Description Hack", competition.getDescription());
+        assertEquals(LocalDateTime.parse("2023-01-12T05:43"), competition.getStartDate());
+        assertEquals(LocalDateTime.parse("2023-06-12T17:59"), competition.getEndDate());
     }
 
     @Test

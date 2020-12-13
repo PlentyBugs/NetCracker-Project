@@ -75,13 +75,13 @@ public class UserControllerTest {
 
         assertNotNull((user = userOptional.orElse(null)));
 
-        assertEquals(user.getId(), 4);
-        assertEquals(user.getName(), "name");
-        assertEquals(user.getSurname(), "surname");
-        assertEquals(user.getSecName(), "secName");
-        assertEquals(user.getEmail(), "wminecraft616@gmail.com");
+        assertEquals(4, user.getId());
+        assertEquals("name", user.getName());
+        assertEquals("surname", user.getSurname());
+        assertEquals("secName", user.getSecName());
+        assertEquals("wminecraft616@gmail.com", user.getEmail());
         assertTrue(BCrypt.checkpw("password", user.getPassword()));
-        assertEquals(user.getUsername(), "username");
+        assertEquals("username", user.getUsername());
     }
 
     @Test

@@ -44,7 +44,7 @@ public class TeamServiceTest {
         Page<Team> teams = teamService.getPage(pageable);
 
         assertNotNull(teams);
-        assertEquals(teams.getNumberOfElements(),1);
+        assertEquals(1, teams.getNumberOfElements());
         verify(teamRepository, times(1)).findAll(pageable);
     }
 

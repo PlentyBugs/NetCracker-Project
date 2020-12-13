@@ -47,7 +47,7 @@ public class CompetitionServiceTest {
         Page<Competition> competitions = competitionService.getPage(pageable);
 
         assertNotNull(competitions);
-        assertEquals(competitions.getNumberOfElements(), 1);
+        assertEquals(1, competitions.getNumberOfElements());
         verify(competitionRepository, times(1)).findAll(pageable);
     }
 

@@ -46,16 +46,16 @@ public class TeamControllerTest {
                 .param("teamName","Team A 2")
                 .with(csrf());
 
-        assertEquals(teamRepository.findAll().size(),3);
+        assertEquals(3, teamRepository.findAll().size());
 
         mockMvc.perform((multipart))
                 .andExpect(authenticated())
                 .andExpect(redirectedUrl("/team"));
 
-        assertEquals(teamRepository.findAll().size(),4);
+        assertEquals(4, teamRepository.findAll().size());
         Team team=teamRepository.findById(10L).orElse(new Team());
-        assertEquals(team.getLogoFilename(),"teamLogo.png");
-        assertEquals(team.getTeamName(),"Team A 2");
+        assertEquals("teamLogo.png", team.getLogoFilename());
+        assertEquals("Team A 2", team.getTeamName());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class TeamControllerTest {
         mockMvc.perform(multipart)
                 .andExpect(authenticated());
         Team team=teamRepository.findById(3L).get();
-        assertEquals(team.getLogoFilename(),"teamLogo.png");
+        assertEquals("teamLogo.png", team.getLogoFilename());
     }
     @Test
     public void inviteUserTest() throws Exception{
