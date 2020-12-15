@@ -119,7 +119,7 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#writeToEveryone" sec:authorize="hasAuthority('ORGANIZER')" th:if="${competition.organizer.id == #authentication.principal.id}">Write to Everyone</button>
             </div>
             <th:block th:each="team : ${competition.teams}">
-                <div class="d-none" th:id="'team-name-' + ${team.teamName}" th:data-team-id="${team.id}"></div>
+                <div class="d-none" th:id="'team-name-' + ${#strings.replace(team.teamName, ' ', '---___---')}" th:data-team-id="${team.id}"></div>
                 <div class="list-group-item bg-dark" th:id="'team-id-' + ${team.id}" th:onclick="'$(\'#teammates-team-id-' + ${team.id} + '\').toggle()'">
                     Название команды: <i th:text="${#strings.capitalize(team.teamName)}"></i>
                     <div class="float-right" style="margin-top: -7px;" sec:authorize="hasAuthority('ORGANIZER')" th:if="${competition.organizer.id == #authentication.principal.id}">

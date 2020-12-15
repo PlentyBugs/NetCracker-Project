@@ -23,9 +23,9 @@ function grade() {
     let header = $('#_csrf_header').attr('content');
     const regexp = /(.+)\/competition\/\d+/;
     let url = document.URL.match(regexp)[0] + "/grade?";
-    let winner = $("#winner").val();
-    let second = $("#second").val();
-    let third = $("#third").val();
+    let winner = $("#winner").val().replace(" ", "---___---");
+    let second = $("#second").val().replace(" ", "---___---");
+    let third = $("#third").val().replace(" ", "---___---");
     if (winner !== "") {
         winner = $("#team-name-" + winner).data("team-id");
         url += "winner=" + encodeURIComponent(winner) + "&";
@@ -40,7 +40,7 @@ function grade() {
     }
     let spotted = $(".spotted");
     for (let s of spotted) {
-        let x = $("#team-name-" + $(s).val()).data("team-id");
+        let x = $("#team-name-" + $(s).val().replace(" ", "---___---")).data("team-id");
         url += "&spotted=" + encodeURIComponent(x);
     }
     $.ajax({
