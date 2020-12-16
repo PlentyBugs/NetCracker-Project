@@ -572,6 +572,7 @@ input[type=number]:active, input[type=search]:active, input[type=text]:active, i
 }
 
 .teams-dropdown {
+    min-height: 20vh;
     max-height: 30vh;
     overflow-y: auto;
     overflow-x: hidden;
