@@ -18,7 +18,7 @@ $(() => {
                 }
 
                 let card = $("<div class='brick bg-dark text-center d-flex flex-column' style='max-width: 15rem;'></div>");
-                let image = $("<a href='/user/" + user.id + "'><img src='/img/" + fileName + "' class='card-img-top user-image-sm' /></a>");
+                let image = $("<a href='/user/" + user.id + "'><img src='/img/" + fileName + "' class='card-img-top user-image-sm' onerror='this.error = null; this.src=`/img/default.png`'/></a>");
                 let bodyHeader = $("<h5 class='card-text m-3'>" + fullName + "</h5>");
 
                 let writeButton = $("<button type='button' class='btn btn-primary btn-block write-button btn-card-group mt-auto' data-recipientId='" + user.id + "'>Write</button>");
